@@ -2,6 +2,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smoke_buddy/constants.dart';
+import 'package:smoke_buddy/screens/auth/email-register.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:flutter/cupertino.dart';
@@ -114,9 +115,17 @@ class _PhoneLoginState extends State<PhoneLogin> {
             ///register with email
             Padding(
               padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(40)),
-              child: CustomText(
-                text: 'Register by e-mail, click here!',
-                isBold: false,
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(builder: (context) => EmailRegister()),
+                  );
+                },
+                child: CustomText(
+                  text: 'Register by e-mail, click here!',
+                  isBold: false,
+                ),
               ),
             )
 
