@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:smoke_buddy/screens/auth/email-otp.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/input-field.dart';
@@ -23,7 +25,6 @@ class EmailRegister extends StatelessWidget {
                 padding: EdgeInsets.all(ScreenUtil().setWidth(60)),
                 child: Image.asset('assets/images/logo.png'),
               ),
-
               SizedBox(
                 height: ScreenUtil().setHeight(25),
               ),
@@ -54,7 +55,12 @@ class EmailRegister extends StatelessWidget {
                 height: ScreenUtil().setHeight(100),
                 child: Button(
                   text: 'NEXT',
-                  onPressed: (){},
+                  onPressed: (){
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(builder: (context) => EmailOTP()),
+                    );
+                  },
                 ),
               ),
               SizedBox(

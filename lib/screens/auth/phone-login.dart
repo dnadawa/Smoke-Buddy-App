@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smoke_buddy/constants.dart';
 import 'package:smoke_buddy/screens/auth/email-register.dart';
+import 'package:smoke_buddy/screens/auth/phone-otp.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:flutter/cupertino.dart';
@@ -89,7 +90,12 @@ class _PhoneLoginState extends State<PhoneLogin> {
               height: ScreenUtil().setHeight(100),
               child: Button(
                 text: 'NEXT',
-                onPressed: (){},
+                onPressed: (){
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(builder: (context) => PhoneOTP()),
+                  );
+                },
               ),
             ),
             Spacer(flex: 4),
