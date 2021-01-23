@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:smoke_buddy/screens/forums/posts.dart';
+import 'package:smoke_buddy/screens/home.dart';
 import 'package:smoke_buddy/widgets/bottom-sheet.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
@@ -31,7 +33,17 @@ class _ForumsState extends State<Forums>  with SingleTickerProviderStateMixin{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: CustomText(text: 'logo here',),
+        title: Padding(
+          padding: EdgeInsets.all(ScreenUtil().setWidth(50)),
+          child: GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(builder: (context) => Home()),
+                );
+              },
+              child: Image.asset('assets/images/appbar.png')),
+        ),
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
@@ -61,6 +73,16 @@ class _ForumsState extends State<Forums>  with SingleTickerProviderStateMixin{
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(gradient: Constants.appGradient),
+        child: TabBarView(
+          controller: _tabController,
+          physics: NeverScrollableScrollPhysics(),
+          children: [
+            Posts(),
+            Posts(),
+            Posts(),
+            Posts(),
+          ],
+        ),
       ),
       bottomSheet: AppBottomSheet(),
     );
