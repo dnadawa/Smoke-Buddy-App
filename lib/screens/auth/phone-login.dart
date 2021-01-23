@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smoke_buddy/constants.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
+import 'package:flutter/cupertino.dart';
+import 'email-login.dart';
 
 class PhoneLogin extends StatefulWidget {
   @override
@@ -30,7 +32,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
 
             ///loginForm
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(ScreenUtil().setWidth(40)),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 children: [
@@ -94,9 +96,17 @@ class _PhoneLoginState extends State<PhoneLogin> {
             ///login with email
             Padding(
               padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(10)),
-              child: CustomText(
-                text: 'Login with e-mail, click here!',
-                isBold: false,
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(builder: (context) => EmailLogin()),
+                  );
+                },
+                child: CustomText(
+                  text: 'Login with e-mail, click here!',
+                  isBold: false,
+                ),
               ),
             ),
 
@@ -109,7 +119,6 @@ class _PhoneLoginState extends State<PhoneLogin> {
                 isBold: false,
               ),
             )
-
 
 
           ],
