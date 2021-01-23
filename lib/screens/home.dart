@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:smoke_buddy/screens/forums/forums.dart';
 import 'package:smoke_buddy/widgets/bottom-sheet.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -28,7 +29,12 @@ class Home extends StatelessWidget {
               ///forums
               Button(
                 text: 'FORUMS',
-                onPressed: (){},
+                onPressed: (){
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(builder: (context) => Forums()),
+                  );
+                },
                 image: 'forums.png',
                 leadingImage: true,
               ),
