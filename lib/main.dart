@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smoke_buddy/constants.dart';
 import 'package:smoke_buddy/screens/auth/phone-login.dart';
 import 'package:smoke_buddy/screens/auth/register.dart';
+import 'package:smoke_buddy/screens/home.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
               )
             )
           ),
-        home: Register(),
+        home: Home(),
       ),
     );
   }
