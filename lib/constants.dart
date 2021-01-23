@@ -23,6 +23,8 @@ mixin Constants {
   static var kFillColor = Colors.white.withOpacity(0.35);
   ///transparent fill outline
   static var kFillOutlineColor = Color(0xff3c4a22).withOpacity(0.35);
+  ///icon color
+  static const kIconColor = Color(0xffc0c531);
 
 
   ///login pages text styles for input fields
