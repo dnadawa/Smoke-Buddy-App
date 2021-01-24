@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:smoke_buddy/screens/profile/profile.dart';
 import 'package:smoke_buddy/screens/settings/settings.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/drawer-side-button.dart';
@@ -110,6 +111,12 @@ class _MenuDrawerState extends State<MenuDrawer> {
                           DrawerSideButton(
                             name: 'PROFILE',
                             image: 'profile.png',
+                            onTap: (){
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(builder: (context) => Profile()),
+                              );
+                            },
                           ),
                           SizedBox(height: ScreenUtil().setHeight(30),),
 
