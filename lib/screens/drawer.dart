@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:smoke_buddy/screens/settings/settings.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/drawer-side-button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../constants.dart';
 
@@ -83,7 +86,9 @@ class _MenuDrawerState extends State<MenuDrawer> {
                           ///shop
                           DrawerSideButton(
                             name: 'SHOP',
-                            image: 'shop.png',),
+                            image: 'shop.png',
+                            onTap: ()async=>await launch('https://www.smokebuddy.eu/'),
+                          ),
                           SizedBox(height: ScreenUtil().setHeight(30),),
 
 
@@ -92,6 +97,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                           DrawerSideButton(
                             name: 'GAME',
                             image: 'game.png',
+                            onTap: ()async=>await launch('https://www.smokebuddy.eu/smokebuddy-world'),
                           ),
                           SizedBox(height: ScreenUtil().setHeight(30),),
 
@@ -113,6 +119,12 @@ class _MenuDrawerState extends State<MenuDrawer> {
                           DrawerSideButton(
                             name: 'SETTINGS',
                             image: 'settings.png',
+                            onTap: (){
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(builder: (context) => Settings()),
+                              );
+                            },
                           ),
                           SizedBox(height: ScreenUtil().setHeight(10),),
                         ],

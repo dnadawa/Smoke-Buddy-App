@@ -25,7 +25,10 @@ mixin Constants {
   static var kFillOutlineColor = Color(0xff3c4a22).withOpacity(0.35);
   ///icon color
   static const kIconColor = Color(0xffc0c531);
-
+  ///switch active color
+  static const kSwitchActiveColor = Color(0xff557334);
+  ///switch active color
+  static const kSwitchInactiveColor = Color(0xff818133);
 
   ///login pages text styles for input fields
   static var kLoginTextStyle = TextStyle(
