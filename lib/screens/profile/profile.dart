@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:smoke_buddy/screens/auth/email-login.dart';
-import 'package:smoke_buddy/screens/forums/posts.dart';
+import 'package:smoke_buddy/screens/profile/followers.dart';
+import 'package:smoke_buddy/screens/profile/following.dart';
+import 'package:smoke_buddy/screens/profile/post.dart';
 import 'package:smoke_buddy/widgets/bottom-sheet.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
@@ -141,8 +142,8 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                         controller: _tabController,
                         children: [
                           Posts(),
-                          Posts(),
-                          Posts(),
+                          Followers(),
+                          Following(),
                         ],
                       ),
                     )
@@ -196,7 +197,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
           ],
         ),
       ),
-      bottomSheet: AppBottomSheet(),
+      // bottomSheet: AppBottomSheet(),
     );
   }
 }
