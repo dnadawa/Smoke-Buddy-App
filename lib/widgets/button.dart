@@ -11,7 +11,7 @@ class Button extends StatelessWidget {
   final bool leadingImage;
   final String image;
 
-  const Button({Key key, this.text, this.borderRadius=40, this.onPressed, this.fontSize=40, this.leadingImage, this.image}) : super(key: key);
+  const Button({Key key, this.text, this.borderRadius=40, this.onPressed, this.fontSize=40, this.leadingImage=false, this.image}) : super(key: key);
 
 
 

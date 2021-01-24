@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smoke_buddy/constants.dart';
+import 'package:smoke_buddy/screens/forums/create-post.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 
 import 'comments.dart';
@@ -32,15 +33,23 @@ class _PostsState extends State<Posts> {
                 ),
                 SizedBox(width: ScreenUtil().setWidth(20),),
                 Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Constants.kFillColor,
-                      borderRadius: BorderRadius.circular(40),
-                      border: Border.all(width: 3,color: Constants.kFillOutlineColor)
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                      child: CustomText(text: "What's on your mind...",size: ScreenUtil().setSp(25),align: TextAlign.start,),
+                  child: GestureDetector(
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CreatePost()),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Constants.kFillColor,
+                        borderRadius: BorderRadius.circular(40),
+                        border: Border.all(width: 3,color: Constants.kFillOutlineColor)
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                        child: CustomText(text: "What's on your mind...",size: ScreenUtil().setSp(25),align: TextAlign.start,),
+                      ),
                     ),
                   ),
                 )
