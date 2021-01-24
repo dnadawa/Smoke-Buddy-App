@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:smoke_buddy/screens/drawer.dart';
 import 'package:smoke_buddy/screens/forums/posts.dart';
 import 'package:smoke_buddy/screens/home.dart';
 import 'package:smoke_buddy/widgets/bottom-sheet.dart';
@@ -68,7 +69,9 @@ class _ForumsState extends State<Forums>  with SingleTickerProviderStateMixin{
           ],
         ),
       ),
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: MenuDrawer(),
+      ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
