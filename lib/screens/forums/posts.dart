@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smoke_buddy/constants.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 
+import 'comments.dart';
+
 class Posts extends StatefulWidget {
   @override
   _PostsState createState() => _PostsState();
@@ -61,11 +63,15 @@ class _PostsState extends State<Posts> {
                     ),
                     child: Column(
                       children: [
+
+                        ///propic and name
                         ListTile(
                           leading: CircleAvatar(),
                           title: CustomText(text: 'Dulaj Nadawa',align: TextAlign.start,),
                           subtitle: CustomText(text: '2020/12/12',align: TextAlign.start,isBold: false,size: ScreenUtil().setSp(25),),
                         ),
+
+                        ///text
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
                           child: CustomText(
@@ -74,11 +80,62 @@ class _PostsState extends State<Posts> {
                             isBold: false,
                           ),
                         ),
+
+                        ///image
                         Padding(
                           padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
                           child: Image.network('https://d3hnfqimznafg0.cloudfront.net/images/news/ImageForNews_26919_15786618897301054.png'),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+
+                              ///likes
+                              Container(
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.favorite_border),
+                                    SizedBox(width: ScreenUtil().setWidth(10),),
+                                    CustomText(text: '143 Likes',)
+                                  ],
+                                ),
+                              ),
+
+                              ///comments
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => Comments()),
+                                  );
+                                },
+                                child: Container(
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.comment),
+                                      SizedBox(width: ScreenUtil().setWidth(10),),
+                                      CustomText(text: '23 Comments',)
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                              ///follow
+                              Container(
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.notifications_none),
+                                    SizedBox(width: ScreenUtil().setWidth(10),),
+                                    CustomText(text: 'Follow',)
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         )
-                        
                         
                       ],
                     ),
