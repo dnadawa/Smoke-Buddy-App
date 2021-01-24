@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:smoke_buddy/screens/settings/about.dart';
+import 'package:smoke_buddy/screens/settings/edit-profile.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 
 import '../../constants.dart';
@@ -45,6 +46,12 @@ class Settings extends StatelessWidget {
                 ListTile(
                   title: CustomText(text: 'Edit Profile',align: TextAlign.start,size: ScreenUtil().setSp(35),),
                   trailing: Icon(Icons.arrow_forward_ios),
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(builder: (context) => EditProfile()),
+                    );
+                  },
                 ),
 
                 ///hide profile

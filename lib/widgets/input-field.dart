@@ -12,8 +12,9 @@ class InputField extends StatelessWidget {
   final TextEditingController controller;
   final Widget suffix;
   final Widget prefix;
+  final bool isLabel;
 
-  const InputField({Key key, this.hint, this.type, this.isPassword=false, this.controller, this.suffix, this.prefix}) : super(key: key);
+  const InputField({Key key, this.hint, this.type, this.isPassword=false, this.controller, this.suffix, this.prefix, this.isLabel=false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +30,10 @@ class InputField extends StatelessWidget {
         suffix: suffix,
         prefix: prefix,
         hintText: hint,
+        labelText: isLabel?hint:null,
+        labelStyle: TextStyle(
+          fontFamily: 'Antonio',
+        ),
         hintStyle: TextStyle(
           fontFamily: 'Antonio',
         ),
