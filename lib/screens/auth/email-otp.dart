@@ -4,10 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:smoke_buddy/screens/auth/register.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 
 import '../../constants.dart';
+import '../home.dart';
 
 class EmailOTP extends StatelessWidget {
   @override
@@ -90,7 +92,10 @@ class EmailOTP extends StatelessWidget {
                 child: Button(
                   text: 'VERIFY',
                   onPressed: (){
-
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(builder: (context) => Register()),
+                    );
                   },
                 ),
               ),

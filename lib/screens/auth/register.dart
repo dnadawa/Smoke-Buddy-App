@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:smoke_buddy/screens/home.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/input-field.dart';
@@ -163,7 +165,12 @@ class _RegisterState extends State<Register> {
                   height: ScreenUtil().setHeight(100),
                   child: Button(
                     text: 'SAVE',
-                    onPressed: (){},
+                    onPressed: (){
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(builder: (context) => Home()),
+                      );
+                    },
                   ),
                 ),
               ),

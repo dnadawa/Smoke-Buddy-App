@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:smoke_buddy/widgets/button.dart';
@@ -5,6 +6,7 @@ import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/input-field.dart';
 
 import '../../constants.dart';
+import '../home.dart';
 
 class EmailLogin extends StatelessWidget {
   @override
@@ -56,7 +58,12 @@ class EmailLogin extends StatelessWidget {
                 height: ScreenUtil().setHeight(100),
                 child: Button(
                   text: 'SAVE',
-                  onPressed: (){},
+                  onPressed: (){
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(builder: (context) => Home()),
+                    );
+                  },
                 ),
               ),
             ],
