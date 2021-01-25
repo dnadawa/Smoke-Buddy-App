@@ -1,9 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smoke_buddy/screens/forums/forums.dart';
+import 'package:smoke_buddy/screens/notifications/notification-post.dart';
+import 'package:smoke_buddy/screens/notifications/notifications.dart';
 import 'package:smoke_buddy/screens/profile/profile.dart';
 import 'package:smoke_buddy/screens/settings/settings.dart';
 import 'package:smoke_buddy/screens/wallpapers/wallpapers.dart';
@@ -13,6 +13,7 @@ import 'package:smoke_buddy/widgets/drawer-side-button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../constants.dart';
+
 
 class MenuDrawer extends StatefulWidget {
 
@@ -492,6 +493,69 @@ class _MenuDrawerState extends State<MenuDrawer> {
                               ),
                             ),
                             SizedBox(height: ScreenUtil().setHeight(10),),
+
+                          ],
+                        ),
+                      ),
+
+                    ///NOTIFICATIONS
+                    if(notificationActive)
+                      Expanded(
+                        child: Column(
+                          children: [
+                            ///title
+                            CustomText(text: 'NOTIFICATIONS',size: ScreenUtil().setSp(50),),
+                            SizedBox(height: ScreenUtil().setHeight(40),),
+
+                            ///notification
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.all(ScreenUtil().setHeight(15)),
+                                child: ListView(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: (){
+                                        Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(builder: (context) => NotificationPost()),
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Constants.kFillColor,
+                                          borderRadius: BorderRadius.circular(10)
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(ScreenUtil().setHeight(15)),
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.favorite),
+                                              SizedBox(width: ScreenUtil().setWidth(10),),
+                                              SizedBox(
+                                                width: ScreenUtil().setWidth(270),
+                                                  child: CustomText(text: 'Dulaj liked your post.',align: TextAlign.start,)
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+
+
+                            ///see all
+                            GestureDetector(
+                              onTap: (){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => Notifications()),
+                                );
+                              },
+                              child: CustomText(text: 'SEE ALL',size: ScreenUtil().setSp(40),),
+                            )
 
                           ],
                         ),

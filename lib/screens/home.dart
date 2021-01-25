@@ -7,6 +7,7 @@ import 'package:smoke_buddy/widgets/bottom-sheet.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants.dart';
+import 'notifications/notifications.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -45,7 +46,12 @@ class Home extends StatelessWidget {
               ///notifications
               Button(
                 text: 'NOTIFICATIONS',
-                onPressed: (){},
+                onPressed: (){
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(builder: (context) => Notifications()),
+                  );
+                },
                 image: 'notifications.png',
                 leadingImage: true,
               ),
