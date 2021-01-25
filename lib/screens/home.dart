@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:smoke_buddy/screens/forums/forums.dart';
+import 'package:smoke_buddy/screens/wallpapers/wallpapers.dart';
 import 'package:smoke_buddy/widgets/bottom-sheet.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -32,7 +33,7 @@ class Home extends StatelessWidget {
                 onPressed: (){
                   Navigator.push(
                     context,
-                    CupertinoPageRoute(builder: (context) => Forums()),
+                    CupertinoPageRoute(builder: (context) => Forums(index: 0,)),
                   );
                 },
                 image: 'forums.png',
@@ -54,7 +55,12 @@ class Home extends StatelessWidget {
               ///wallpapers
               Button(
                 text: 'WALLPAPERS',
-                onPressed: (){},
+                onPressed: (){
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(builder: (context) => Wallpapers(index: 0,)),
+                  );
+                },
                 image: 'wallpapers.png',
                 leadingImage: true,
               ),

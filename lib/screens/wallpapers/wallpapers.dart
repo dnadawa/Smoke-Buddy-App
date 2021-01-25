@@ -11,48 +11,48 @@ import 'package:smoke_buddy/widgets/tab-button.dart';
 
 import '../../constants.dart';
 
-class Forums extends StatefulWidget {
-
+class Wallpapers extends StatefulWidget {
   static TabController tabController;
+
   final int index;
 
-  const Forums({Key key, this.index}) : super(key: key);
+  const Wallpapers({Key key, this.index}) : super(key: key);
 
   @override
-  _ForumsState createState() => _ForumsState();
+  _WallpapersState createState() => _WallpapersState();
 }
 
-class _ForumsState extends State<Forums>  with SingleTickerProviderStateMixin{
-
+class _WallpapersState extends State<Wallpapers>  with SingleTickerProviderStateMixin{
+  // TabController _tabController;
   bool t1;
   bool t2;
   bool t3;
-  bool t4;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Forums.tabController = TabController(length: 4, vsync: this, initialIndex: widget.index);
-    Forums.tabController.addListener(() {
-      print('index is: '+Forums.tabController.index.toString());
+    Wallpapers.tabController = TabController(length: 3, vsync: this,initialIndex: widget.index);
+    Wallpapers.tabController.addListener(() {
+      print('index is: '+Wallpapers.tabController.index.toString());
       setState(() {
-        switch(Forums.tabController.index){
-          case 0:{t1=true;t2=false;t3=false;t4=false;}break;
-          case 1:{t1=false;t2=true;t3=false;t4=false;}break;
-          case 2:{t1=false;t2=false;t3=true;t4=false;}break;
-          case 3:{t1=false;t2=false;t3=false;t4=true;}break;
-          default:{t1=false;t2=false;t3=false;t4=true;}break;
+        switch(Wallpapers.tabController.index){
+          case 0:{t1=true;t2=false;t3=false;}break;
+          case 1:{t1=false;t2=true;t3=false;}break;
+          case 2:{t1=false;t2=false;t3=true;}break;
+          default:{t1=false;t2=false;t3=false;}break;
         }
       });
     });
 
     switch(widget.index){
-      case 0:{t1=true;t2=false;t3=false;t4=false;}break;
-      case 1:{t1=false;t2=true;t3=false;t4=false;}break;
-      case 2:{t1=false;t2=false;t3=true;t4=false;}break;
-      case 3:{t1=false;t2=false;t3=false;t4=true;}break;
-      default:{t1=false;t2=false;t3=false;t4=true;}break;
+      case 0:{t1=true;t2=false;t3=false;}break;
+      case 1:{t1=false;t2=true;t3=false;}break;
+      case 2:{t1=false;t2=false;t3=true;}break;
+      default:{t1=false;t2=false;t3=false;}break;
     }
+
+
   }
 
   @override
@@ -71,41 +71,38 @@ class _ForumsState extends State<Forums>  with SingleTickerProviderStateMixin{
               child: Image.asset('assets/images/appbar.png')),
         ),
         bottom: TabBar(
-          controller: Forums.tabController,
+          controller: Wallpapers.tabController,
           isScrollable: true,
           indicatorColor: Colors.transparent,
           labelPadding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(25)),
           onTap: (i){
             setState(() {
               switch(i){
-                case 0:{t1=true;t2=false;t3=false;t4=false;}break;
-                case 1:{t1=false;t2=true;t3=false;t4=false;}break;
-                case 2:{t1=false;t2=false;t3=true;t4=false;}break;
-                case 3:{t1=false;t2=false;t3=false;t4=true;}break;
-                default:{t1=false;t2=false;t3=false;t4=true;}break;
+                case 0:{t1=true;t2=false;t3=false;}break;
+                case 1:{t1=false;t2=true;t3=false;}break;
+                case 2:{t1=false;t2=false;t3=true;}break;
+                default:{t1=false;t2=false;t3=false;}break;
               }
             });
           },
           tabs: [
-            TabButton(name: 'STATUS',image: 'status.png',selected: t1,),
-            TabButton(name: 'GALLERY',image: 'gallery.png',selected: t2,),
-            TabButton(name: 'GROW',image: 'grow.png',selected: t3,),
-            TabButton(name: 'COOKING',image: 'cooking.png',selected: t4,),
+            TabButton(name: 'ARTISTS',image: 'artists.png',selected: t1,),
+            TabButton(name: 'CHRISTIANIA',image: 'christiania.png',selected: t2,),
+            TabButton(name: 'SMOKEBUDDY',image: 'smokebuddy.png',selected: t3,),
           ],
         ),
       ),
       drawer: Drawer(
-        child: MenuDrawer(controller: Forums.tabController,screen: 'forums',),
+        child: MenuDrawer(controller: Wallpapers.tabController,screen: 'wallpapers',),
       ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(gradient: Constants.appGradient),
         child: TabBarView(
-          controller: Forums.tabController,
+          controller: Wallpapers.tabController,
           physics: NeverScrollableScrollPhysics(),
           children: [
-            Posts(),
             Posts(),
             Posts(),
             Posts(),
