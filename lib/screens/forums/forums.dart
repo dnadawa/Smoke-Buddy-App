@@ -28,6 +28,18 @@ class _ForumsState extends State<Forums>  with SingleTickerProviderStateMixin{
     // TODO: implement initState
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(() {
+      print('index is: '+_tabController.index.toString());
+      setState(() {
+        switch(_tabController.index){
+          case 0:{t1=true;t2=false;t3=false;t4=false;}break;
+          case 1:{t1=false;t2=true;t3=false;t4=false;}break;
+          case 2:{t1=false;t2=false;t3=true;t4=false;}break;
+          case 3:{t1=false;t2=false;t3=false;t4=true;}break;
+          default:{t1=false;t2=false;t3=false;t4=true;}break;
+        }
+      });
+    });
   }
 
   @override
@@ -70,7 +82,7 @@ class _ForumsState extends State<Forums>  with SingleTickerProviderStateMixin{
         ),
       ),
       drawer: Drawer(
-        child: MenuDrawer(),
+        child: MenuDrawer(controller: _tabController,screen: 'forums',),
       ),
       body: Container(
         width: double.infinity,

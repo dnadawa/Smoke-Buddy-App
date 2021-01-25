@@ -10,8 +10,10 @@ class Button extends StatelessWidget {
   final double fontSize;
   final bool leadingImage;
   final String image;
+  final Color color;
+  final bool isBorder;
 
-  const Button({Key key, this.text, this.borderRadius=40, this.onPressed, this.fontSize=40, this.leadingImage=false, this.image}) : super(key: key);
+  const Button({Key key, this.text, this.borderRadius=40, this.onPressed, this.fontSize=40, this.leadingImage=false, this.image, this.color, this.isBorder=true}) : super(key: key);
 
 
 
@@ -31,7 +33,7 @@ class Button extends StatelessWidget {
           ScreenUtil().setHeight(20)
       ),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: color==null?MainAxisSize.min:MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(
@@ -47,12 +49,12 @@ class Button extends StatelessWidget {
 
     return RaisedButton(
       onPressed: onPressed,
-      color: Theme.of(context).accentColor,
+      color: color==null?Theme.of(context).accentColor:color,
       elevation: 0,
       padding: leadingImage?EdgeInsets.zero:null,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius),
-          side: BorderSide(color: Color(0xff3c4a22),width: 2)
+          side: BorderSide(color: isBorder?Color(0xff3c4a22):Colors.transparent,width: 2)
       ),
       child: leadingImage?imageChild:textChild,
     );
