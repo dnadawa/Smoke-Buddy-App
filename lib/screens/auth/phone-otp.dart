@@ -130,10 +130,18 @@ class _PhoneOTPState extends State<PhoneOTP> {
               ///resend
               Visibility(
                 visible: showResend,
-                child: CustomText(
-                  text: "Didn't receive the code? RESEND",
-                  isBold: false,
-                  size: ScreenUtil().setSp(35),
+                child: GestureDetector(
+                  onTap: (){
+                    sendOtp();
+                    setState(() {
+                      showResend = false;
+                    });
+                  },
+                  child: CustomText(
+                    text: "Didn't receive the code? RESEND",
+                    isBold: false,
+                    size: ScreenUtil().setSp(35),
+                  ),
                 ),
               ),
 
@@ -164,7 +172,7 @@ class _PhoneOTPState extends State<PhoneOTP> {
                       if(users.isEmpty){
                         Navigator.of(context).pushAndRemoveUntil(
                             CupertinoPageRoute(builder: (context) =>
-                                Register(uid: auth.currentUser.uid,phone: widget.phone,)), (Route<dynamic> route) => false);
+                                Register(uid: auth.currentUser.uid,phone: widget.phone,email: '',password: '',)), (Route<dynamic> route) => false);
                       }
                       else{
 

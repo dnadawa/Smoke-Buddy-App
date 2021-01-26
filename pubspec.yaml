@@ -41,6 +41,7 @@ dependencies:
   firebase_storage: ^7.0.0
   cloud_firestore: ^0.16.0
   shared_preferences: ^0.5.12+4
+  mailer: ^3.2.1
 
 dev_dependencies:
   flutter_test:

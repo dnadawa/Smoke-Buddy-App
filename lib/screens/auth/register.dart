@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +21,10 @@ import '../../constants.dart';
 class Register extends StatefulWidget {
   final String uid;
   final String phone;
+  final String email;
+  final String password;
 
-  const Register({Key key, this.uid, this.phone}) : super(key: key);
+  const Register({Key key, this.uid, this.phone, this.email, this.password}) : super(key: key);
   @override
   _RegisterState createState() => _RegisterState();
 }
@@ -36,6 +39,7 @@ class _RegisterState extends State<Register> {
   TextEditingController email = TextEditingController();
   File image;
   FirebaseStorage storage = FirebaseStorage.instance;
+  String uid;
 
   Future getImage() async {
     final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
@@ -47,6 +51,14 @@ class _RegisterState extends State<Register> {
         ToastBar(text: 'No image selected',color: Colors.red).show();
       }
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    uid=widget.uid;
+    email.text = widget.email;
   }
 
   @override
@@ -214,11 +226,35 @@ class _RegisterState extends State<Register> {
                           }
 
                           try{
-                            TaskSnapshot snap = await storage.ref('users_profiles/'+widget.uid).putFile(image);
+
+                            ///auth using email
+                            if(widget.email!=''){
+                              try {
+                                UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                                    email: widget.email,
+                                    password: widget.password
+                                );
+
+                                uid = userCredential.user.uid;
+                              } on FirebaseAuthException catch (e) {
+                                if (e.code == 'weak-password') {
+                                  print('The password provided is too weak.');
+                                } else if (e.code == 'email-already-in-use') {
+                                  print('The account already exists for that email.');
+                                }
+                              } catch (e) {
+                                print(e);
+                              }
+                            }
+
+
+                            ///image upload
+
+                            TaskSnapshot snap = await storage.ref('users_profiles/'+uid).putFile(image);
                             String url = await snap.ref.getDownloadURL();
 
-                            await FirebaseFirestore.instance.collection('users').doc(widget.uid).set({
-                              'id': widget.uid,
+                            await FirebaseFirestore.instance.collection('users').doc(uid).set({
+                              'id': uid,
                               'name': username.text,
                               'status': status.text,
                               'email': email.text,
@@ -231,7 +267,7 @@ class _RegisterState extends State<Register> {
                             });
 
                             SharedPreferences prefs = await SharedPreferences.getInstance();
-                            prefs.setString('uid', widget.uid);
+                            prefs.setString('uid', uid);
 
                             ToastBar(text: 'Registered Successfully!',color: Colors.green).show();
 

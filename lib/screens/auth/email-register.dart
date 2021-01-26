@@ -5,10 +5,16 @@ import 'package:smoke_buddy/screens/auth/email-otp.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/input-field.dart';
+import 'package:smoke_buddy/widgets/toast.dart';
 
 import '../../constants.dart';
 
 class EmailRegister extends StatelessWidget {
+
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController confirmPassword = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,17 +39,17 @@ class EmailRegister extends StatelessWidget {
               ///email
               Padding(
                 padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(40),ScreenUtil().setWidth(40),ScreenUtil().setWidth(40),0),
-                child: InputField(hint: 'EMAIL',type: TextInputType.emailAddress,),
+                child: InputField(hint: 'EMAIL',type: TextInputType.emailAddress,controller: email,),
               ),
               ///password
               Padding(
                 padding: EdgeInsets.all(ScreenUtil().setWidth(40)),
-                child: InputField(hint: 'CREATE PASSWORD',isPassword: true,),
+                child: InputField(hint: 'CREATE PASSWORD',isPassword: true,controller: password,),
               ),
               ///confirm password
               Padding(
                 padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(40),0,ScreenUtil().setWidth(40),ScreenUtil().setWidth(40)),
-                child: InputField(hint: 'CONFIRM PASSWORD',isPassword: true,),
+                child: InputField(hint: 'CONFIRM PASSWORD',isPassword: true,controller: confirmPassword,),
               ),
               SizedBox(
                 height: ScreenUtil().setHeight(40),
@@ -56,10 +62,20 @@ class EmailRegister extends StatelessWidget {
                 child: Button(
                   text: 'NEXT',
                   onPressed: (){
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(builder: (context) => EmailOTP()),
-                    );
+
+                    if(password.text==confirmPassword.text){
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(builder: (context) => EmailOTP(email: email.text,password: password.text,)),
+                      );
+                    }
+                    else{
+                      ToastBar(text: 'Password does not match!',color: Colors.red).show();
+                    }
+
+
+
+
                   },
                 ),
               ),
