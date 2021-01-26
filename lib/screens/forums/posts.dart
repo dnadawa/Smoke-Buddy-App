@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/constants.dart';
 import 'package:smoke_buddy/screens/forums/create-post.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
@@ -8,11 +10,41 @@ import 'package:smoke_buddy/widgets/post-widget.dart';
 import 'comments.dart';
 
 class Posts extends StatefulWidget {
+
+  final String category;
+
+  const Posts({Key key, this.category}) : super(key: key);
+
   @override
   _PostsState createState() => _PostsState();
 }
 
 class _PostsState extends State<Posts> {
+  String proPic='https://i.pinimg.com/originals/90/80/60/9080607321ab98fa3e70dd24b2513a20.gif';
+  String uid;
+  String name;
+
+  getUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    uid = prefs.getString('uid');
+    var sub = await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: uid).get();
+    var users = sub.docs;
+    if(users.isNotEmpty){
+      print(users[0]['name']);
+      setState(() {
+        proPic = users[0]['proPic'];
+        name = users[0]['name'];
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,8 +61,8 @@ class _PostsState extends State<Posts> {
               children: [
                 CircleAvatar(
                   backgroundColor: Constants.kFillColor,
-                  backgroundImage: NetworkImage(
-                      'https://hgtvhome.sndimg.com/content/dam/images/hgtv/fullset/2015/11/10/0/CI_Costa-Farms-Ballad-aster.jpg.rend.hgtvcom.966.644.suffix/1447169929799.jpeg'),
+                  radius: 25,
+                  backgroundImage: NetworkImage(proPic),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(20),),
                 Expanded(
@@ -38,7 +70,7 @@ class _PostsState extends State<Posts> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => CreatePost()),
+                        MaterialPageRoute(builder: (context) => CreatePost(uid: uid,category: widget.category,proPic: proPic,name: name,)),
                       );
                     },
                     child: Container(

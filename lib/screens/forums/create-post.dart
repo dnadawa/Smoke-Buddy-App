@@ -1,16 +1,33 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
+import 'package:smoke_buddy/widgets/toast.dart';
 
 import '../../constants.dart';
 
 class CreatePost extends StatefulWidget {
+
+  final String proPic;
+  final String category;
+  final String uid;
+  final String name;
+
+  const CreatePost({Key key, this.proPic, this.category, this.uid, this.name}) : super(key: key);
+
   @override
   _CreatePostState createState() => _CreatePostState();
 }
 
 class _CreatePostState extends State<CreatePost> {
+
+  File image;
+  TextEditingController post = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,17 +64,31 @@ class _CreatePostState extends State<CreatePost> {
                           ///profile
                           Expanded(
                             child: ListTile(
-                              leading: CircleAvatar(),
-                              title: CustomText(text: 'Ali Sabri',align: TextAlign.start,),
+                              leading: CircleAvatar(
+                                backgroundImage: NetworkImage(widget.proPic),
+                              ),
+                              title: CustomText(text: widget.name,align: TextAlign.start,),
                             ),
                           ),
 
                           ///picker
                           Padding(
                             padding: EdgeInsets.all(ScreenUtil().setHeight(15)),
-                            child: SizedBox(
-                                height: ScreenUtil().setHeight(60),
-                                child: Image.asset('assets/images/picker.png')
+                            child: GestureDetector(
+                              onTap: () async {
+                                final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
+                                setState(() {
+                                  if (pickedFile != null) {
+                                    image = File(pickedFile.path);
+                                  } else {
+                                    ToastBar(text: 'No image selected',color: Colors.red).show();
+                                  }
+                                });
+                                },
+                              child: SizedBox(
+                                  height: ScreenUtil().setHeight(60),
+                                  child: Image.asset('assets/images/picker.png')
+                              ),
                             ),
                           )
                         ],
@@ -69,6 +100,7 @@ class _CreatePostState extends State<CreatePost> {
                         padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
                         child: TextField(
                           style: Constants.kLoginTextStyle,
+                          controller: post,
                           maxLines: null,
                           decoration: InputDecoration(
                             hintText: "What's on your mind...",
@@ -80,9 +112,12 @@ class _CreatePostState extends State<CreatePost> {
 
 
                       ///image
-                      Padding(
-                        padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
-                        child: Image.network('https://i.pinimg.com/736x/ee/5a/01/ee5a0191372af6acd13d08ba7fb3417c.jpg'),
+                      Visibility(
+                        visible: image!=null,
+                        child: Padding(
+                          padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
+                          child: image!=null?Image.file(image):Container(),
+                        ),
                       ),
                     ],
                   ),
@@ -98,7 +133,33 @@ class _CreatePostState extends State<CreatePost> {
                   height: ScreenUtil().setHeight(100),
                   child: Button(
                     text: 'POST',
-                    onPressed: (){},
+                    onPressed: ()async{
+                      try{
+                        ToastBar(text: 'Posting...',color: Colors.orange).show();
+                        String url='';
+                        if(image!=null){
+                          TaskSnapshot snap = await FirebaseStorage.instance.ref('post_images/${widget.uid}/${DateTime.now().millisecondsSinceEpoch.toString()}').putFile(image);
+                          url = await snap.ref.getDownloadURL();
+                        }
+
+
+                        await FirebaseFirestore.instance.collection('posts').add({
+                          'authorID': widget.uid,
+                          'authorName': widget.name,
+                          'post': post.text,
+                          'image': url,
+                          'publishedDate': DateTime.now().toString(),
+                          'likes': [],
+                          'following': [],
+                          'category': widget.category
+                        });
+                        ToastBar(text: 'Posted',color: Colors.green).show();
+                        Navigator.pop(context);
+                      }
+                      catch(e){
+                        ToastBar(text: 'Something went wrong',color: Colors.red).show();
+                      }
+                    },
                   ),
                 ),
                 SizedBox(

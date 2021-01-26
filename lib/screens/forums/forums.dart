@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/screens/drawer.dart';
 import 'package:smoke_buddy/screens/forums/posts.dart';
 import 'package:smoke_buddy/screens/home.dart';
@@ -28,6 +30,7 @@ class _ForumsState extends State<Forums>  with SingleTickerProviderStateMixin{
   bool t2;
   bool t3;
   bool t4;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -105,10 +108,10 @@ class _ForumsState extends State<Forums>  with SingleTickerProviderStateMixin{
           controller: Forums.tabController,
           physics: NeverScrollableScrollPhysics(),
           children: [
-            Posts(),
-            Posts(),
-            Posts(),
-            Posts(),
+            Posts(category: 'status',),
+            Posts(category: 'gallery',),
+            Posts(category: 'grow',),
+            Posts(category: 'cooking',),
           ],
         ),
       ),
