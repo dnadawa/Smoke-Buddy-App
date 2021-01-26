@@ -104,9 +104,9 @@ class _WallpapersState extends State<Wallpapers>  with SingleTickerProviderState
           controller: Wallpapers.tabController,
           physics: NeverScrollableScrollPhysics(),
           children: [
-            WallpaperFeed(),
-            WallpaperFeed(),
-            WallpaperFeed(),
+            WallpaperFeed(category: 'ARTISTS',),
+            WallpaperFeed(category: 'CHRISTIANIA',),
+            WallpaperFeed(category: 'SMOKEBUDDY',),
           ],
         ),
       ),
