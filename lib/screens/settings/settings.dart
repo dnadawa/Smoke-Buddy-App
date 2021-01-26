@@ -1,13 +1,59 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smoke_buddy/screens/auth/phone-login.dart';
 import 'package:smoke_buddy/screens/settings/about.dart';
 import 'package:smoke_buddy/screens/settings/edit-profile.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
+import 'package:smoke_buddy/widgets/toast.dart';
 
 import '../../constants.dart';
 
-class Settings extends StatelessWidget {
+class Settings extends StatefulWidget {
+  @override
+  _SettingsState createState() => _SettingsState();
+}
+
+class _SettingsState extends State<Settings> {
+
+  bool hideProfile=false,notifyOwnPosts=true,notifyOtherPosts=true;
+  List<DocumentSnapshot> user;
+  StreamSubscription<QuerySnapshot> subscription;
+  String uid;
+  getUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    uid = prefs.getString('uid');
+
+    subscription = FirebaseFirestore.instance.collection('users').where('id', isEqualTo: uid).snapshots().listen((datasnapshot){
+      setState(() {
+        user = datasnapshot.docs;
+        hideProfile = user[0]['hide'];
+        notifyOwnPosts = user[0]['notifyOwnPosts'];
+        notifyOtherPosts = user[0]['notifyOtherPosts'];
+      });
+    });
+
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserData();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    subscription?.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +95,7 @@ class Settings extends StatelessWidget {
                   onTap: (){
                     Navigator.push(
                       context,
-                      CupertinoPageRoute(builder: (context) => EditProfile()),
+                      CupertinoPageRoute(builder: (context) => EditProfile(uid: uid,)),
                     );
                   },
                 ),
@@ -58,8 +104,17 @@ class Settings extends StatelessWidget {
                 ListTile(
                   title: CustomText(text: 'Hide Profile',align: TextAlign.start,size: ScreenUtil().setSp(35),),
                   trailing: CupertinoSwitch(
-                      value: false,
-                      onChanged: (val){},
+                      value: hideProfile,
+                      onChanged: (val)async{
+                        setState((){
+                          hideProfile = val;
+                        });
+
+                        await FirebaseFirestore.instance.collection('users').doc(uid).update({
+                          'hide': hideProfile
+                        });
+
+                      },
                       activeColor: Constants.kSwitchActiveColor,
                       trackColor: Constants.kSwitchInactiveColor,
                   ),
@@ -70,6 +125,16 @@ class Settings extends StatelessWidget {
                 ListTile(
                   title: CustomText(text: 'Log Out',align: TextAlign.start,size: ScreenUtil().setSp(35),),
                   trailing: Icon(Icons.arrow_forward_ios),
+                  onTap: () async {
+                    ToastBar(text: 'Please wait...',color: Colors.orange).show();
+                    await FirebaseAuth.instance.signOut();
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    prefs.setString('uid', null);
+                    Navigator.of(context).pushAndRemoveUntil(
+                        CupertinoPageRoute(builder: (context) =>
+                            PhoneLogin()), (Route<dynamic> route) => false);
+                    ToastBar(text: 'Logged out!',color: Colors.green).show();
+                  },
                 ),
 
 
@@ -83,8 +148,17 @@ class Settings extends StatelessWidget {
                 ListTile(
                   title: CustomText(text: 'Own Posts',align: TextAlign.start,size: ScreenUtil().setSp(35),),
                   trailing: CupertinoSwitch(
-                    value: true,
-                    onChanged: (val){},
+                    value: notifyOwnPosts,
+                    onChanged: (val) async {
+                      setState(() {
+                        notifyOwnPosts = val;
+                      });
+
+                      await FirebaseFirestore.instance.collection('users').doc(uid).update({
+                        'notifyOwnPosts': notifyOwnPosts
+                      });
+
+                    },
                     activeColor: Constants.kSwitchActiveColor,
                     trackColor: Constants.kSwitchInactiveColor,
                   ),
@@ -95,8 +169,17 @@ class Settings extends StatelessWidget {
                 ListTile(
                   title: CustomText(text: 'Other Posts',align: TextAlign.start,size: ScreenUtil().setSp(35),),
                   trailing: CupertinoSwitch(
-                    value: true,
-                    onChanged: (val){},
+                    value: notifyOtherPosts,
+                    onChanged: (val) async {
+                      setState(() {
+                        notifyOtherPosts = val;
+                      });
+
+                      await FirebaseFirestore.instance.collection('users').doc(uid).update({
+                        'notifyOtherPosts': notifyOtherPosts
+                      });
+
+                    },
                     activeColor: Constants.kSwitchActiveColor,
                     trackColor: Constants.kSwitchInactiveColor,
                   ),

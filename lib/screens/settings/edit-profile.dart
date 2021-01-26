@@ -1,18 +1,63 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:smoke_buddy/widgets/bottom-sheet.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/input-field.dart';
+import 'package:smoke_buddy/widgets/toast.dart';
 
 import '../../constants.dart';
 
 class EditProfile extends StatefulWidget {
+
+  final String uid;
+
+  const EditProfile({Key key, this.uid}) : super(key: key);
+
   @override
   _EditProfileState createState() => _EditProfileState();
 }
 
 class _EditProfileState extends State<EditProfile> {
+
+  TextEditingController name = TextEditingController();
+  TextEditingController status = TextEditingController();
+  List<DocumentSnapshot> user;
+  StreamSubscription<QuerySnapshot> subscription;
+  String image = '';
+  File pickedImage;
+
+  getData(){
+    subscription = FirebaseFirestore.instance.collection('users').where('id', isEqualTo: widget.uid).snapshots().listen((datasnapshot){
+      setState(() {
+        user = datasnapshot.docs;
+        name.text = user[0]['name'];
+        status.text = user[0]['status'];
+        image = user[0]['proPic'];
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    subscription?.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +98,7 @@ class _EditProfileState extends State<EditProfile> {
                         child: InputField(
                           hint: 'SmokeBuddy Name',
                           isLabel: true,
+                          controller: name,
                         ),
                       ),
                       
@@ -63,6 +109,7 @@ class _EditProfileState extends State<EditProfile> {
                         child: InputField(
                           hint: 'SmokeBuddy Status',
                           isLabel: true,
+                          controller: status,
                         ),
                       ),
                       
@@ -75,7 +122,15 @@ class _EditProfileState extends State<EditProfile> {
                           height: ScreenUtil().setHeight(100),
                           child: Button(
                             text: 'SAVE',
-                            onPressed: (){},
+                            onPressed: () async {
+                              ToastBar(text: 'Please wait',color: Colors.orange).show();
+                              await FirebaseFirestore.instance.collection('users').doc(widget.uid).update({
+                                'name': name.text,
+                                'status': status.text,
+                                'proPic': image
+                              });
+                              ToastBar(text: 'Account updated!',color: Colors.green).show();
+                            },
                           ),
                         ),
                       ),
@@ -88,9 +143,26 @@ class _EditProfileState extends State<EditProfile> {
               ///pro pic
               Align(
                   alignment: Alignment.topCenter,
-                  child: CircleAvatar(
-                      backgroundColor: Colors.white,
-                    radius: ScreenUtil().setHeight(80),
+                  child: GestureDetector(
+                    onTap: ()async {
+                      FirebaseStorage storage = FirebaseStorage.instance;
+                      final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
+                      if (pickedFile != null) {
+                          pickedImage = File(pickedFile.path);
+                      } else {
+                          ToastBar(text: 'No image selected',color: Colors.red).show();
+                      }
+                      ToastBar(text: 'Uploading...',color: Colors.orange).show();
+                      TaskSnapshot snap = await storage.ref('users_profiles/'+DateTime.now().millisecondsSinceEpoch.toString()).putFile(pickedImage);
+                      image = await snap.ref.getDownloadURL();
+                      setState(() {});
+                      ToastBar(text: 'Image uploaded!',color: Colors.green).show();
+                      },
+                    child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                      backgroundImage: NetworkImage(image),
+                      radius: ScreenUtil().setHeight(80),
+                    ),
                   )
               )
             ],
