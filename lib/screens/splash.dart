@@ -4,7 +4,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/screens/auth/phone-login.dart';
+import 'package:smoke_buddy/screens/home.dart';
 
 import '../constants.dart';
 
@@ -15,15 +17,33 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> {
 
+  String uid;
+
+  isLoggedIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    uid = prefs.getString('uid');
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     Firebase.initializeApp();
+    isLoggedIn();
     Timer(Duration(seconds: 3), (){
-      Navigator.of(context).pushAndRemoveUntil(
-          CupertinoPageRoute(builder: (context) =>
-          PhoneLogin()), (Route<dynamic> route) => false);
+
+      if(uid==null){
+        Navigator.of(context).pushAndRemoveUntil(
+            CupertinoPageRoute(builder: (context) =>
+                PhoneLogin()), (Route<dynamic> route) => false);
+      }
+      else{
+        Navigator.of(context).pushAndRemoveUntil(
+            CupertinoPageRoute(builder: (context) =>
+                Home()), (Route<dynamic> route) => false);
+      }
+
+
     });
   }
 
