@@ -1,11 +1,14 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/screens/auth/register.dart';
+import 'package:smoke_buddy/screens/home.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/toast.dart';
@@ -151,10 +154,31 @@ class _PhoneOTPState extends State<PhoneOTP> {
                       PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(verificationId: gVerificationId, smsCode: code.text);
                       await auth.signInWithCredential(phoneAuthCredential);
 
+
+                      ///check user exists
+                      var sub = await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: auth.currentUser.uid).get();
+                      var users = sub.docs;
+
                       ToastBar(text: 'Phone Verified!',color: Colors.green).show();
-                      Navigator.of(context).pushAndRemoveUntil(
-                          CupertinoPageRoute(builder: (context) =>
-                              Register(uid: auth.currentUser.uid,phone: widget.phone,)), (Route<dynamic> route) => false);
+
+                      if(users.isEmpty){
+                        Navigator.of(context).pushAndRemoveUntil(
+                            CupertinoPageRoute(builder: (context) =>
+                                Register(uid: auth.currentUser.uid,phone: widget.phone,)), (Route<dynamic> route) => false);
+                      }
+                      else{
+
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        prefs.setString('uid', users[0]['id']);
+
+                        Navigator.of(context).pushAndRemoveUntil(
+                            CupertinoPageRoute(builder: (context) =>
+                               Home()), (Route<dynamic> route) => false);
+                      }
+
+
+
+
                     }
                     on FirebaseAuthException catch(e){
                       if(e.code == 'session-expired'){
