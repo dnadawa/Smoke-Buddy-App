@@ -1,6 +1,10 @@
+import 'dart:async';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/constants.dart';
 import 'package:smoke_buddy/screens/forums/create-post.dart';
@@ -23,6 +27,8 @@ class _PostsState extends State<Posts> {
   String proPic='https://i.pinimg.com/originals/90/80/60/9080607321ab98fa3e70dd24b2513a20.gif';
   String uid;
   String name;
+  List<DocumentSnapshot> posts;
+  StreamSubscription<QuerySnapshot> subscription;
 
   getUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -38,11 +44,29 @@ class _PostsState extends State<Posts> {
     }
   }
 
+
+  getPosts(){
+    subscription = FirebaseFirestore.instance.collection('posts').where('category',isEqualTo: widget.category).orderBy('publishedDate', descending: true).snapshots().listen((datasnapshot){
+      setState(() {
+        posts = datasnapshot.docs;
+      });
+    });
+  }
+
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getUserData();
+    getPosts();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    subscription?.cancel();
   }
 
   @override
@@ -54,7 +78,6 @@ class _PostsState extends State<Posts> {
         child: Column(
           children: [
 
-
             ///create post
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -62,7 +85,7 @@ class _PostsState extends State<Posts> {
                 CircleAvatar(
                   backgroundColor: Constants.kFillColor,
                   radius: 25,
-                  backgroundImage: NetworkImage(proPic),
+                  backgroundImage: CachedNetworkImageProvider(proPic),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(20),),
                 Expanded(
@@ -94,21 +117,38 @@ class _PostsState extends State<Posts> {
 
             ///feed
             Expanded(
-              child: ListView(
+              child: posts!=null?ListView.builder(
+                itemCount: posts.length,
                 physics: BouncingScrollPhysics(),
-                children: [
-                 PostWidget(
-                   image: 'https://d3hnfqimznafg0.cloudfront.net/images/news/ImageForNews_26919_15786618897301054.png',
-                   name: 'Dulaj Nadawa',
-                   date: '2020.12.12',
-                   proPic: 'https://d3hnfqimznafg0.cloudfront.net/images/news/ImageForNews_26919_15786618897301054.png',
-                   description: 'I can extract them Nikolina, But the problem is if we get the images from the PDF they will not be in high quality. So, if you/your previous developer can provide',
-                 ),
-                ],
-              ),
+                itemBuilder: (context,i){
+
+                  String image = posts[i]['image'];
+                  String authorName = posts[i]['authorName'];
+                  String authorImage = posts[i]['authorImage'];
+                  String authorID = posts[i]['authorID'];
+                  String post = posts[i]['post'];
+                  String date = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(posts[i]['publishedDate']));
+                  List likes = posts[i]['likes'];
+                  List following = posts[i]['following'];
+
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
+                    child: PostWidget(
+                      image: image,
+                      name: authorName,
+                      date: date,
+                      proPic: authorImage,
+                      description: post,
+                      authorId: authorID,
+                      uid: uid,
+                      following: following,
+                      likes: likes,
+                      postId: posts[i].id,
+                    ),
+                  );
+                },
+              ):Center(child: CircularProgressIndicator(),),
             )
-
-
           ],
         ),
       ),

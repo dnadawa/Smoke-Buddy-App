@@ -146,6 +146,7 @@ class _CreatePostState extends State<CreatePost> {
                         await FirebaseFirestore.instance.collection('posts').add({
                           'authorID': widget.uid,
                           'authorName': widget.name,
+                          'authorImage': widget.proPic,
                           'post': post.text,
                           'image': url,
                           'publishedDate': DateTime.now().toString(),

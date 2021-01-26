@@ -1,15 +1,65 @@
+import 'dart:async';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
+import 'package:smoke_buddy/widgets/toast.dart';
 
 import '../../constants.dart';
 
 class Comments extends StatefulWidget {
+
+  final String postID;
+
+  const Comments({Key key, this.postID}) : super(key: key);
+
+
   @override
   _CommentsState createState() => _CommentsState();
 }
 
 class _CommentsState extends State<Comments> {
+
+  TextEditingController comment = TextEditingController();
+  String uid;
+  String proPic='https://i.pinimg.com/originals/90/80/60/9080607321ab98fa3e70dd24b2513a20.gif';
+  String userName;
+  List<DocumentSnapshot> comments;
+  StreamSubscription<QuerySnapshot> subscription;
+
+
+  getPosts(){
+    subscription = FirebaseFirestore.instance.collection('posts').doc(widget.postID).collection('comments').orderBy('time',descending: true).snapshots().listen((datasnapshot){
+      setState(() {
+        comments = datasnapshot.docs;
+      });
+    });
+  }
+
+  getUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    uid = prefs.getString('uid');
+    var sub = await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: uid).get();
+    var users = sub.docs;
+    if(users.isNotEmpty){
+      print(users[0]['name']);
+      setState(() {
+        proPic = users[0]['proPic'];
+        userName = users[0]['name'];
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserData();
+    getPosts();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +83,25 @@ class _CommentsState extends State<Comments> {
             children: [
 
               Expanded(
-                child: ListView(
-                  children: [
-                    ListTile(
-                      leading: CircleAvatar(),
+                child: comments!=null?ListView.builder(
+                  itemCount: comments.length,
+                  physics: BouncingScrollPhysics(),
+                  itemBuilder: (context,i){
+
+                    String proPic = comments[i]['authorImage'];
+                    String name = comments[i]['authorName'];
+                    String comment = comments[i]['comment'];
+
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: CachedNetworkImageProvider(proPic),
+                      ),
                       contentPadding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
-                      title: CustomText(text: 'Sanjula Hasaranga',align: TextAlign.start,),
-                      subtitle: CustomText(text: 'Meka attac eka nisa puken hinaweyan bla vla vla vl vla vla vla vl alvla lbla balvl vla vlalbv bla blalb vlalbva vbl a',align: TextAlign.start,isBold: false,size: ScreenUtil().setSp(25),),
-                    )
-                  ],
-                ),
+                      title: CustomText(text: name==userName?'Me':name,align: TextAlign.start,),
+                      subtitle: CustomText(text: comment,align: TextAlign.start,isBold: false,size: ScreenUtil().setSp(25),),
+                    );
+                  },
+                ):Center(child: CircularProgressIndicator(),),
               ),
 
 
@@ -52,6 +111,7 @@ class _CommentsState extends State<Comments> {
                 children: [
                   CircleAvatar(
                     radius: 25,
+                    backgroundImage: CachedNetworkImageProvider(proPic),
                   ),
                   SizedBox(width: ScreenUtil().setWidth(10),),
                   Expanded(
@@ -59,6 +119,7 @@ class _CommentsState extends State<Comments> {
                       style: TextStyle(
                         fontFamily: 'Antonio',
                       ),
+                      controller: comment,
                       cursorColor: Theme.of(context).accentColor,
                       decoration: InputDecoration(
                         hintText: 'Type a comment...',
@@ -67,7 +128,19 @@ class _CommentsState extends State<Comments> {
                         ),
                         suffixIcon: IconButton(
                           icon: Icon(Icons.send,color: Constants.kMainTextColor,),
-                          onPressed: (){},
+                          onPressed: () async {
+                            ToastBar(text: 'Commenting...',color: Colors.orange).show();
+                            await FirebaseFirestore.instance.collection('posts').doc(widget.postID).collection('comments').add({
+                              'time': DateTime.now().toString(),
+                              'comment': comment.text,
+                              'authorName': userName,
+                              'authorImage': proPic,
+                              'authorID': uid,
+                            });
+
+                            ToastBar(text: 'Comment added!',color: Colors.green).show();
+                            comment.clear();
+                          },
                         ),
                         filled: true,
                         fillColor: Constants.kFillColor,
