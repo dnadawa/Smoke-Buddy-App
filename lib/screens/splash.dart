@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
@@ -18,6 +19,7 @@ class _SplashState extends State<Splash> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    Firebase.initializeApp();
     Timer(Duration(seconds: 3), (){
       Navigator.of(context).pushAndRemoveUntil(
           CupertinoPageRoute(builder: (context) =>

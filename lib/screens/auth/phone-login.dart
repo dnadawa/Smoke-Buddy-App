@@ -15,6 +15,10 @@ class PhoneLogin extends StatefulWidget {
 }
 
 class _PhoneLoginState extends State<PhoneLogin> {
+
+  TextEditingController phone = TextEditingController();
+  String countryCode = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,14 +64,18 @@ class _PhoneLoginState extends State<PhoneLogin> {
                           fontWeight: FontWeight.bold,
                           fontSize: ScreenUtil().setSp(35)
                       ),
-                      onChanged: (code)=>print(code),
+                      onChanged: (code){
+                        countryCode=code.toString();
+                        print(countryCode);
+                      },
                     ),
                   ),
                   SizedBox(width: ScreenUtil().setWidth(30),),
                   Expanded(
                     child: TextField(
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.phone,
                       style: Constants.kLoginTextStyle,
+                      controller: phone,
                       decoration: InputDecoration(
                         hintText: 'PHONE NUMBER',
                         hintStyle: Constants.kLoginTextStyle,
@@ -93,7 +101,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
                 onPressed: (){
                   Navigator.push(
                     context,
-                    CupertinoPageRoute(builder: (context) => PhoneOTP()),
+                    CupertinoPageRoute(builder: (context) => PhoneOTP(phone: countryCode+phone.text,)),
                   );
                 },
               ),
