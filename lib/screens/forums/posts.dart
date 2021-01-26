@@ -131,6 +131,7 @@ class _PostsState extends State<Posts> {
                   List likes = posts[i]['likes'];
                   List following = posts[i]['following'];
 
+                  print(post);
                   return Padding(
                     padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
                     child: PostWidget(

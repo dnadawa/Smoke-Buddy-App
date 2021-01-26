@@ -170,7 +170,7 @@ class _PostWidgetState extends State<PostWidget> {
                   onTap: () async {
                     List following = widget.following;
 
-                    if(!following.contains(widget.uid)){
+                    if(!widget.following.contains(widget.uid)){
                       following.add(widget.uid);
                       await FirebaseFirestore.instance.collection('posts').doc(widget.postId).update({
                         'following': following
