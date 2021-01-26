@@ -238,9 +238,9 @@ class _RegisterState extends State<Register> {
                                 uid = userCredential.user.uid;
                               } on FirebaseAuthException catch (e) {
                                 if (e.code == 'weak-password') {
-                                  print('The password provided is too weak.');
+                                  ToastBar(text: 'The password provided is too weak',color: Colors.red).show();
                                 } else if (e.code == 'email-already-in-use') {
-                                  print('The account already exists for that email.');
+                                  ToastBar(text: 'The account already exists for that email',color: Colors.red).show();
                                 }
                               } catch (e) {
                                 print(e);

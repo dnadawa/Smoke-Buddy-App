@@ -1,14 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/input-field.dart';
+import 'package:smoke_buddy/widgets/toast.dart';
 
 import '../../constants.dart';
 import '../home.dart';
 
 class EmailLogin extends StatelessWidget {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,12 +46,12 @@ class EmailLogin extends StatelessWidget {
               ///email
               Padding(
                 padding: EdgeInsets.all(ScreenUtil().setWidth(40)),
-                child: InputField(hint: 'EMAIL',type: TextInputType.emailAddress,),
+                child: InputField(hint: 'EMAIL',type: TextInputType.emailAddress,controller: email,),
               ),
               ///password
               Padding(
                 padding: EdgeInsets.all(ScreenUtil().setWidth(40)),
-                child: InputField(hint: 'PASSWORD',isPassword: true,),
+                child: InputField(hint: 'PASSWORD',isPassword: true,controller: password,),
               ),
               SizedBox(
                 height: ScreenUtil().setHeight(40),
@@ -58,12 +63,35 @@ class EmailLogin extends StatelessWidget {
                 height: ScreenUtil().setHeight(100),
                 child: Button(
                   text: 'SAVE',
-                  onPressed: (){
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(builder: (context) => Home()),
-                    );
-                  },
+                  onPressed: () async {
+
+                    ToastBar(text: 'Please wait',color: Colors.orange).show();
+
+                    try {
+                      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                          email: email.text,
+                          password: password.text
+                      );
+
+                    ToastBar(text: 'Logged in!',color: Colors.green).show();
+
+                    String uid = userCredential.user.uid;
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      prefs.setString('uid', uid);
+
+                      Navigator.of(context).pushAndRemoveUntil(
+                          CupertinoPageRoute(builder: (context) =>
+                              Home()), (Route<dynamic> route) => false);
+
+                    } on FirebaseAuthException catch (e) {
+                      if (e.code == 'user-not-found') {
+                        ToastBar(text: 'No user found for that email',color: Colors.red).show();
+                      } else if (e.code == 'wrong-password') {
+                        ToastBar(text: 'Password incorrect',color: Colors.red).show();
+                      }
+                    }
+
+                    },
                 ),
               ),
             ],
