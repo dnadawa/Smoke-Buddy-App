@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smoke_buddy/notification-model.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/toast.dart';
 
@@ -13,8 +14,10 @@ import '../../constants.dart';
 class Comments extends StatefulWidget {
 
   final String postID;
+  final List following;
+  final String authorID;
 
-  const Comments({Key key, this.postID}) : super(key: key);
+  const Comments({Key key, this.postID, this.following, this.authorID}) : super(key: key);
 
 
   @override
@@ -137,6 +140,9 @@ class _CommentsState extends State<Comments> {
                               'authorImage': proPic,
                               'authorID': uid,
                             });
+
+                            ///sendNotification
+                            NotificationModel.sendCommentNotification(postID: widget.postID,receiverID: widget.authorID,following: widget.following);
 
                             ToastBar(text: 'Comment added!',color: Colors.green).show();
                             comment.clear();

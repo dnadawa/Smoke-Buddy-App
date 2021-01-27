@@ -169,7 +169,7 @@ class _PostWidgetState extends State<PostWidget> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Comments(postID: widget.postId)),
+                      MaterialPageRoute(builder: (context) => Comments(postID: widget.postId,authorID: widget.authorId,following: widget.following,)),
                     );
                   },
                   child: Container(

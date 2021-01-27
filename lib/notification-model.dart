@@ -121,5 +121,68 @@ class NotificationModel{
 
 
 
+  static sendCommentNotification({String receiverID,String postID,List following}) async {
+
+
+    ///send to author
+    String authorID = await NotificationModel.getPlayerID(receiverID);
+    List<String> authorIDs = [authorID];
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String uid = prefs.get('uid');
+    var sub = await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: uid).get();
+    var user = sub.docs;
+    String subjectName = user[0]['name'];
+
+    OneSignal.shared.postNotification(OSCreateNotification(
+        playerIds: authorIDs,
+        content: "$subjectName commented your post.",
+        heading: "Your post commented!",
+        additionalData: {
+          'type': 'postComment',
+          'postID': postID
+        }
+    ));
+    await FirebaseFirestore.instance.collection('notifications').add({
+      'notification': "$subjectName commented your post",
+      'type': 'postComment',
+      'postID': postID,
+      'uid': [receiverID]
+    });
+
+
+
+    ///send to followers
+
+    if(following.contains(uid)){
+      following.remove(uid);
+    }
+
+    if(following.isNotEmpty){
+      List<String> followerIDs = [];
+      for(int i=0;i<following.length;i++){
+        String followerID = await NotificationModel.getPlayerID(following[i]);
+        followerIDs.add(followerID);
+      }
+
+      OneSignal.shared.postNotification(OSCreateNotification(
+          playerIds: followerIDs,
+          content: "$subjectName commented a post you are following.",
+          heading: "Followed post commented!",
+          additionalData: {
+            'type': 'postComment',
+            'postID': postID
+          }
+      ));
+
+      await FirebaseFirestore.instance.collection('notifications').add({
+        'notification': "$subjectName commented a post you are following",
+        'type': 'postComment',
+        'postID': postID,
+        'uid': following
+      });
+
+    }
+
+  }
 
 }
