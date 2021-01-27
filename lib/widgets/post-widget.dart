@@ -3,8 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:smoke_buddy/notification-model.dart';
 import 'package:smoke_buddy/screens/forums/comments.dart';
 import 'package:smoke_buddy/screens/profile/profile.dart';
+import 'package:smoke_buddy/widgets/toast.dart';
 
 import '../constants.dart';
 import 'custom-text.dart';
@@ -131,6 +134,7 @@ class _PostWidgetState extends State<PostWidget> {
                       await FirebaseFirestore.instance.collection('posts').doc(widget.postId).update({
                         'likes': likes
                       });
+
                       setState(() {
                         liked=true;
                       });
@@ -179,6 +183,7 @@ class _PostWidgetState extends State<PostWidget> {
                 if(widget.authorId!=widget.uid)
                 GestureDetector(
                   onTap: () async {
+                    ToastBar(text: 'Please wait',color: Colors.orange).show();
                     List following = widget.following;
 
                     if(!widget.following.contains(widget.uid)){
@@ -186,6 +191,10 @@ class _PostWidgetState extends State<PostWidget> {
                       await FirebaseFirestore.instance.collection('posts').doc(widget.postId).update({
                         'following': following
                       });
+
+                      ///send notification
+                      await NotificationModel.sendFollowNotification(receiverID: widget.authorId,postID: widget.postId);
+
                       setState(() {
                         followed=true;
                       });

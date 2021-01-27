@@ -38,6 +38,7 @@ class _SplashState extends State<Splash> {
           OSiOSSettings.inAppLaunchUrl: false
         }
     );
+    OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
     Timer(Duration(seconds: 3), (){
 
       if(uid==null){

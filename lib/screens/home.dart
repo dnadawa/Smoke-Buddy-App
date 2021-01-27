@@ -7,9 +7,22 @@ import 'package:smoke_buddy/widgets/bottom-sheet.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants.dart';
+import '../notification-model.dart';
 import 'notifications/notifications.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    NotificationModel.setPlayerID();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,7 +110,7 @@ class Home extends StatelessWidget {
           ),
         ),
       ),
-      
+
       bottomSheet: AppBottomSheet(),
     );
   }
