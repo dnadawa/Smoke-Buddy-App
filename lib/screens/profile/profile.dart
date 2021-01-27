@@ -35,6 +35,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   List myFollowing;
   List profileFollowers;
   List myFollowers;
+  bool hide = true;
 
   getProfileData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -56,6 +57,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
         status = users[0]['status'];
         profileFollowing = users[0]['following'];
         profileFollowers = users[0]['followers'];
+        hide = users[0]['hide'];
       });
     }
   }
@@ -173,6 +175,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                           SizedBox(height: ScreenUtil().setHeight(20),),
 
                           ///tabbar
+                          if(!hide||(widget.uid==loggedUid))
                           TabBar(
                             controller: _tabController,
                             indicatorColor: Constants.kMainTextColor,
@@ -208,7 +211,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                     ),
 
                     ///tabview
-
+                    if(!hide||(widget.uid==loggedUid))
                     Expanded(
                       child: TabBarView(
                         controller: _tabController,
@@ -218,7 +221,15 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                           Followers(followers: profileFollowing,), //this because same ui, don't need separate following and followers, only data change
                         ],
                       ),
-                    )
+                    ),
+
+
+                    if(!(!hide||(widget.uid==loggedUid)))
+                      Expanded(
+                        child: Center(
+                          child: CustomText(text: 'This profile is private',size: ScreenUtil().setSp(35),),
+                        ),
+                      )
 
 
 
