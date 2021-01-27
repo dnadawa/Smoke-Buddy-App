@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/screens/auth/phone-login.dart';
 import 'package:smoke_buddy/screens/home.dart';
@@ -30,6 +31,13 @@ class _SplashState extends State<Splash> {
     super.initState();
     Firebase.initializeApp();
     isLoggedIn();
+    OneSignal.shared.init(
+        "b9c1f8c8-8d79-49e3-9724-252ea89083ec",
+        iOSSettings: {
+          OSiOSSettings.autoPrompt: false,
+          OSiOSSettings.inAppLaunchUrl: false
+        }
+    );
     Timer(Duration(seconds: 3), (){
 
       if(uid==null){
