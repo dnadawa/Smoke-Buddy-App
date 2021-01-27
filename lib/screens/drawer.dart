@@ -101,7 +101,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
   getNotifications() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String uid = prefs.get('uid');
-    subscription = FirebaseFirestore.instance.collection('notifications').where('uid', arrayContains: uid).snapshots().listen((datasnapshot){
+    subscription = FirebaseFirestore.instance.collection('notifications').where('uid', arrayContains: uid).orderBy('time', descending: true).snapshots().listen((datasnapshot){
       setState(() {
         notifications = datasnapshot.docs;
       });
@@ -120,6 +120,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
       getForumsSelected();
     }
     else if(widget.screen =='notifications'){
+      getNotifications();
       forumActive = false;
       notificationActive = true;
       wallpaperActive = false;
@@ -139,14 +140,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: [
-                  Color(0xffbfc430),
-                  Color(0xff78983d),
-                ]
-            )
+            gradient: Constants.appGradient,
         ),
         child: Column(
           children: [
@@ -166,7 +160,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                           end: Alignment.bottomCenter,
                           colors: [
                             Color(0xff557334),
-                            Color(0xff84a93f),
+                            Color(0xff84a94f),
                           ],
                         )
                       ),

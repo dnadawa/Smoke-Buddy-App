@@ -49,7 +49,8 @@ class NotificationModel{
       'notification': "$subjectName followed your post",
       'type': 'postFollow',
       'postID': postID,
-      'uid': [receiverID]
+      'uid': [receiverID],
+      'time': DateTime.now().toString()
     });
   }
 
@@ -75,7 +76,8 @@ class NotificationModel{
     await FirebaseFirestore.instance.collection('notifications').add({
       'notification': "$subjectName followed you",
       'type': 'profileFollow',
-      'uid': [receiverID]
+      'uid': [receiverID],
+      'time': DateTime.now().toString()
     });
   }
 
@@ -106,13 +108,13 @@ class NotificationModel{
       await FirebaseFirestore.instance.collection('notifications').add({
         'notification': "$author posted a new post",
         'type': 'postCreate',
-        'uid': following
+        'uid': following,
+        'time': DateTime.now().toString()
       });
     }
 
 
   }
-
 
   static sendLikeNotification({String receiverID,String postID,List following}) async {
 
@@ -139,7 +141,8 @@ class NotificationModel{
         'notification': "$subjectName liked your post",
         'type': 'postLike',
         'postID': postID,
-        'uid': [receiverID]
+        'uid': [receiverID],
+        'time': DateTime.now().toString()
       });
     }
 
@@ -172,14 +175,13 @@ class NotificationModel{
         'notification': "$subjectName liked a post you are following",
         'type': 'postLike',
         'postID': postID,
-        'uid': following
+        'uid': following,
+        'time': DateTime.now().toString()
       });
 
     }
 
   }
-
-
 
   static sendCommentNotification({String receiverID,String postID,List following}) async {
 
@@ -206,7 +208,8 @@ class NotificationModel{
         'notification': "$subjectName commented your post",
         'type': 'postComment',
         'postID': postID,
-        'uid': [receiverID]
+        'uid': [receiverID],
+        'time': DateTime.now().toString()
       });
     }
 
@@ -240,7 +243,8 @@ class NotificationModel{
         'notification': "$subjectName commented a post you are following",
         'type': 'postComment',
         'postID': postID,
-        'uid': following
+        'uid': following,
+        'time': DateTime.now().toString()
       });
 
     }
