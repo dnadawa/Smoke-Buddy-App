@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,7 +9,7 @@ import 'package:smoke_buddy/screens/forums/forums.dart';
 import 'package:smoke_buddy/screens/notifications/notification-post.dart';
 import 'package:smoke_buddy/screens/notifications/notifications.dart';
 import 'package:smoke_buddy/screens/profile/profile.dart';
-import 'package:smoke_buddy/screens/settings/settings.dart';
+import 'package:smoke_buddy/screens/settings/settings.dart' as settings;
 import 'package:smoke_buddy/screens/wallpapers/wallpapers.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
@@ -30,6 +33,8 @@ class MenuDrawer extends StatefulWidget {
 class _MenuDrawerState extends State<MenuDrawer> {
 
   String currentScreen;
+  List<DocumentSnapshot> notifications;
+  StreamSubscription<QuerySnapshot> subscription;
 
   ///side menu
   bool forumActive = true;
@@ -91,6 +96,16 @@ class _MenuDrawerState extends State<MenuDrawer> {
       christianiaActive = false;
       smokeBuddyActive = true;
     }
+  }
+
+  getNotifications() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String uid = prefs.get('uid');
+    subscription = FirebaseFirestore.instance.collection('notifications').where('uid', arrayContains: uid).snapshots().listen((datasnapshot){
+      setState(() {
+        notifications = datasnapshot.docs;
+      });
+    });
   }
 
   @override
@@ -184,6 +199,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             image: 'notifications.png',
                             activate: notificationActive,
                             onTap: (){
+                              getNotifications();
                               setState(() {
                                 forumActive = false;
                                 notificationActive = true;
@@ -258,7 +274,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             onTap: (){
                               Navigator.push(
                                 context,
-                                CupertinoPageRoute(builder: (context) => Settings()),
+                                CupertinoPageRoute(builder: (context) => settings.Settings()),
                               );
                             },
                           ),
@@ -515,37 +531,60 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             Expanded(
                               child: Padding(
                                 padding: EdgeInsets.all(ScreenUtil().setHeight(15)),
-                                child: ListView(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: (){
-                                        Navigator.push(
-                                          context,
-                                          CupertinoPageRoute(builder: (context) => NotificationPost()),
-                                        );
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Constants.kFillColor,
-                                          borderRadius: BorderRadius.circular(10)
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(ScreenUtil().setHeight(15)),
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.favorite),
-                                              SizedBox(width: ScreenUtil().setWidth(10),),
-                                              SizedBox(
-                                                width: ScreenUtil().setWidth(270),
-                                                  child: CustomText(text: 'Dulaj liked your post.',align: TextAlign.start,)
-                                              )
-                                            ],
+                                child: notifications!=null?ListView.builder(
+                                  itemCount: notifications.length,
+                                  itemBuilder: (context,i){
+
+                                    String notification = notifications[i]['notification'];
+                                    String postID;
+                                    String type = notifications[i]['type'];
+                                    if(type!='profileFollow'){
+                                      postID = notifications[i]['postID'];
+                                    }
+
+
+                                    return Padding(
+                                      padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(15)),
+                                      child: GestureDetector(
+                                        onTap: (){
+                                          if(type!='profileFollow') {
+                                            Navigator.push(
+                                              context,
+                                              CupertinoPageRoute(
+                                                  builder: (context) =>
+                                                      NotificationPost(
+                                                        postID: postID,)),
+                                            );
+                                          }
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Constants.kFillColor,
+                                              borderRadius: BorderRadius.circular(10)
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.all(ScreenUtil().setHeight(15)),
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                    type=='postLike'?Icons.favorite:
+                                                    type=='postComment'?Icons.comment:
+                                                    type=='postFollow'?Icons.addchart:
+                                                    type=='profileFollow'?Icons.person_add:
+                                                    Icons.create),
+                                                SizedBox(width: ScreenUtil().setWidth(10),),
+                                                SizedBox(
+                                                    width: ScreenUtil().setWidth(270),
+                                                    child: CustomText(text: notification,align: TextAlign.start,)
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    )
-                                  ],
-                                ),
+                                    );
+                                  },
+                                ):Center(child: CircularProgressIndicator(),),
                               ),
                             ),
 

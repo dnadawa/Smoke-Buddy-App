@@ -53,46 +53,46 @@ class _NotificationsState extends State<Notifications>  with SingleTickerProvide
         decoration: BoxDecoration(gradient: Constants.appGradient),
         child: Padding(
           padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
-          child: ListView(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Constants.kYellow,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(width: 3,color: Constants.kMainTextColor)
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(ScreenUtil().setHeight(10)),
-                  child: Column(
-                    children: [
-
-                      ///notification
-                      Padding(
-                        padding: EdgeInsets.all(ScreenUtil().setHeight(10)),
-                        child: Row(
-                          children: [
-                            Icon(Icons.favorite_outlined,color: Constants.kMainTextColor,),
-                            SizedBox(width: ScreenUtil().setHeight(10),),
-                            CustomText(text: 'Dulaj Nadawa liked your post',size: ScreenUtil().setSp(35),),
-                          ],
-                        ),
-                      ),
-
-
-                      ///post
-                      PostWidget(
-                        image: '',
-                        description: 'Hello there is is just a ui',
-                        proPic: '',
-                        date: '2021/12/12',
-                        name: 'Sanjula',
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
+          // child: ListView(
+          //   children: [
+          //     Container(
+          //       decoration: BoxDecoration(
+          //         color: Constants.kYellow,
+          //         borderRadius: BorderRadius.circular(10),
+          //         border: Border.all(width: 3,color: Constants.kMainTextColor)
+          //       ),
+          //       child: Padding(
+          //         padding: EdgeInsets.all(ScreenUtil().setHeight(10)),
+          //         child: Column(
+          //           children: [
+          //
+          //             ///notification
+          //             Padding(
+          //               padding: EdgeInsets.all(ScreenUtil().setHeight(10)),
+          //               child: Row(
+          //                 children: [
+          //                   Icon(Icons.favorite_outlined,color: Constants.kMainTextColor,),
+          //                   SizedBox(width: ScreenUtil().setHeight(10),),
+          //                   CustomText(text: 'Dulaj Nadawa liked your post',size: ScreenUtil().setSp(35),),
+          //                 ],
+          //               ),
+          //             ),
+          //
+          //
+          //             ///post
+          //             PostWidget(
+          //               image: '',
+          //               description: 'Hello there is is just a ui',
+          //               proPic: '',
+          //               date: '2021/12/12',
+          //               name: 'Sanjula',
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //     )
+          //   ],
+          // ),
         ),
       ),
       bottomSheet: AppBottomSheet(),

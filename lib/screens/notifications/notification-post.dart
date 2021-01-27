@@ -1,11 +1,53 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/post-widget.dart';
 
 import '../../constants.dart';
 
-class NotificationPost extends StatelessWidget {
+class NotificationPost extends StatefulWidget {
+  final String postID;
+
+  const NotificationPost({Key key, this.postID}) : super(key: key);
+
+  @override
+  _NotificationPostState createState() => _NotificationPostState();
+}
+
+class _NotificationPostState extends State<NotificationPost> {
+
+  String image,authorName,authorImage, authorID ,post, date, uid;
+  List likes,following;
+
+  getPost() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    uid = preferences.get('uid');
+
+
+    await FirebaseFirestore.instance.collection('posts').doc(widget.postID).get().then((value){
+     setState(() {
+        image = value['image'];
+        authorName = value['authorName'];
+        authorImage = value['authorImage'];
+        authorID = value['authorID'];
+        post = value['post'];
+        date = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(value['publishedDate']));
+        likes = value['likes'];
+        following = value['following'];
+     });
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPost();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,13 +66,18 @@ class NotificationPost extends StatelessWidget {
           child: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-              child: PostWidget(
-                name: 'Sanjula Hasaranga',
-                date: '2021/12/12',
-                proPic: '',
-                description: 'Hello world',
-                image: 'https://images.unsplash.com/photo-1550355291-bbee04a92027?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHw%3D&w=1000&q=80',
-              ),
+            child: authorImage!=null?PostWidget(
+                image: image,
+                name: authorName,
+                date: date,
+                proPic: authorImage,
+                description: post,
+                authorId: authorID,
+                uid: uid,
+                following: following,
+                likes: likes,
+                postId: widget.postID,
+              ):Center(child: CircularProgressIndicator(),),
             ),
           ),
         ),
