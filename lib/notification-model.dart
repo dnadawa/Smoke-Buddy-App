@@ -66,22 +66,23 @@ class NotificationModel{
     var sub = await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: uid).get();
     var user = sub.docs;
     String subjectName = user[0]['name'];
-
-    OneSignal.shared.postNotification(OSCreateNotification(
-        playerIds: authorIDs,
-        content: "$subjectName liked your post.",
-        heading: "Your post liked!",
-        additionalData: {
-          'type': 'postLike',
-          'postID': postID
-        }
-    ));
-    await FirebaseFirestore.instance.collection('notifications').add({
-      'notification': "$subjectName liked your post",
-      'type': 'postLike',
-      'postID': postID,
-      'uid': [receiverID]
-    });
+    if(uid!=receiverID){
+      OneSignal.shared.postNotification(OSCreateNotification(
+          playerIds: authorIDs,
+          content: "$subjectName liked your post.",
+          heading: "Your post liked!",
+          additionalData: {
+            'type': 'postLike',
+            'postID': postID
+          }
+      ));
+      await FirebaseFirestore.instance.collection('notifications').add({
+        'notification': "$subjectName liked your post",
+        'type': 'postLike',
+        'postID': postID,
+        'uid': [receiverID]
+      });
+    }
 
 
 
@@ -132,22 +133,24 @@ class NotificationModel{
     var sub = await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: uid).get();
     var user = sub.docs;
     String subjectName = user[0]['name'];
+    if(uid!=receiverID){
+      OneSignal.shared.postNotification(OSCreateNotification(
+          playerIds: authorIDs,
+          content: "$subjectName commented your post.",
+          heading: "Your post commented!",
+          additionalData: {
+            'type': 'postComment',
+            'postID': postID
+          }
+      ));
+      await FirebaseFirestore.instance.collection('notifications').add({
+        'notification': "$subjectName commented your post",
+        'type': 'postComment',
+        'postID': postID,
+        'uid': [receiverID]
+      });
+    }
 
-    OneSignal.shared.postNotification(OSCreateNotification(
-        playerIds: authorIDs,
-        content: "$subjectName commented your post.",
-        heading: "Your post commented!",
-        additionalData: {
-          'type': 'postComment',
-          'postID': postID
-        }
-    ));
-    await FirebaseFirestore.instance.collection('notifications').add({
-      'notification': "$subjectName commented your post",
-      'type': 'postComment',
-      'postID': postID,
-      'uid': [receiverID]
-    });
 
 
 
