@@ -18,7 +18,7 @@ class DrawerSideButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: ScreenUtil().setWidth(170),
+        width: ScreenUtil().setWidth(160),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,7 +30,7 @@ class DrawerSideButton extends StatelessWidget {
               child: Container(
                 width: ScreenUtil().setWidth(10),
                 color: activate?Constants.kYellow:Colors.transparent,
-                height: ScreenUtil().setHeight(135),
+                height: ScreenUtil().setHeight(80),
               ),
             ),
 
@@ -40,13 +40,13 @@ class DrawerSideButton extends StatelessWidget {
               children: [
                 ///image
                 SizedBox(
-                    height: ScreenUtil().setHeight(100),
+                    height: ScreenUtil().setHeight(80),
                     child: Image.asset('assets/images/$image')
                 ),
                 SizedBox(height: ScreenUtil().setHeight(5),),
 
                 ///name
-                CustomText(text: name,size: ScreenUtil().setSp(25),)
+                CustomText(text: name,size: ScreenUtil().setSp(20),)
               ],
             ),
             Expanded(child: Container()),

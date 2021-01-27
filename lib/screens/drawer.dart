@@ -423,6 +423,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                               width: ScreenUtil().setWidth(320),
                               child: Button(
                                 text: 'ARTISTS',
+                                fontSize: ScreenUtil().setSp(60),
                                 onPressed: () async {
                                   setState(() {
                                     artistsActive = true;

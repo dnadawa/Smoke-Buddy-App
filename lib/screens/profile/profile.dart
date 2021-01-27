@@ -96,7 +96,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Padding(
-                      padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
+                      padding: EdgeInsets.only(top: ScreenUtil().setHeight(70)),
                       child: Row(
                         children: [
                           ///backbutton

@@ -33,13 +33,13 @@ class _HomeState extends State<Home> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: ScreenUtil().setHeight(100)),
+              SizedBox(height: ScreenUtil().setHeight(140)),
               ///logo
               Padding(
                 padding: EdgeInsets.all(ScreenUtil().setWidth(60)),
                 child: Image.asset('assets/images/logo.png'),
               ),
-
+              SizedBox(height: ScreenUtil().setHeight(60)),
 
               ///forums
               Button(
