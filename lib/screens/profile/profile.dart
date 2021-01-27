@@ -13,6 +13,7 @@ import 'package:smoke_buddy/widgets/marquee.dart';
 import 'package:smoke_buddy/widgets/toast.dart';
 
 import '../../constants.dart';
+import '../../notification-model.dart';
 import '../home.dart';
 
 class Profile extends StatefulWidget {
@@ -162,6 +163,9 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                 }
                                 else{
                                   profileFollowers.add(loggedUid);
+
+                                  ///send notification
+                                  NotificationModel.sendProfileFollowNotification(receiverID: widget.uid);
                                 }
                                 await FirebaseFirestore.instance.collection('users').doc(widget.uid).update({
                                   'followers': profileFollowers

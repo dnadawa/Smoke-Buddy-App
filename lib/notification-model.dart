@@ -53,7 +53,31 @@ class NotificationModel{
     });
   }
 
+  static sendProfileFollowNotification({String receiverID}) async {
+    String playerID = await NotificationModel.getPlayerID(receiverID);
+    List<String> playerIDs = [playerID];
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String uid = prefs.get('uid');
+    var sub = await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: uid).get();
+    var user = sub.docs;
+
+    String subjectName = user[0]['name'];
+
+    OneSignal.shared.postNotification(OSCreateNotification(
+        playerIds: playerIDs,
+        content: "$subjectName followed you.",
+        heading: "Your have followed!",
+        additionalData: {
+          'type': 'profileFollow',
+        }
+    ));
+    await FirebaseFirestore.instance.collection('notifications').add({
+      'notification': "$subjectName followed you",
+      'type': 'profileFollow',
+      'uid': [receiverID]
+    });
+  }
 
   static sendLikeNotification({String receiverID,String postID,List following}) async {
 
