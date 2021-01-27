@@ -10,6 +10,7 @@ import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/toast.dart';
 
 import '../../constants.dart';
+import '../../notification-model.dart';
 
 class CreatePost extends StatefulWidget {
 
@@ -143,7 +144,7 @@ class _CreatePostState extends State<CreatePost> {
                         }
 
 
-                        await FirebaseFirestore.instance.collection('posts').add({
+                        var ref = await FirebaseFirestore.instance.collection('posts').add({
                           'authorID': widget.uid,
                           'authorName': widget.name,
                           'authorImage': widget.proPic,
@@ -154,6 +155,10 @@ class _CreatePostState extends State<CreatePost> {
                           'following': [],
                           'category': widget.category
                         });
+
+                        ///send notification
+                        NotificationModel.sendPostCreateNotification(author: widget.name,postID: ref.id);
+
                         ToastBar(text: 'Posted',color: Colors.green).show();
                         Navigator.pop(context);
                       }

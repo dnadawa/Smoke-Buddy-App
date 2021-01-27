@@ -79,6 +79,41 @@ class NotificationModel{
     });
   }
 
+  static sendPostCreateNotification({String author,String postID}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String uid = prefs.get('uid');
+    var sub = await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: uid).get();
+    var user = sub.docs;
+    List following = user[0]['followers'];
+
+
+    if(following.isNotEmpty){
+      List<String> playerIDs = [];
+      for(int i=0;i<following.length;i++){
+        String playerID = await NotificationModel.getPlayerID(following[i]);
+        playerIDs.add(playerID);
+      }
+
+      OneSignal.shared.postNotification(OSCreateNotification(
+          playerIds: playerIDs,
+          content: "$author posted a new post.",
+          heading: "New Post added",
+          additionalData: {
+            'type': 'postCreate',
+            'postID': postID
+          }
+      ));
+      await FirebaseFirestore.instance.collection('notifications').add({
+        'notification': "$author posted a new post",
+        'type': 'postCreate',
+        'uid': following
+      });
+    }
+
+
+  }
+
+
   static sendLikeNotification({String receiverID,String postID,List following}) async {
 
 
