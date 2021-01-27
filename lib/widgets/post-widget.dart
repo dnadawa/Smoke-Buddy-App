@@ -130,10 +130,14 @@ class _PostWidgetState extends State<PostWidget> {
                     List likes = widget.likes;
 
                     if(!likes.contains(widget.uid)){
+                      ToastBar(text: 'Please wait',color: Colors.orange).show();
                       likes.add(widget.uid);
                       await FirebaseFirestore.instance.collection('posts').doc(widget.postId).update({
                         'likes': likes
                       });
+
+                      ///send notifications
+                      NotificationModel.sendLikeNotification(postID: widget.postId,receiverID: widget.authorId,following: widget.following);
 
                       setState(() {
                         liked=true;
