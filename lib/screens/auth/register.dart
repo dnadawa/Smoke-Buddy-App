@@ -263,7 +263,9 @@ class _RegisterState extends State<Register> {
                               'proPic': url,
                               'hide': false,
                               'notifyOwnPosts': true,
-                              'notifyOtherPosts': true
+                              'notifyOtherPosts': true,
+                              'following': [],
+                              'followers': []
                             });
 
                             SharedPreferences prefs = await SharedPreferences.getInstance();

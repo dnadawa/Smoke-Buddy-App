@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:smoke_buddy/screens/forums/comments.dart';
+import 'package:smoke_buddy/screens/profile/profile.dart';
 
 import '../constants.dart';
 import 'custom-text.dart';
@@ -74,8 +76,16 @@ class _PostWidgetState extends State<PostWidget> {
 
           ///propic and name
           ListTile(
-            leading: CircleAvatar(
-              backgroundImage: CachedNetworkImageProvider(widget.proPic),
+            leading: GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(builder: (context) => Profile(uid: widget.authorId,)),
+                );
+              },
+              child: CircleAvatar(
+                backgroundImage: CachedNetworkImageProvider(widget.proPic),
+              ),
             ),
             title: CustomText(text: widget.uid==widget.authorId?'Me':widget.name,align: TextAlign.start,),
             subtitle: CustomText(text: widget.date,align: TextAlign.start,isBold: false,size: ScreenUtil().setSp(25),),
@@ -166,6 +176,7 @@ class _PostWidgetState extends State<PostWidget> {
                 ),
 
                 ///follow
+                if(widget.authorId!=widget.uid)
                 GestureDetector(
                   onTap: () async {
                     List following = widget.following;

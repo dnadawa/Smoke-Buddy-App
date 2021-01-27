@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/screens/forums/forums.dart';
 import 'package:smoke_buddy/screens/notifications/notification-post.dart';
 import 'package:smoke_buddy/screens/notifications/notifications.dart';
@@ -236,10 +237,13 @@ class _MenuDrawerState extends State<MenuDrawer> {
                           DrawerSideButton(
                             name: 'PROFILE',
                             image: 'profile.png',
-                            onTap: (){
+                            onTap: () async {
+                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                              String uid = prefs.getString('uid');
+
                               Navigator.push(
                                 context,
-                                CupertinoPageRoute(builder: (context) => Profile()),
+                                CupertinoPageRoute(builder: (context) => Profile(uid: uid,)),
                               );
                             },
                           ),

@@ -1,29 +1,71 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/screens/profile/followers.dart';
-import 'package:smoke_buddy/screens/profile/following.dart';
 import 'package:smoke_buddy/screens/profile/post.dart';
 import 'package:smoke_buddy/widgets/bottom-sheet.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
+import 'package:smoke_buddy/widgets/marquee.dart';
+import 'package:smoke_buddy/widgets/toast.dart';
 
 import '../../constants.dart';
 import '../home.dart';
 
 class Profile extends StatefulWidget {
+
+  final String uid;
+  static int postCount = 0;
+  const Profile({Key key, this.uid}) : super(key: key);
+
   @override
   _ProfileState createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   TabController _tabController;
+  String proPic = 'https://media2.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif';
+  String name='n/a';
+  String status='n/a';
+  String loggedUid;
+  List profileFollowing;
+  List myFollowing;
+  List profileFollowers;
+  List myFollowers;
+
+  getProfileData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    loggedUid = prefs.getString('uid');
+    var sub2 = await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: loggedUid).get();
+    var myacc = sub2.docs;
+    if(myacc.isNotEmpty){
+      myFollowing = myacc[0]['following'];
+      myFollowers = myacc[0]['followers'];
+    }
+
+
+    var sub = await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: widget.uid).get();
+    var users = sub.docs;
+    if(users.isNotEmpty){
+      setState(() {
+        proPic = users[0]['proPic'];
+        name = users[0]['name'];
+        status = users[0]['status'];
+        profileFollowing = users[0]['following'];
+        profileFollowers = users[0]['followers'];
+      });
+    }
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    getProfileData();
   }
 
   @override
@@ -90,14 +132,44 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           ///follow button
-                          SizedBox(
+                          if(widget.uid!=loggedUid)
+                            myFollowing!=null&&profileFollowers!=null?
+                            SizedBox(
                             width: ScreenUtil().setWidth(400),
                             height: ScreenUtil().setHeight(100),
                             child: Button(
-                              text: 'FOLLOW',
-                              onPressed: () {},
+                              text: profileFollowers.contains(loggedUid)?'UNFOLLOW':'FOLLOW',
+                              onPressed: () async {
+                                ToastBar(text: 'Please wait...',color: Colors.orange).show();
+
+                                ///add him to my following list
+                                  if(myFollowing.contains(widget.uid)){
+                                    myFollowing.remove(widget.uid);
+                                  }
+                                  else{
+                                    myFollowing.add(widget.uid);
+                                  }
+                                  await FirebaseFirestore.instance.collection('users').doc(loggedUid).update({
+                                  'following': myFollowing
+                                  });
+
+
+                                  ///add me to his followers lis
+                                if(profileFollowers.contains(loggedUid)){
+                                  profileFollowers.remove(loggedUid);
+                                }
+                                else{
+                                  profileFollowers.add(loggedUid);
+                                }
+                                await FirebaseFirestore.instance.collection('users').doc(widget.uid).update({
+                                  'followers': profileFollowers
+                                });
+
+                                  getProfileData();
+                                  ToastBar(text: 'Followed',color: Colors.green).show();
+                              },
                             ),
-                          ),
+                          ):Center(child: CircularProgressIndicator(),),
                           SizedBox(height: ScreenUtil().setHeight(20),),
 
                           ///tabbar
@@ -109,7 +181,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                 child: Column(
                                   children: [
                                     CustomText(text: 'POSTS'),
-                                    CustomText(text: '5',),
+                                    CustomText(text: Profile.postCount.toString(),),
                                   ],
                                 ),
                               ),
@@ -117,7 +189,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                 child: Column(
                                   children: [
                                     CustomText(text: 'FOLLOWERS'),
-                                    CustomText(text: '512',),
+                                    CustomText(text: profileFollowers!=null?profileFollowers.length.toString():'0',),
                                   ],
                                 ),
                               ),
@@ -125,7 +197,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                 child: Column(
                                   children: [
                                     CustomText(text: 'FOLLOWING'),
-                                    CustomText(text: '524',),
+                                    CustomText(text: profileFollowing!=null?profileFollowing.length.toString():'0',),
                                   ],
                                 ),
                               ),
@@ -141,9 +213,9 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                       child: TabBarView(
                         controller: _tabController,
                         children: [
-                          Posts(),
-                          Followers(),
-                          Following(),
+                          Posts(id: widget.uid,loggedID: loggedUid,),
+                          Followers(followers: profileFollowers,),
+                          Followers(followers: profileFollowing,), //this because same ui, don't need separate following and followers, only data change
                         ],
                       ),
                     )
@@ -174,8 +246,8 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         SizedBox(height: ScreenUtil().setHeight(60),),
-                        CustomText(text: 'Sanjula Hasaranga',size: ScreenUtil().setSp(50),),
-                        CustomText(text: 'puka kamu',isBold: false,),
+                        CustomText(text: name,size: ScreenUtil().setSp(50),),
+                        MarqueeWidget(child: CustomText(text: status,isBold: false,)),
                       ],
                     ),
                   ),
@@ -190,6 +262,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                   padding: EdgeInsets.only(top: ScreenUtil().setHeight(220)),
                   child: CircleAvatar(
                     backgroundColor: Colors.white,
+                    backgroundImage: CachedNetworkImageProvider(proPic),
                     radius: ScreenUtil().setHeight(80),
                   ),
                 )
