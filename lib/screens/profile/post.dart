@@ -12,8 +12,9 @@ class Posts extends StatefulWidget {
 
   final String id;
   final String loggedID;
+  final ScrollController scrollController;
 
-  const Posts({Key key, this.id, this.loggedID}) : super(key: key);
+  const Posts({Key key, this.id, this.loggedID, this.scrollController}) : super(key: key);
 
   @override
   _PostsState createState() => _PostsState();
@@ -54,6 +55,9 @@ class _PostsState extends State<Posts> {
         padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
         child: ListView.builder(
           itemCount: posts.length,
+          controller: widget.scrollController,
+          physics: ScrollPhysics(),
+          shrinkWrap: true,
           itemBuilder: (context,i){
 
             String image = posts[i]['image'];

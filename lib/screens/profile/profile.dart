@@ -37,6 +37,8 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   List profileFollowers;
   List myFollowers;
   bool hide = true;
+  ScrollController _scrollController = ScrollController();
+  ScrollController _nextController = ScrollController();
 
   getProfileData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -68,6 +70,34 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
     // TODO: implement initState
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _scrollController.addListener(() {
+      print(_scrollController.offset);
+      // if(_scrollController.offset==157.11961722488036){
+      //   _nextController.addListener(() {
+      //     if(_nextController.offset==0){
+      //       _scrollController.animateTo(0, duration: Duration(milliseconds: 100), curve: Curves.easeIn);
+      //     }
+      //   });
+      // }
+      // else if(_scrollController.offset==0){
+      //   _nextController.addListener(() {
+      //     if(_nextController.offset>0){
+      //       _scrollController.animateTo(157, duration: Duration(milliseconds: 100), curve: Curves.easeIn);
+      //     }
+      //   });
+      // }
+    });
+
+    _nextController.addListener(() {
+      print(_scrollController.offset);
+      if(_nextController.offset>0&&_scrollController.offset==0){
+        _scrollController.animateTo(157, duration: Duration(milliseconds: 100), curve: Curves.easeIn);
+      }
+      else if(_nextController.offset==0&&_scrollController.offset>=157){
+        _scrollController.animateTo(0, duration: Duration(milliseconds: 100), curve: Curves.easeIn);
+      }
+    });
+
     getProfileData();
   }
 
@@ -96,7 +126,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Padding(
-                      padding: EdgeInsets.only(top: ScreenUtil().setHeight(70)),
+                      padding: EdgeInsets.only(top: ScreenUtil().setHeight(50)),
                       child: Row(
                         children: [
                           ///backbutton
@@ -124,28 +154,25 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                   ),
                 ),
 
-                SizedBox(height: ScreenUtil().setHeight(110),),
+                SizedBox(height: ScreenUtil().setHeight(80),),
 
 
-                    ///2nd container
-                    Container(
-                      height: ScreenUtil().screenHeight / 4 - ScreenUtil().setHeight(125),
-                      width: double.infinity,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ///follow button
-                          if(widget.uid!=loggedUid)
-                            myFollowing!=null&&profileFollowers!=null?
-                            SizedBox(
-                            width: ScreenUtil().setWidth(400),
-                            height: ScreenUtil().setHeight(100),
-                            child: Button(
-                              text: profileFollowers.contains(loggedUid)?'UNFOLLOW':'FOLLOW',
-                              onPressed: () async {
-                                ToastBar(text: 'Please wait...',color: Colors.orange).show();
+                    Expanded(
+                      child: NestedScrollView(
+                        physics: ScrollPhysics(),
+                        controller: _scrollController,
+                        headerSliverBuilder: (context,value){
+                          return [
+                            SliverAppBar(
+                            title: widget.uid!=loggedUid&&myFollowing!=null&&profileFollowers!=null?SizedBox(
+                              width: ScreenUtil().setWidth(400),
+                              height: ScreenUtil().setHeight(100),
+                              child: Button(
+                                text: profileFollowers.contains(loggedUid)?'UNFOLLOW':'FOLLOW',
+                                onPressed: () async {
+                                  ToastBar(text: 'Please wait...',color: Colors.orange).show();
 
-                                ///add him to my following list
+                                  ///add him to my following list
                                   if(myFollowing.contains(widget.uid)){
                                     myFollowing.remove(widget.uid);
                                   }
@@ -153,87 +180,180 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                     myFollowing.add(widget.uid);
                                   }
                                   await FirebaseFirestore.instance.collection('users').doc(loggedUid).update({
-                                  'following': myFollowing
+                                    'following': myFollowing
                                   });
 
 
                                   ///add me to his followers lis
-                                if(profileFollowers.contains(loggedUid)){
-                                  profileFollowers.remove(loggedUid);
-                                }
-                                else{
-                                  profileFollowers.add(loggedUid);
+                                  if(profileFollowers.contains(loggedUid)){
+                                    profileFollowers.remove(loggedUid);
+                                  }
+                                  else{
+                                    profileFollowers.add(loggedUid);
 
-                                  ///send notification
-                                  NotificationModel.sendProfileFollowNotification(receiverID: widget.uid);
-                                }
-                                await FirebaseFirestore.instance.collection('users').doc(widget.uid).update({
-                                  'followers': profileFollowers
-                                });
+                                    ///send notification
+                                    NotificationModel.sendProfileFollowNotification(receiverID: widget.uid);
+                                  }
+                                  await FirebaseFirestore.instance.collection('users').doc(widget.uid).update({
+                                    'followers': profileFollowers
+                                  });
 
                                   getProfileData();
                                   ToastBar(text: 'Followed',color: Colors.green).show();
-                              },
-                            ),
-                          ):Center(child: CircularProgressIndicator(),),
-                          SizedBox(height: ScreenUtil().setHeight(20),),
-
-                          ///tabbar
-                          if(!hide||(widget.uid==loggedUid))
-                          TabBar(
-                            controller: _tabController,
-                            indicatorColor: Constants.kMainTextColor,
-                            tabs: [
-                              Tab(
-                                child: Column(
-                                  children: [
-                                    CustomText(text: 'POSTS'),
-                                    CustomText(text: Profile.postCount.toString(),),
-                                  ],
-                                ),
+                                },
                               ),
-                              Tab(
-                                child: Column(
-                                  children: [
-                                    CustomText(text: 'FOLLOWERS'),
-                                    CustomText(text: profileFollowers!=null?profileFollowers.length.toString():'0',),
-                                  ],
+                            ):Container(),
+                            backgroundColor: Colors.transparent,
+                            floating: false,
+                            pinned: false,
+                            snap: false,
+                            expandedHeight: ScreenUtil().setHeight(230),
+                            automaticallyImplyLeading: false,
+                            bottom: !hide||(widget.uid==loggedUid)?TabBar(
+                              controller: _tabController,
+                              indicatorColor: Constants.kMainTextColor,
+                              tabs: [
+                                Tab(
+                                  child: Column(
+                                    children: [
+                                      CustomText(text: 'POSTS'),
+                                      CustomText(text: Profile.postCount.toString(),),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Tab(
-                                child: Column(
-                                  children: [
-                                    CustomText(text: 'FOLLOWING'),
-                                    CustomText(text: profileFollowing!=null?profileFollowing.length.toString():'0',),
-                                  ],
+                                Tab(
+                                  child: Column(
+                                    children: [
+                                      CustomText(text: 'FOLLOWERS'),
+                                      CustomText(text: profileFollowers!=null?profileFollowers.length.toString():'0',),
+                                    ],
+                                  ),
                                 ),
+                                Tab(
+                                  child: Column(
+                                    children: [
+                                      CustomText(text: 'FOLLOWING'),
+                                      CustomText(text: profileFollowing!=null?profileFollowing.length.toString():'0',),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ):PreferredSize(child: SizedBox.shrink(),preferredSize: Size(0,0),),
+                          )];
+                        },
+                        body: !hide||(widget.uid==loggedUid)?TabBarView(
+                          controller: _tabController,
+                          children: [
+                            Posts(id: widget.uid,loggedID: loggedUid,scrollController: _nextController,),
+                            Followers(followers: profileFollowers,scrollController: _nextController,),
+                            Followers(followers: profileFollowing,scrollController: _nextController,), //this because same ui, don't need separate following and followers, only data change
+                          ],
+                        ):Center(child: CustomText(text: 'This profile is private',size: ScreenUtil().setSp(35),),),
+                        // child: Column(
+                        //   children: [
+                        //     ///2nd container
+                        //     Container(
+                        //       height: ScreenUtil().screenHeight / 4 - ScreenUtil().setHeight(125),
+                        //       width: double.infinity,
+                        //       child: Column(
+                        //         mainAxisAlignment: MainAxisAlignment.end,
+                        //         children: [
+                        //           ///follow button
+                        //           if(widget.uid!=loggedUid)
+                        //             myFollowing!=null&&profileFollowers!=null?
+                        //             SizedBox(
+                        //               width: ScreenUtil().setWidth(400),
+                        //               height: ScreenUtil().setHeight(100),
+                        //               child: Button(
+                        //                 text: profileFollowers.contains(loggedUid)?'UNFOLLOW':'FOLLOW',
+                        //                 onPressed: () async {
+                        //                   ToastBar(text: 'Please wait...',color: Colors.orange).show();
+                        //
+                        //                   ///add him to my following list
+                        //                   if(myFollowing.contains(widget.uid)){
+                        //                     myFollowing.remove(widget.uid);
+                        //                   }
+                        //                   else{
+                        //                     myFollowing.add(widget.uid);
+                        //                   }
+                        //                   await FirebaseFirestore.instance.collection('users').doc(loggedUid).update({
+                        //                     'following': myFollowing
+                        //                   });
+                        //
+                        //
+                        //                   ///add me to his followers lis
+                        //                   if(profileFollowers.contains(loggedUid)){
+                        //                     profileFollowers.remove(loggedUid);
+                        //                   }
+                        //                   else{
+                        //                     profileFollowers.add(loggedUid);
+                        //
+                        //                     ///send notification
+                        //                     NotificationModel.sendProfileFollowNotification(receiverID: widget.uid);
+                        //                   }
+                        //                   await FirebaseFirestore.instance.collection('users').doc(widget.uid).update({
+                        //                     'followers': profileFollowers
+                        //                   });
+                        //
+                        //                   getProfileData();
+                        //                   ToastBar(text: 'Followed',color: Colors.green).show();
+                        //                 },
+                        //               ),
+                        //             ):Center(child: CircularProgressIndicator(),),
+                        //           SizedBox(height: ScreenUtil().setHeight(20),),
+                        //
+                        //           ///tabbar
+                        //           if(!hide||(widget.uid==loggedUid))
+                        //             TabBar(
+                        //               controller: _tabController,
+                        //               indicatorColor: Constants.kMainTextColor,
+                        //               tabs: [
+                        //                 Tab(
+                        //                   child: Column(
+                        //                     children: [
+                        //                       CustomText(text: 'POSTS'),
+                        //                       CustomText(text: Profile.postCount.toString(),),
+                        //                     ],
+                        //                   ),
+                        //                 ),
+                        //                 Tab(
+                        //                   child: Column(
+                        //                     children: [
+                        //                       CustomText(text: 'FOLLOWERS'),
+                        //                       CustomText(text: profileFollowers!=null?profileFollowers.length.toString():'0',),
+                        //                     ],
+                        //                   ),
+                        //                 ),
+                        //                 Tab(
+                        //                   child: Column(
+                        //                     children: [
+                        //                       CustomText(text: 'FOLLOWING'),
+                        //                       CustomText(text: profileFollowing!=null?profileFollowing.length.toString():'0',),
+                        //                     ],
+                        //                   ),
+                        //                 ),
+                        //               ],
+                        //             ),
+                        //         ],
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
                     ),
+                        //
+                        //     ///tabview
+                        //     if(!hide||(widget.uid==loggedUid))
+                        //       // Container(
+                        //       //     child: Posts(id: widget.uid,loggedID: loggedUid,)),
+                        //
+                        //
+                        //
+                        //     if(!(!hide||(widget.uid==loggedUid)))
+                        //       Center(
+                        //         child: CustomText(text: 'This profile is private',size: ScreenUtil().setSp(35),),
+                        //       )
+                        //   ],
+                        // ),
+                      // ),
+                    // ),
 
-                    ///tabview
-                    if(!hide||(widget.uid==loggedUid))
-                    Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          Posts(id: widget.uid,loggedID: loggedUid,),
-                          Followers(followers: profileFollowers,),
-                          Followers(followers: profileFollowing,), //this because same ui, don't need separate following and followers, only data change
-                        ],
-                      ),
-                    ),
-
-
-                    if(!(!hide||(widget.uid==loggedUid)))
-                      Expanded(
-                        child: Center(
-                          child: CustomText(text: 'This profile is private',size: ScreenUtil().setSp(35),),
-                        ),
-                      )
 
 
 

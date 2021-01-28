@@ -282,129 +282,139 @@ class _MenuDrawerState extends State<MenuDrawer> {
                     if(forumActive)
                     Expanded(
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ///title
-                          CustomText(text: 'FORUMS',size: ScreenUtil().setSp(50),),
+                          Center(child: CustomText(text: 'FORUMS',size: ScreenUtil().setSp(50),)),
                           SizedBox(height: ScreenUtil().setHeight(40),),
 
-                          ///status
-                          SizedBox(
-                            width: ScreenUtil().setWidth(290),
-                            child: Button(
-                              text: 'STATUS',
-                              onPressed: () async {
-                                setState(() {
-                                  op1Active = true;
-                                  op2Active = false;
-                                  op3Active = false;
-                                  op4Active = false;
-                                });
-                                if(currentScreen!='forums'){
-                                  currentScreen='forums';
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => Forums(index: 0,)),
-                                  );
-                                }
-                                Forums.tabController.animateTo(0);
-                                Navigator.pop(context);
-                              },
-                              leadingImage: true,
-                              image: 'status.png',
-                              color: Colors.transparent,
-                              isBorder: op1Active,
-                            ),
-                          ),
-                          SizedBox(height: ScreenUtil().setHeight(10),),
+                          ///buttons column
+                          Padding(
+                            padding: EdgeInsets.only(left: ScreenUtil().setWidth(40)),
+                            child: Column(
+                              children: [
+                              ///status
+                              SizedBox(
+                                width: ScreenUtil().setWidth(290),
+                                child: Button(
+                                  text: 'STATUS',
+                                  onPressed: () async {
+                                    setState(() {
+                                      op1Active = true;
+                                      op2Active = false;
+                                      op3Active = false;
+                                      op4Active = false;
+                                    });
+                                    if(currentScreen!='forums'){
+                                      currentScreen='forums';
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => Forums(index: 0,)),
+                                      );
+                                    }
+                                    Forums.tabController.animateTo(0);
+                                    Navigator.pop(context);
+                                  },
+                                  leadingImage: true,
+                                  image: 'status.png',
+                                  color: Colors.transparent,
+                                  isBorder: op1Active,
+                                ),
+                              ),
+                              SizedBox(height: ScreenUtil().setHeight(10),),
 
-                          ///gallery
-                          SizedBox(
-                            width: ScreenUtil().setWidth(290),
-                            child: Button(
-                              text: 'GALLERY',
-                              onPressed: () async {
-                                setState(() {
-                                  op1Active = false;
-                                  op2Active = true;
-                                  op3Active = false;
-                                  op4Active = false;
-                                });
-                                if(currentScreen!='forums'){
-                                  currentScreen='forums';
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => Forums(index: 1,)),
-                                  );
-                                }
-                                Forums.tabController.animateTo(1);
-                                Navigator.pop(context);
-                              },
-                              leadingImage: true,
-                              image: 'gallery.png',
-                              color: Colors.transparent,
-                              isBorder: op2Active,
-                            ),
-                          ),
-                          SizedBox(height: ScreenUtil().setHeight(10),),
+                              ///gallery
+                              SizedBox(
+                                width: ScreenUtil().setWidth(290),
+                                child: Button(
+                                  text: 'GALLERY',
+                                  onPressed: () async {
+                                    setState(() {
+                                      op1Active = false;
+                                      op2Active = true;
+                                      op3Active = false;
+                                      op4Active = false;
+                                    });
+                                    if(currentScreen!='forums'){
+                                      currentScreen='forums';
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => Forums(index: 1,)),
+                                      );
+                                    }
+                                    Forums.tabController.animateTo(1);
+                                    Navigator.pop(context);
+                                  },
+                                  leadingImage: true,
+                                  image: 'gallery.png',
+                                  color: Colors.transparent,
+                                  isBorder: op2Active,
+                                ),
+                              ),
+                              SizedBox(height: ScreenUtil().setHeight(10),),
 
-                          ///grow
-                          SizedBox(
-                            width: ScreenUtil().setWidth(290),
-                            child: Button(
-                              text: 'GROW',
-                              onPressed: () async {
-                                setState(() {
-                                  op1Active = false;
-                                  op2Active = false;
-                                  op3Active = true;
-                                  op4Active = false;
-                                });
-                                if(currentScreen!='forums'){
-                                  currentScreen='forums';
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => Forums(index: 2,)),
-                                  );
-                                }
-                                Forums.tabController.animateTo(2);
-                                Navigator.pop(context);
-                              },
-                              leadingImage: true,
-                              image: 'grow.png',
-                              color: Colors.transparent,
-                              isBorder: op3Active,
-                            ),
-                          ),
-                          SizedBox(height: ScreenUtil().setHeight(10),),
+                              ///grow
+                              SizedBox(
+                                width: ScreenUtil().setWidth(290),
+                                child: Button(
+                                  text: 'GROW',
+                                  onPressed: () async {
+                                    setState(() {
+                                      op1Active = false;
+                                      op2Active = false;
+                                      op3Active = true;
+                                      op4Active = false;
+                                    });
+                                    if(currentScreen!='forums'){
+                                      currentScreen='forums';
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => Forums(index: 2,)),
+                                      );
+                                    }
+                                    Forums.tabController.animateTo(2);
+                                    Navigator.pop(context);
+                                  },
+                                  leadingImage: true,
+                                  image: 'grow.png',
+                                  color: Colors.transparent,
+                                  isBorder: op3Active,
+                                ),
+                              ),
+                              SizedBox(height: ScreenUtil().setHeight(10),),
 
-                          ///cooking
-                          SizedBox(
-                            width: ScreenUtil().setWidth(290),
-                            child: Button(
-                              text: 'COOKING',
-                              onPressed: () async {
-                                setState(() {
-                                  op1Active = false;
-                                  op2Active = false;
-                                  op3Active = false;
-                                  op4Active = true;
-                                });
-                                if(currentScreen!='forums'){
-                                  currentScreen='forums';
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => Forums(index: 3,)),
-                                  );
-                                }
-                                Forums.tabController.animateTo(3);
-                                Navigator.pop(context);
-                              },
-                              leadingImage: true,
-                              image: 'cooking.png',
-                              color: Colors.transparent,
-                              isBorder: op4Active,
+                              ///cooking
+                              SizedBox(
+                                width: ScreenUtil().setWidth(290),
+                                child: Button(
+                                  text: 'COOKING',
+                                  onPressed: () async {
+                                    setState(() {
+                                      op1Active = false;
+                                      op2Active = false;
+                                      op3Active = false;
+                                      op4Active = true;
+                                    });
+                                    if(currentScreen!='forums'){
+                                      currentScreen='forums';
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => Forums(index: 3,)),
+                                      );
+                                    }
+                                    Forums.tabController.animateTo(3);
+                                    Navigator.pop(context);
+                                  },
+                                  leadingImage: true,
+                                  image: 'cooking.png',
+                                  color: Colors.transparent,
+                                  isBorder: op4Active,
+                                ),
+                              ),
+                            ],
                             ),
                           ),
+
                         ],
                       ),
                     ),
@@ -413,101 +423,110 @@ class _MenuDrawerState extends State<MenuDrawer> {
                     if(wallpaperActive)
                       Expanded(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ///title
-                            CustomText(text: 'WALLPAPERS',size: ScreenUtil().setSp(50),),
+                            Center(child: CustomText(text: 'WALLPAPERS',size: ScreenUtil().setSp(50),)),
                             SizedBox(height: ScreenUtil().setHeight(40),),
 
-                            ///artists
-                            SizedBox(
-                              width: ScreenUtil().setWidth(320),
-                              child: Button(
-                                text: 'ARTISTS',
-                                fontSize: ScreenUtil().setSp(60),
-                                onPressed: () async {
-                                  setState(() {
-                                    artistsActive = true;
-                                    christianiaActive = false;
-                                    smokeBuddyActive = false;
-                                  });
 
-                                  if(currentScreen!='wallpapers'){
-                                    await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => Wallpapers(index: 0,)),
-                                    );
-                                    currentScreen='wallpapers';
-                                  }
-                                  Wallpapers.tabController.animateTo(0);
-                                  Navigator.pop(context);
-                                },
-                                leadingImage: true,
-                                image: 'artists.png',
-                                color: Colors.transparent,
-                                isBorder: artistsActive,
-                              ),
-                            ),
-                            SizedBox(height: ScreenUtil().setHeight(10),),
+                            ///buttons
+                            Padding(
+                              padding: EdgeInsets.only(left: ScreenUtil().setWidth(40)),
+                              child: Column(
+                                children: [
+                                  ///artists
+                                  SizedBox(
+                                    width: ScreenUtil().setWidth(360),
+                                    child: Button(
+                                      text: 'ARTISTS',
+                                      // fontSize: ScreenUtil().setSp(60),
+                                      onPressed: () async {
+                                        setState(() {
+                                          artistsActive = true;
+                                          christianiaActive = false;
+                                          smokeBuddyActive = false;
+                                        });
 
-                            ///christiania
-                            SizedBox(
-                              width: ScreenUtil().setWidth(320),
-                              child: Button(
-                                text: 'CHRISTIANIA',
-                                fontSize: ScreenUtil().setSp(60),
-                                onPressed: () async {
-                                  setState(() {
-                                    artistsActive = false;
-                                    christianiaActive = true;
-                                    smokeBuddyActive = false;
-                                  });
-                                  if(currentScreen!='wallpapers'){
-                                    await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => Wallpapers(index: 1,)),
-                                    );
-                                    currentScreen='wallpapers';
-                                  }
-                                  Wallpapers.tabController.animateTo(1);
-                                  Navigator.pop(context);
-                                },
-                                leadingImage: true,
-                                image: 'christiania.png',
-                                color: Colors.transparent,
-                                isBorder: christianiaActive,
-                              ),
-                            ),
-                            SizedBox(height: ScreenUtil().setHeight(10),),
+                                        if(currentScreen!='wallpapers'){
+                                          await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => Wallpapers(index: 0,)),
+                                          );
+                                          currentScreen='wallpapers';
+                                        }
+                                        Wallpapers.tabController.animateTo(0);
+                                        Navigator.pop(context);
+                                      },
+                                      leadingImage: true,
+                                      image: 'artists.png',
+                                      color: Colors.transparent,
+                                      isBorder: artistsActive,
+                                    ),
+                                  ),
+                                  SizedBox(height: ScreenUtil().setHeight(10),),
 
-                            ///smokebuddy
-                            SizedBox(
-                              width: ScreenUtil().setWidth(320),
-                              child: Button(
-                                text: 'SMOKEBUDDY',
-                                fontSize: ScreenUtil().setSp(55),
-                                onPressed: () async {
-                                  setState(() {
-                                    artistsActive = false;
-                                    christianiaActive = false;
-                                    smokeBuddyActive = true;
-                                  });
-                                  if(currentScreen!='wallpapers'){
-                                    await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => Wallpapers(index: 2,)),
-                                    );
-                                    currentScreen='wallpapers';
-                                  }
-                                  Wallpapers.tabController.animateTo(2);
-                                  Navigator.pop(context);
-                                },
-                                leadingImage: true,
-                                image: 'smokebuddy.png',
-                                color: Colors.transparent,
-                                isBorder: smokeBuddyActive,
+                                  ///christiania
+                                  SizedBox(
+                                    width: ScreenUtil().setWidth(360),
+                                    child: Button(
+                                      text: 'CHRISTIANIA',
+                                      // fontSize: ScreenUtil().setSp(60),
+                                      onPressed: () async {
+                                        setState(() {
+                                          artistsActive = false;
+                                          christianiaActive = true;
+                                          smokeBuddyActive = false;
+                                        });
+                                        if(currentScreen!='wallpapers'){
+                                          await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => Wallpapers(index: 1,)),
+                                          );
+                                          currentScreen='wallpapers';
+                                        }
+                                        Wallpapers.tabController.animateTo(1);
+                                        Navigator.pop(context);
+                                      },
+                                      leadingImage: true,
+                                      image: 'christiania.png',
+                                      color: Colors.transparent,
+                                      isBorder: christianiaActive,
+                                    ),
+                                  ),
+                                  SizedBox(height: ScreenUtil().setHeight(10),),
+
+                                  ///smokebuddy
+                                  SizedBox(
+                                    width: ScreenUtil().setWidth(360),
+                                    child: Button(
+                                      text: 'SMOKEBUDDY',
+                                      onPressed: () async {
+                                        setState(() {
+                                          artistsActive = false;
+                                          christianiaActive = false;
+                                          smokeBuddyActive = true;
+                                        });
+                                        if(currentScreen!='wallpapers'){
+                                          await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => Wallpapers(index: 2,)),
+                                          );
+                                          currentScreen='wallpapers';
+                                        }
+                                        Wallpapers.tabController.animateTo(2);
+                                        Navigator.pop(context);
+                                      },
+                                      leadingImage: true,
+                                      image: 'smokebuddy.png',
+                                      color: Colors.transparent,
+                                      isBorder: smokeBuddyActive,
+                                    ),
+                                  ),
+                                  SizedBox(height: ScreenUtil().setHeight(10),),
+                                ],
                               ),
-                            ),
-                            SizedBox(height: ScreenUtil().setHeight(10),),
+                            )
 
                           ],
                         ),

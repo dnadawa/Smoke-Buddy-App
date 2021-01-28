@@ -7,8 +7,9 @@ import 'package:smoke_buddy/widgets/custom-text.dart';
 class Followers extends StatefulWidget {
 
   final List followers;
+  final ScrollController scrollController;
 
-  const Followers({Key key, this.followers}) : super(key: key);
+  const Followers({Key key, this.followers, this.scrollController}) : super(key: key);
 
   @override
   _FollowersState createState() => _FollowersState();
@@ -36,6 +37,7 @@ class _FollowersState extends State<Followers> {
       backgroundColor: Colors.transparent,
       body: widget.followers!=null?ListView.builder(
         itemCount: widget.followers.length,
+        controller: widget.scrollController,
         itemBuilder: (context,i){
 
           return FutureBuilder(
