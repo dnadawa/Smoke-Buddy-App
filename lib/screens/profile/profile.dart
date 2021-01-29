@@ -72,20 +72,6 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
     _tabController = TabController(length: 3, vsync: this);
     _scrollController.addListener(() {
       print(_scrollController.offset);
-      // if(_scrollController.offset==157.11961722488036){
-      //   _nextController.addListener(() {
-      //     if(_nextController.offset==0){
-      //       _scrollController.animateTo(0, duration: Duration(milliseconds: 100), curve: Curves.easeIn);
-      //     }
-      //   });
-      // }
-      // else if(_scrollController.offset==0){
-      //   _nextController.addListener(() {
-      //     if(_nextController.offset>0){
-      //       _scrollController.animateTo(157, duration: Duration(milliseconds: 100), curve: Curves.easeIn);
-      //     }
-      //   });
-      // }
     });
 
     _nextController.addListener(() {
@@ -93,7 +79,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
       if(_nextController.offset>0&&_scrollController.offset==0){
         _scrollController.animateTo(157, duration: Duration(milliseconds: 100), curve: Curves.easeIn);
       }
-      else if(_nextController.offset==0&&_scrollController.offset>=157){
+      else if(_nextController.offset==0&&_scrollController.offset>=1){
         _scrollController.animateTo(0, duration: Duration(milliseconds: 100), curve: Curves.easeIn);
       }
     });
