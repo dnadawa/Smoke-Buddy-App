@@ -65,6 +65,7 @@ class _ExtendedWallpaperState extends State<ExtendedWallpaper> {
                         var path = await ImageDownloader.findPath(imageId);
                         ToastBar(text: 'Downloaded to $path',color: Colors.green).show();
                       } on PlatformException catch (error) {
+                        print(error.toString());
                         ToastBar(text: 'Something went wrong',color: Colors.red).show();
                       }
                     },

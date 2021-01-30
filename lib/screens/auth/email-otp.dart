@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
@@ -14,7 +13,6 @@ import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/toast.dart';
 
 import '../../constants.dart';
-import '../home.dart';
 
 class EmailOTP extends StatefulWidget {
   final String email;

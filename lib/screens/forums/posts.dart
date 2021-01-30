@@ -11,8 +11,6 @@ import 'package:smoke_buddy/screens/forums/create-post.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/post-widget.dart';
 
-import 'comments.dart';
-
 class Posts extends StatefulWidget {
 
   final String category;

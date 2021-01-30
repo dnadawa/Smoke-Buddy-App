@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,9 +31,8 @@ class _PhoneOTPState extends State<PhoneOTP> {
   TextEditingController code = TextEditingController();
 
   sendOtp() async {
-    var phone = widget.phone.substring(widget.phone.length - 9);
     await auth.verifyPhoneNumber(
-      phoneNumber: '+94$phone',
+      phoneNumber: widget.phone,
       verificationCompleted: (PhoneAuthCredential credential) async {
         print('verification completed');
       },

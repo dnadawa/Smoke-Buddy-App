@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smoke_buddy/constants.dart';
-import 'package:smoke_buddy/screens/auth/phone-login.dart';
-import 'package:smoke_buddy/screens/auth/register.dart';
-import 'package:smoke_buddy/screens/home.dart';
 import 'package:smoke_buddy/screens/splash.dart';
 
 void main() {

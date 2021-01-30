@@ -7,16 +7,11 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/screens/drawer.dart';
-import 'package:smoke_buddy/screens/forums/posts.dart';
 import 'package:smoke_buddy/screens/home.dart';
-import 'package:smoke_buddy/screens/profile/post.dart';
-import 'package:smoke_buddy/screens/wallpapers/wallpaper-feed.dart';
 import 'package:smoke_buddy/widgets/bottom-sheet.dart';
-import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/marquee.dart';
 import 'package:smoke_buddy/widgets/post-widget.dart';
-import 'package:smoke_buddy/widgets/tab-button.dart';
 
 import '../../constants.dart';
 

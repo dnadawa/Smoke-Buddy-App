@@ -9,6 +9,7 @@ import 'package:smoke_buddy/widgets/toast.dart';
 
 import '../../constants.dart';
 
+// ignore: must_be_immutable
 class EmailRegister extends StatelessWidget {
 
   TextEditingController email = TextEditingController();

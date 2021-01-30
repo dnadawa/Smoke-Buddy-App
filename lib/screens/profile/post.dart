@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:smoke_buddy/screens/profile/profile.dart';
-import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/post-widget.dart';
 
 class Posts extends StatefulWidget {

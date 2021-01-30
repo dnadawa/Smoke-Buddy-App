@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
 
+// ignore: must_be_immutable
 class About extends StatelessWidget {
 
 

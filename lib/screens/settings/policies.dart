@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/screenutil.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
 

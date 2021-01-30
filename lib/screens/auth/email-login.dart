@@ -11,6 +11,7 @@ import 'package:smoke_buddy/widgets/toast.dart';
 import '../../constants.dart';
 import '../home.dart';
 
+// ignore: must_be_immutable
 class EmailLogin extends StatelessWidget {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();

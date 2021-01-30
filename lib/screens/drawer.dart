@@ -134,6 +134,13 @@ class _MenuDrawerState extends State<MenuDrawer> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    subscription?.cancel();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(

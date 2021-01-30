@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:smoke_buddy/notification-model.dart';
 import 'package:smoke_buddy/screens/forums/comments.dart';
 import 'package:smoke_buddy/screens/profile/profile.dart';
