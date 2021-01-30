@@ -71,6 +71,7 @@ class _SettingsState extends State<Settings> {
         height: double.infinity,
         decoration: BoxDecoration(gradient: Constants.appGradient),
         child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Padding(
             padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
             child: Column(
@@ -79,12 +80,14 @@ class _SettingsState extends State<Settings> {
                 ///logo
                 Padding(
                   padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
-                  child: Image.asset('assets/images/logo.png'),
+                  child: SizedBox(
+                      height: ScreenUtil().setHeight(250),
+                      child: Center(child: Image.asset('assets/images/logo.png'))),
                 ),
 
                 ///account
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(20)),
+                  padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(10)),
                   child: CustomText(text: 'ACCOUNT',size: ScreenUtil().setSp(40),),
                 ),
 
@@ -92,6 +95,7 @@ class _SettingsState extends State<Settings> {
                 ListTile(
                   title: CustomText(text: 'Edit Profile',align: TextAlign.start,size: ScreenUtil().setSp(35),),
                   trailing: Icon(Icons.arrow_forward_ios),
+                  dense: true,
                   onTap: (){
                     Navigator.push(
                       context,
@@ -103,6 +107,7 @@ class _SettingsState extends State<Settings> {
                 ///hide profile
                 ListTile(
                   title: CustomText(text: 'Hide Profile',align: TextAlign.start,size: ScreenUtil().setSp(35),),
+                  dense: true,
                   trailing: CupertinoSwitch(
                       value: hideProfile,
                       onChanged: (val)async{
@@ -124,6 +129,7 @@ class _SettingsState extends State<Settings> {
                 ///log out
                 ListTile(
                   title: CustomText(text: 'Log Out',align: TextAlign.start,size: ScreenUtil().setSp(35),),
+                  dense: true,
                   trailing: Icon(Icons.arrow_forward_ios),
                   onTap: () async {
                     ToastBar(text: 'Please wait...',color: Colors.orange).show();
@@ -140,13 +146,14 @@ class _SettingsState extends State<Settings> {
 
                 ///notifications
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(20)),
+                  padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(10)),
                   child: CustomText(text: 'NOTIFICATIONS',size: ScreenUtil().setSp(40),),
                 ),
 
                 ///own posts
                 ListTile(
                   title: CustomText(text: 'Own Posts',align: TextAlign.start,size: ScreenUtil().setSp(35),),
+                  dense: true,
                   trailing: CupertinoSwitch(
                     value: notifyOwnPosts,
                     onChanged: (val) async {
@@ -168,6 +175,7 @@ class _SettingsState extends State<Settings> {
                 ///own posts
                 ListTile(
                   title: CustomText(text: 'Other Posts',align: TextAlign.start,size: ScreenUtil().setSp(35),),
+                  dense: true,
                   trailing: CupertinoSwitch(
                     value: notifyOtherPosts,
                     onChanged: (val) async {
@@ -188,6 +196,7 @@ class _SettingsState extends State<Settings> {
                 ///about
                 ListTile(
                   title: CustomText(text: 'About',align: TextAlign.start,size: ScreenUtil().setSp(35),),
+                  dense: true,
                   trailing: Icon(Icons.arrow_forward_ios),
                   onTap: (){
                     Navigator.push(
