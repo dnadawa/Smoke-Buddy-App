@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,6 +36,15 @@ class _PostWidgetState extends State<PostWidget> {
 
   bool liked = false;
   bool followed = false;
+  List<DocumentSnapshot> comments;
+  StreamSubscription<QuerySnapshot> subscription;
+  getComments(String postID)async{
+    subscription = FirebaseFirestore.instance.collection('posts').doc(postID).collection('comments').orderBy('time',descending: true).snapshots().listen((datasnapshot){
+      setState(() {
+        comments = datasnapshot.docs;
+      });
+    });
+  }
 
   @override
   void initState() {
@@ -64,6 +75,15 @@ class _PostWidgetState extends State<PostWidget> {
         followed = false;
       });
     }
+
+    getComments(widget.postId);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    subscription?.cancel();
   }
   @override
   Widget build(BuildContext context) {
@@ -118,6 +138,7 @@ class _PostWidgetState extends State<PostWidget> {
             ),
           ),
 
+          ///button bar
           Padding(
             padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
             child: Row(
@@ -177,7 +198,7 @@ class _PostWidgetState extends State<PostWidget> {
                       children: [
                         Icon(Icons.comment),
                         SizedBox(width: ScreenUtil().setWidth(10),),
-                        CustomText(text: 'Comments',)
+                        CustomText(text: '${comments!=null?comments.length:0} Comments',)
                       ],
                     ),
                   ),
@@ -224,6 +245,21 @@ class _PostWidgetState extends State<PostWidget> {
                   ),
                 )
               ],
+            ),
+          ),
+
+          ///single comment
+          if(comments!=null&&comments.isNotEmpty)
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(50)),
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundImage: CachedNetworkImageProvider(comments[0]['authorImage']),
+              ),
+              contentPadding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
+              dense: true,
+              title: CustomText(text: comments[0]['authorID']==widget.uid?'Me':comments[0]['authorName'],align: TextAlign.start,),
+              subtitle: CustomText(text: comments[0]['comment'],align: TextAlign.start,isBold: false,size: ScreenUtil().setSp(25),),
             ),
           )
 

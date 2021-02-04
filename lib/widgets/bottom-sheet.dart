@@ -13,19 +13,20 @@ class AppBottomSheet extends StatelessWidget {
         color: Theme.of(context).primaryColor,
         width: double.infinity,
         height: ScreenUtil().setHeight(100),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CustomText(text: 'SUPPORT',size: ScreenUtil().setSp(40),color: Theme.of(context).accentColor,),
-            SizedBox(width: ScreenUtil().setWidth(20),),
-            SizedBox(
-                height: ScreenUtil().setHeight(65),
-                child: Image.asset('assets/images/heart.png')),
-            SizedBox(width: ScreenUtil().setWidth(20),),
-            CustomText(text: 'SMOKEBUDDY',size: ScreenUtil().setSp(40),color: Theme.of(context).accentColor,),
-          ],
-        ),
+        child: Image.asset('assets/images/support.png'),
+        // child: Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   crossAxisAlignment: CrossAxisAlignment.center,
+        //   children: [
+        //     CustomText(text: 'SUPPORT',size: ScreenUtil().setSp(40),color: Theme.of(context).accentColor,),
+        //     SizedBox(width: ScreenUtil().setWidth(20),),
+        //     SizedBox(
+        //         height: ScreenUtil().setHeight(65),
+        //         child: Image.asset('assets/images/heart.png')),
+        //     SizedBox(width: ScreenUtil().setWidth(20),),
+        //     CustomText(text: 'SMOKEBUDDY',size: ScreenUtil().setSp(40),color: Theme.of(context).accentColor,),
+        //   ],
+        // ),
       ),
     );
   }

@@ -42,7 +42,6 @@ class _PostsState extends State<Posts> {
     }
   }
 
-
   getPosts(){
     subscription = FirebaseFirestore.instance.collection('posts').where('category',isEqualTo: widget.category).orderBy('publishedDate', descending: true).snapshots().listen((datasnapshot){
       setState(() {
