@@ -57,7 +57,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
                       dialogTextStyle: TextStyle(
                         fontFamily: 'Antonio'
                       ),
-                      initialSelection: 'Denmark',
+                      initialSelection: 'Danmark',
                       textStyle: TextStyle(
                           fontFamily: 'Antonio',
                           letterSpacing: 0.6,

@@ -51,9 +51,7 @@ class _WallpaperFeedState extends State<WallpaperFeed> {
           crossAxisCount: 2,
           childAspectRatio: 9/14,
         ),
-        physics: BouncingScrollPhysics(),
         padding: EdgeInsets.all(5),
-
         itemBuilder: (context,i){
 
           return GestureDetector(

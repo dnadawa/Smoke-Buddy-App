@@ -77,7 +77,7 @@ class _CreatePostState extends State<CreatePost> {
                             padding: EdgeInsets.all(ScreenUtil().setHeight(15)),
                             child: GestureDetector(
                               onTap: () async {
-                                final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
+                                final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery,imageQuality: 50);
                                 setState(() {
                                   if (pickedFile != null) {
                                     image = File(pickedFile.path);
@@ -97,6 +97,7 @@ class _CreatePostState extends State<CreatePost> {
 
 
                       ///textfield
+                      if(widget.category!='gallery')
                       Padding(
                         padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
                         child: TextField(
@@ -104,11 +105,16 @@ class _CreatePostState extends State<CreatePost> {
                           controller: post,
                           maxLines: null,
                           decoration: InputDecoration(
-                            hintText: "What's on your mind...",
+                            hintText: widget.category!='gallery'?"Create a post":"Upload a photo",
                             hintStyle: Constants.kLoginTextStyle,
                             border: InputBorder.none,
                           ),
                         ),
+                      ),
+                      if(widget.category=='gallery')
+                      Padding(
+                        padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(40)),
+                        child: CustomText(text: 'Upload a photo',),
                       ),
 
 

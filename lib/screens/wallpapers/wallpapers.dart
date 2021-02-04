@@ -72,7 +72,7 @@ class _WallpapersState extends State<Wallpapers>  with SingleTickerProviderState
           controller: Wallpapers.tabController,
           isScrollable: true,
           indicatorColor: Colors.transparent,
-          labelPadding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(25)),
+          labelPadding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(15)),
           onTap: (i){
             setState(() {
               switch(i){
@@ -107,7 +107,7 @@ class _WallpapersState extends State<Wallpapers>  with SingleTickerProviderState
           ],
         ),
       ),
-      bottomSheet: AppBottomSheet(),
+      bottomNavigationBar: AppBottomSheet(),
     );
   }
 }

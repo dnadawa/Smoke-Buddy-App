@@ -73,7 +73,7 @@ class _ForumsState extends State<Forums>  with SingleTickerProviderStateMixin{
           controller: Forums.tabController,
           isScrollable: true,
           indicatorColor: Colors.transparent,
-          labelPadding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(25)),
+          labelPadding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(15)),
           onTap: (i){
             setState(() {
               switch(i){
@@ -111,7 +111,7 @@ class _ForumsState extends State<Forums>  with SingleTickerProviderStateMixin{
           ],
         ),
       ),
-      bottomSheet: AppBottomSheet(),
+      bottomNavigationBar: AppBottomSheet(),
     );
   }
 }

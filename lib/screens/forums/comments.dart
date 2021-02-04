@@ -28,7 +28,7 @@ class _CommentsState extends State<Comments> {
 
   TextEditingController comment = TextEditingController();
   String uid;
-  String proPic='https://i.pinimg.com/originals/90/80/60/9080607321ab98fa3e70dd24b2513a20.gif';
+  String proPic='https://media2.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif';
   String userName;
   List<DocumentSnapshot> comments;
   StreamSubscription<QuerySnapshot> subscription;

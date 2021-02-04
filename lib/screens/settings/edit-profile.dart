@@ -146,7 +146,7 @@ class _EditProfileState extends State<EditProfile> {
                   child: GestureDetector(
                     onTap: ()async {
                       FirebaseStorage storage = FirebaseStorage.instance;
-                      final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
+                      final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery,imageQuality: 50);
                       if (pickedFile != null) {
                           pickedImage = File(pickedFile.path);
                       } else {
@@ -171,7 +171,7 @@ class _EditProfileState extends State<EditProfile> {
       ),
 
 
-      bottomSheet: AppBottomSheet(),
+      bottomNavigationBar: AppBottomSheet(),
     );
   }
 }

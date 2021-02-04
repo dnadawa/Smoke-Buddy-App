@@ -40,11 +40,12 @@ class _ExtendedWallpaperState extends State<ExtendedWallpaper> {
               Container(
                 width: double.infinity,
                 height: double.infinity,
+                color: Colors.black,
                 child: Hero(
                   tag: widget.index,
                   child: CachedNetworkImage(
                     imageUrl: widget.wallpapers[i]['url'],
-                    fit: BoxFit.fill,
+                    fit: BoxFit.fitWidth,
                     placeholder: (context,url)=>Image.asset('assets/images/loading.gif'),
                   ),
                 ),

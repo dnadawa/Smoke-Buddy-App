@@ -41,7 +41,7 @@ class _RegisterState extends State<Register> {
   String uid;
 
   Future getImage() async {
-    final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
+    final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery,imageQuality: 50);
 
     setState(() {
       if (pickedFile != null) {
@@ -216,7 +216,7 @@ class _RegisterState extends State<Register> {
 
                       if(accept){
                         ToastBar(text: 'Please wait',color: Colors.orange).show();
-                        if(username.text.isNotEmpty&&status.text.isNotEmpty&&email.text.isNotEmpty&&image!=null){
+                        if(username.text.isNotEmpty&&status.text.isNotEmpty&&email.text.isNotEmpty){
                           String gender;
                           switch(_gender.index){
                             case 0:gender='male';break;
@@ -248,9 +248,12 @@ class _RegisterState extends State<Register> {
 
 
                             ///image upload
+                            String url = 'https://www.kindpng.com/picc/m/22-223965_no-profile-picture-icon-circle-member-icon-png.png';
+                            if(image!=null){
+                              TaskSnapshot snap = await storage.ref('users_profiles/'+uid).putFile(image);
+                              url = await snap.ref.getDownloadURL();
+                            }
 
-                            TaskSnapshot snap = await storage.ref('users_profiles/'+uid).putFile(image);
-                            String url = await snap.ref.getDownloadURL();
 
                             await FirebaseFirestore.instance.collection('users').doc(uid).set({
                               'id': uid,

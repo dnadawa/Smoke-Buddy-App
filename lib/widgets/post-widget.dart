@@ -94,6 +94,7 @@ class _PostWidgetState extends State<PostWidget> {
           ),
 
           ///text
+          if(widget.description!='')
           Padding(
             padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
             child: CustomText(

@@ -22,7 +22,7 @@ class Posts extends StatefulWidget {
 }
 
 class _PostsState extends State<Posts> {
-  String proPic='https://i.pinimg.com/originals/90/80/60/9080607321ab98fa3e70dd24b2513a20.gif';
+  String proPic='https://media2.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif';
   String uid;
   String name;
   List<DocumentSnapshot> posts;
@@ -102,7 +102,7 @@ class _PostsState extends State<Posts> {
                       ),
                       child: Padding(
                         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                        child: CustomText(text: "What's on your mind...",size: ScreenUtil().setSp(25),align: TextAlign.start,),
+                        child: CustomText(text: widget.category!='gallery'?"Create a post":"Upload a photo",size: ScreenUtil().setSp(25),align: TextAlign.start,),
                       ),
                     ),
                   ),

@@ -54,8 +54,27 @@ class EmailLogin extends StatelessWidget {
                 padding: EdgeInsets.all(ScreenUtil().setWidth(40)),
                 child: InputField(hint: 'PASSWORD',isPassword: true,controller: password,),
               ),
-              SizedBox(
-                height: ScreenUtil().setHeight(40),
+
+              ///forget password
+              Padding(
+                padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(80)),
+                child: GestureDetector(
+                  onTap: () async {
+                    if(email.text.isNotEmpty) {
+                      ToastBar(text: 'Please wait',color: Colors.orange).show();
+                      FirebaseAuth auth = FirebaseAuth.instance;
+                      await auth.sendPasswordResetEmail(email: email.text);
+                      ToastBar(text: 'Password reset link sent to your email!',color: Colors.green).show();
+                    }
+                    else{
+                      ToastBar(text: 'Please fill the email',color: Colors.red).show();
+                    }
+                  },
+                  child: CustomText(
+                    text: 'Forget Password',
+                    isBold: false,
+                  ),
+                ),
               ),
 
               ///loginButton

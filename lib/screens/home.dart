@@ -111,7 +111,7 @@ class _HomeState extends State<Home> {
         ),
       ),
 
-      bottomSheet: AppBottomSheet(),
+      bottomNavigationBar: AppBottomSheet(),
     );
   }
 }

@@ -208,7 +208,7 @@ class _NotificationsState extends State<Notifications>{
           ):Center(child: CircularProgressIndicator(),),
         ),
       ),
-      bottomSheet: AppBottomSheet(),
+      bottomNavigationBar: AppBottomSheet(),
     );
   }
 }
