@@ -79,10 +79,8 @@ class _SettingsState extends State<Settings> {
               children: [
                 ///logo
                 Padding(
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
-                  child: SizedBox(
-                      height: ScreenUtil().setHeight(250),
-                      child: Center(child: Image.asset('assets/images/logo.png'))),
+                  padding: EdgeInsets.all(ScreenUtil().setWidth(60)),
+                  child: Image.asset('assets/images/logo.png'),
                 ),
 
                 ///account

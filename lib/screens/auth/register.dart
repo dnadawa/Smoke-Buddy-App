@@ -267,7 +267,8 @@ class _RegisterState extends State<Register> {
                               'notifyOwnPosts': true,
                               'notifyOtherPosts': true,
                               'following': [],
-                              'followers': []
+                              'followers': [],
+                              'ban': false
                             });
 
                             SharedPreferences prefs = await SharedPreferences.getInstance();

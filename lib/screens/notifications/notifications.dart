@@ -88,8 +88,8 @@ class _NotificationsState extends State<Notifications>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Padding(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(50)),
+        title: SizedBox(
+          width: ScreenUtil().setWidth(430),
           child: GestureDetector(
               onTap: (){
                 Navigator.push(

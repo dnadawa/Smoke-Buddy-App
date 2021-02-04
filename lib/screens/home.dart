@@ -1,13 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/screens/forums/forums.dart';
 import 'package:smoke_buddy/screens/wallpapers/wallpapers.dart';
 import 'package:smoke_buddy/widgets/bottom-sheet.dart';
 import 'package:smoke_buddy/widgets/button.dart';
+import 'package:smoke_buddy/widgets/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants.dart';
 import '../notification-model.dart';
+import 'auth/phone-login.dart';
 import 'notifications/notifications.dart';
 
 class Home extends StatefulWidget {
@@ -17,11 +22,29 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+
+  checkBan() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String uid = prefs.getString('uid');
+    var sub = await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: uid).get();
+    var user = sub.docs;
+    bool isBan = user[0]['ban'];
+    if(isBan){
+      ToastBar(text: 'You have banned from the app',color: Colors.red).show();
+      await FirebaseAuth.instance.signOut();
+      prefs.setString('uid', null);
+      Navigator.of(context).pushAndRemoveUntil(
+          CupertinoPageRoute(builder: (context) =>
+              PhoneLogin()), (Route<dynamic> route) => false);
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     NotificationModel.setPlayerID();
+    checkBan();
   }
   @override
   Widget build(BuildContext context) {
