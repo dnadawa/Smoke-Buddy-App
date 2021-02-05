@@ -133,7 +133,7 @@ class _HomeState extends State<Home> {
               Button(
                 text: 'BLOG',
                 onPressed: () async => await launch('https://www.smokebuddy.eu/blogs'),
-                image: 'game.png',
+                image: 'blog.png',
                 leadingImage: true,
               ),
               SizedBox(height: ScreenUtil().setHeight(30),),
