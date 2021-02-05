@@ -15,9 +15,10 @@ class Comments extends StatefulWidget {
 
   final String postID;
   final List following;
+  final List likes;
   final String authorID;
 
-  const Comments({Key key, this.postID, this.following, this.authorID}) : super(key: key);
+  const Comments({Key key, this.postID, this.following, this.authorID, this.likes}) : super(key: key);
 
 
   @override
@@ -32,12 +33,15 @@ class _CommentsState extends State<Comments> {
   String userName;
   List<DocumentSnapshot> comments;
   StreamSubscription<QuerySnapshot> subscription;
-
+  List commentersIDs = [];
 
   getPosts(){
     subscription = FirebaseFirestore.instance.collection('posts').doc(widget.postID).collection('comments').orderBy('time',descending: true).snapshots().listen((datasnapshot){
       setState(() {
         comments = datasnapshot.docs;
+        comments.forEach((element) {
+          commentersIDs.add(element['authorID']);
+        });
       });
     });
   }
@@ -149,7 +153,7 @@ class _CommentsState extends State<Comments> {
                             });
 
                             ///sendNotification
-                            NotificationModel.sendCommentNotification(postID: widget.postID,receiverID: widget.authorID,following: widget.following);
+                            NotificationModel.sendCommentNotification(postID: widget.postID,receiverID: widget.authorID,following: widget.following, likes: widget.likes, comments: commentersIDs);
 
                             ToastBar(text: 'Comment added!',color: Colors.green).show();
                             comment.clear();

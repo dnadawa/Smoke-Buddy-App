@@ -56,13 +56,13 @@ class _HomeState extends State<Home> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: ScreenUtil().setHeight(140)),
+              SizedBox(height: ScreenUtil().setHeight(100)),
               ///logo
               Padding(
                 padding: EdgeInsets.all(ScreenUtil().setWidth(60)),
                 child: Image.asset('assets/images/logo.png'),
               ),
-              SizedBox(height: ScreenUtil().setHeight(60)),
+              // SizedBox(height: ScreenUtil().setHeight(10)),
 
               ///forums
               Button(
@@ -123,6 +123,16 @@ class _HomeState extends State<Home> {
               Button(
                 text: 'GAME',
                 onPressed: () async => await launch('https://www.smokebuddy.eu/smokebuddy-world'),
+                image: 'game.png',
+                leadingImage: true,
+              ),
+              SizedBox(height: ScreenUtil().setHeight(30),),
+
+
+              ///blog
+              Button(
+                text: 'BLOG',
+                onPressed: () async => await launch('https://www.smokebuddy.eu/blogs'),
                 image: 'game.png',
                 leadingImage: true,
               ),

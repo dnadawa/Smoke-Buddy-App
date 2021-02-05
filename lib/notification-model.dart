@@ -169,56 +169,9 @@ class NotificationModel{
       });
     }
 
-
-
-    ///send to followers
-
-
-      if(following.contains(uid)){
-        following.remove(uid);
-      }
-
-      if(following.isNotEmpty){
-        List<String> followerIDs = [];
-        for(int i=0;i<following.length;i++){
-          var data = await NotificationModel.getPlayerID(following[i]);
-          String followerID = data['notificationID'];
-          bool notifyOtherPosts = data['notifyOtherPosts'];
-          if(notifyOtherPosts){
-            followerIDs.add(followerID);
-          }
-        }
-
-        if(followerIDs.isNotEmpty){
-          OneSignal.shared.postNotification(OSCreateNotification(
-              playerIds: followerIDs,
-              content: "$subjectName liked a post you are following.",
-              heading: "Followed post liked!",
-              additionalData: {
-                'type': 'postLike',
-                'postID': postID
-              }
-          ));
-
-          await FirebaseFirestore.instance.collection('notifications').add({
-            'notification': "$subjectName liked a post you are following",
-            'type': 'postLike',
-            'postID': postID,
-            'uid': following,
-            'time': DateTime.now().toString()
-          });
-        }
-
-
-
-      }
-
-
-
-
   }
 
-  static sendCommentNotification({String receiverID,String postID,List following}) async {
+  static sendCommentNotification({String receiverID,String postID,List following,List likes, List comments}) async {
 
 
     ///send to author
@@ -294,6 +247,93 @@ class NotificationModel{
 
 
       }
+
+
+
+      ///send to likers
+
+
+    if(likes.contains(uid)){
+      likes.remove(uid);
+    }
+
+    if(likes.isNotEmpty){
+      List<String> likesID = [];
+      for(int i=0;i<likes.length;i++){
+        var data = await NotificationModel.getPlayerID(likes[i]);
+        String likeID = data['notificationID'];
+        bool notifyOtherPosts = data['notifyOtherPosts'];
+        if(notifyOtherPosts){
+          likesID.add(likeID);
+        }
+      }
+
+      if(likesID.isNotEmpty){
+        OneSignal.shared.postNotification(OSCreateNotification(
+            playerIds: likesID,
+            content: "$subjectName commented a post you are liked.",
+            heading: "Liked post commented!",
+            additionalData: {
+              'type': 'postComment',
+              'postID': postID
+            }
+        ));
+
+        await FirebaseFirestore.instance.collection('notifications').add({
+          'notification': "$subjectName commented a post you are liked",
+          'type': 'postComment',
+          'postID': postID,
+          'uid': following,
+          'time': DateTime.now().toString()
+        });
+      }
+
+
+    }
+
+
+
+    ///send to commenters
+    ///send to likers
+
+
+    if(comments.contains(uid)){
+      comments.remove(uid);
+    }
+
+    if(comments.isNotEmpty){
+      List<String> commentsID = [];
+      for(int i=0;i<comments.length;i++){
+        var data = await NotificationModel.getPlayerID(comments[i]);
+        String commentID = data['notificationID'];
+        bool notifyOtherPosts = data['notifyOtherPosts'];
+        if(notifyOtherPosts){
+          commentsID.add(commentID);
+        }
+      }
+
+      if(commentsID.isNotEmpty){
+        OneSignal.shared.postNotification(OSCreateNotification(
+            playerIds: commentsID,
+            content: "$subjectName commented a post you are commented.",
+            heading: "Commented post commented!",
+            additionalData: {
+              'type': 'postComment',
+              'postID': postID
+            }
+        ));
+
+        await FirebaseFirestore.instance.collection('notifications').add({
+          'notification': "$subjectName commented a post you are commented",
+          'type': 'postComment',
+          'postID': postID,
+          'uid': following,
+          'time': DateTime.now().toString()
+        });
+      }
+
+
+    }
 
 
 

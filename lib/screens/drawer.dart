@@ -245,6 +245,17 @@ class _MenuDrawerState extends State<MenuDrawer> {
                           ),
                           SizedBox(height: ScreenUtil().setHeight(30),),
 
+
+
+                          ///blog
+                          DrawerSideButton(
+                            name: 'BLOG',
+                            image: 'game.png',
+                            onTap: ()async=>await launch('https://www.smokebuddy.eu/blogs'),
+                          ),
+                          SizedBox(height: ScreenUtil().setHeight(30),),
+
+
                           Expanded(
                             child: Container(),
                           ),
