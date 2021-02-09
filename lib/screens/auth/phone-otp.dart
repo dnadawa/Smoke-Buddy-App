@@ -31,6 +31,7 @@ class _PhoneOTPState extends State<PhoneOTP> {
   TextEditingController code = TextEditingController();
 
   sendOtp() async {
+    print(widget.phone);
     await auth.verifyPhoneNumber(
       phoneNumber: widget.phone,
       verificationCompleted: (PhoneAuthCredential credential) async {

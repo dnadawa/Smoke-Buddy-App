@@ -57,6 +57,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
                       dialogTextStyle: TextStyle(
                         fontFamily: 'Antonio'
                       ),
+                      onInit: (code){countryCode=code.toString();},
                       initialSelection: 'Danmark',
                       textStyle: TextStyle(
                           fontFamily: 'Antonio',
