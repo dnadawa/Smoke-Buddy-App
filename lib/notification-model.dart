@@ -126,6 +126,7 @@ class NotificationModel{
         await FirebaseFirestore.instance.collection('notifications').add({
           'notification': "$author posted a new post",
           'type': 'postCreate',
+          'postID': postID,
           'uid': following,
           'time': DateTime.now().toString()
         });

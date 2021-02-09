@@ -14,6 +14,7 @@ import 'package:smoke_buddy/widgets/marquee.dart';
 import 'package:smoke_buddy/widgets/post-widget.dart';
 
 import '../../constants.dart';
+import 'notification-post.dart';
 
 class Notifications extends StatefulWidget {
   @override
@@ -177,17 +178,30 @@ class _NotificationsState extends State<Notifications>{
 
                               return Padding(
                                 padding:  EdgeInsets.all(ScreenUtil().setWidth(10)),
-                                child: PostWidget(
-                                  image: image,
-                                  name: authorName,
-                                  date: date,
-                                  proPic: authorImage,
-                                  description: post,
-                                  authorId: authorID,
-                                  uid: uid,
-                                  following: following,
-                                  likes: likes,
-                                  postId: postID,
+                                child: GestureDetector(
+                                  onTap: (){
+                                    if(type!='profileFollow') {
+                                      Navigator.push(
+                                        context,
+                                        CupertinoPageRoute(
+                                            builder: (context) =>
+                                                NotificationPost(
+                                                  postID: postID,)),
+                                      );
+                                    }
+                                  },
+                                  child: PostWidget(
+                                    image: image,
+                                    name: authorName,
+                                    date: date,
+                                    proPic: authorImage,
+                                    description: post,
+                                    authorId: authorID,
+                                    uid: uid,
+                                    following: following,
+                                    likes: likes,
+                                    postId: postID,
+                                  ),
                                 ),
                               );
 

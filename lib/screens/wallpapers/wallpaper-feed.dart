@@ -67,7 +67,7 @@ class _WallpaperFeedState extends State<WallpaperFeed> {
                 elevation: 5,
                 child: CachedNetworkImage(
                   imageUrl: wallpapers[i]['url'],
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                   placeholder: (context,url)=>Image.asset('assets/images/loading.gif'),
                 ),
               ),

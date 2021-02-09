@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/screens/forums/forums.dart';
 import 'package:smoke_buddy/screens/wallpapers/wallpapers.dart';
@@ -45,6 +46,14 @@ class _HomeState extends State<Home> {
     super.initState();
     NotificationModel.setPlayerID();
     checkBan();
+    OneSignal.shared
+        .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+      print('getting notification');
+      Navigator.push(
+        context,
+        CupertinoPageRoute(builder: (context) => Notifications()),
+      );
+    });
   }
   @override
   Widget build(BuildContext context) {

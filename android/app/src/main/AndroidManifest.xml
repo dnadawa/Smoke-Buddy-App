@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.RECEIVE"/>
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="Smoke Buddy"
+        android:label="SmokeBuddy"
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true"
         >

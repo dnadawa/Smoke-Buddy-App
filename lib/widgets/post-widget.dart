@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:smoke_buddy/notification-model.dart';
 import 'package:smoke_buddy/screens/forums/comments.dart';
 import 'package:smoke_buddy/screens/profile/profile.dart';
@@ -98,19 +99,17 @@ class _PostWidgetState extends State<PostWidget> {
 
           ///propic and name
           ListTile(
-            leading: GestureDetector(
-              onTap: (){
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(builder: (context) => Profile(uid: widget.authorId,)),
-                );
-              },
-              child: CircleAvatar(
-                backgroundImage: CachedNetworkImageProvider(widget.proPic),
-              ),
+            leading: CircleAvatar(
+              backgroundImage: CachedNetworkImageProvider(widget.proPic),
             ),
             title: CustomText(text: widget.uid==widget.authorId?'Me':widget.name,align: TextAlign.start,),
             subtitle: CustomText(text: widget.date,align: TextAlign.start,isBold: false,size: ScreenUtil().setSp(25),),
+            onTap: (){
+              Navigator.push(
+                context,
+                CupertinoPageRoute(builder: (context) => Profile(uid: widget.authorId,)),
+              );
+            },
           ),
 
           ///text
@@ -130,10 +129,15 @@ class _PostWidgetState extends State<PostWidget> {
             visible: widget.image!='',
             child: Padding(
               padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-              child: CachedNetworkImage(
-                imageUrl: widget.image,
-                fit: BoxFit.fill,
-                placeholder: (context,url)=>Image.asset('assets/images/loading.gif'),
+              child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height/2
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: widget.image,
+                  fit: BoxFit.fitHeight,
+                  placeholder: (context,url)=>Image.asset('assets/images/loading.gif'),
+                ),
               ),
             ),
           ),
@@ -151,7 +155,9 @@ class _PostWidgetState extends State<PostWidget> {
                     List likes = widget.likes;
 
                     if(!likes.contains(widget.uid)){
-                      ToastBar(text: 'Please wait',color: Colors.orange).show();
+                      setState(() {
+                        liked=true;
+                      });
                       likes.add(widget.uid);
                       await FirebaseFirestore.instance.collection('posts').doc(widget.postId).update({
                         'likes': likes
@@ -160,18 +166,17 @@ class _PostWidgetState extends State<PostWidget> {
                       ///send notifications
                       NotificationModel.sendLikeNotification(postID: widget.postId,receiverID: widget.authorId,following: widget.following);
 
-                      setState(() {
-                        liked=true;
-                      });
+
                     }
                     else{
+                      setState(() {
+                        liked=false;
+                      });
                       likes.remove(widget.uid);
                       await FirebaseFirestore.instance.collection('posts').doc(widget.postId).update({
                         'likes': likes
                       });
-                      setState(() {
-                        liked=false;
-                      });
+
                     }
                     },
                   child: Container(
@@ -208,7 +213,9 @@ class _PostWidgetState extends State<PostWidget> {
                 if(widget.authorId!=widget.uid)
                 GestureDetector(
                   onTap: () async {
-                    ToastBar(text: 'Please wait',color: Colors.orange).show();
+                    setState(() {
+                      followed=true;
+                    });
                     List following = widget.following;
 
                     if(!widget.following.contains(widget.uid)){
@@ -220,18 +227,17 @@ class _PostWidgetState extends State<PostWidget> {
                       ///send notification
                       await NotificationModel.sendFollowNotification(receiverID: widget.authorId,postID: widget.postId);
 
-                      setState(() {
-                        followed=true;
-                      });
+
                     }
                     else{
+                      setState(() {
+                        followed=false;
+                      });
                       following.remove(widget.uid);
                       await FirebaseFirestore.instance.collection('posts').doc(widget.postId).update({
                         'following': following
                       });
-                      setState(() {
-                        followed=false;
-                      });
+
                     }
                   },
                   child: Container(
@@ -258,8 +264,9 @@ class _PostWidgetState extends State<PostWidget> {
               ),
               contentPadding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
               dense: true,
+              isThreeLine: true,
               title: CustomText(text: comments[0]['authorID']==widget.uid?'Me':comments[0]['authorName'],align: TextAlign.start,),
-              subtitle: CustomText(text: comments[0]['comment'],align: TextAlign.start,isBold: false,size: ScreenUtil().setSp(25),),
+              subtitle: CustomText(text: DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(comments[0]['time']))+'\n'+comments[0]['comment'],align: TextAlign.start,isBold: false,size: ScreenUtil().setSp(25),),
             ),
           )
 

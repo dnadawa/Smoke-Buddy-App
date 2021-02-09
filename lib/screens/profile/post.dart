@@ -12,61 +12,62 @@ class Posts extends StatefulWidget {
   final String id;
   final String loggedID;
   final ScrollController scrollController;
+  final List posts;
 
-  const Posts({Key key, this.id, this.loggedID, this.scrollController}) : super(key: key);
+  const Posts({Key key, this.id, this.loggedID, this.scrollController, this.posts}) : super(key: key);
 
   @override
   _PostsState createState() => _PostsState();
 }
 
 class _PostsState extends State<Posts> {
-  List<DocumentSnapshot> posts;
-  StreamSubscription<QuerySnapshot> subscription;
+  // List<DocumentSnapshot> posts;
+  // StreamSubscription<QuerySnapshot> subscription;
 
-  getPosts(){
-    subscription = FirebaseFirestore.instance.collection('posts').where('authorID', isEqualTo: widget.id).orderBy('publishedDate', descending: true).snapshots().listen((datasnapshot){
-      setState(() {
-        posts = datasnapshot.docs;
-        Profile.postCount = posts.length;
-      });
-    });
-  }
+  // getPosts(){
+  //   subscription = FirebaseFirestore.instance.collection('posts').where('authorID', isEqualTo: widget.id).orderBy('publishedDate', descending: true).snapshots().listen((datasnapshot){
+  //     setState(() {
+  //       posts = datasnapshot.docs;
+  //       Profile.postCount = posts.length;
+  //     });
+  //   });
+  // }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getPosts();
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    subscription?.cancel();
-  }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   getPosts();
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   super.dispose();
+  //   subscription?.cancel();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: posts!=null?Padding(
+      body: widget.posts!=null?Padding(
         padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
         child: ListView.builder(
-          itemCount: posts.length,
+          itemCount: widget.posts.length,
           controller: widget.scrollController,
           physics: ScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (context,i){
 
-            String image = posts[i]['image'];
-            String authorName = posts[i]['authorName'];
-            String authorImage = posts[i]['authorImage'];
-            String authorID = posts[i]['authorID'];
-            String post = posts[i]['post'];
-            String date = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(posts[i]['publishedDate']));
-            List likes = posts[i]['likes'];
-            List following = posts[i]['following'];
+            String image = widget.posts[i]['image'];
+            String authorName = widget.posts[i]['authorName'];
+            String authorImage = widget.posts[i]['authorImage'];
+            String authorID = widget.posts[i]['authorID'];
+            String post = widget.posts[i]['post'];
+            String date = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(widget.posts[i]['publishedDate']));
+            List likes = widget.posts[i]['likes'];
+            List following = widget.posts[i]['following'];
 
             return Padding(
               padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
@@ -80,7 +81,7 @@ class _PostsState extends State<Posts> {
                 uid: widget.loggedID,
                 following: following,
                 likes: likes,
-                postId: posts[i].id,
+                postId: widget.posts[i].id,
               ),
             );
           },

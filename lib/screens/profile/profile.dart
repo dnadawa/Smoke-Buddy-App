@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,6 +40,8 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   bool hide = true;
   ScrollController _scrollController = ScrollController();
   ScrollController _nextController = ScrollController();
+  List<DocumentSnapshot> posts;
+  StreamSubscription<QuerySnapshot> subscription;
 
   getProfileData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -64,6 +68,16 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
     }
   }
 
+
+  getPosts(){
+    subscription = FirebaseFirestore.instance.collection('posts').where('authorID', isEqualTo: widget.uid).orderBy('publishedDate', descending: true).snapshots().listen((datasnapshot){
+      setState(() {
+        posts = datasnapshot.docs;
+        Profile.postCount = posts.length;
+      });
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -84,6 +98,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
     });
 
     getProfileData();
+    getPosts();
   }
 
   @override
@@ -229,7 +244,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                         body: !hide||(widget.uid==loggedUid)?TabBarView(
                           controller: _tabController,
                           children: [
-                            Posts(id: widget.uid,loggedID: loggedUid,scrollController: _nextController,),
+                            Posts(id: widget.uid,loggedID: loggedUid,scrollController: _nextController,posts: posts,),
                             Followers(followers: profileFollowers,scrollController: _nextController,),
                             Followers(followers: profileFollowing,scrollController: _nextController,), //this because same ui, don't need separate following and followers, only data change
                           ],

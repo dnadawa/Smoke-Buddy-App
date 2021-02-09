@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/notification-model.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
@@ -105,14 +106,16 @@ class _CommentsState extends State<Comments> {
                     String proPic = comments[i]['authorImage'];
                     String name = comments[i]['authorName'];
                     String comment = comments[i]['comment'];
+                    String time = comments[i]['time'];
 
                     return ListTile(
+                      isThreeLine: true,
                       leading: CircleAvatar(
                         backgroundImage: CachedNetworkImageProvider(proPic),
                       ),
                       contentPadding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
                       title: CustomText(text: name==userName?'Me':name,align: TextAlign.start,),
-                      subtitle: CustomText(text: comment,align: TextAlign.start,isBold: false,size: ScreenUtil().setSp(25),),
+                      subtitle: CustomText(text: DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(time))+'\n'+comment,align: TextAlign.start,isBold: false,size: ScreenUtil().setSp(25),),
                     );
                   },
                 ):Center(child: CircularProgressIndicator(),),

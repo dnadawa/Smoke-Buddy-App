@@ -97,7 +97,6 @@ class _CreatePostState extends State<CreatePost> {
 
 
                       ///textfield
-                      if(widget.category!='gallery')
                       Padding(
                         padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
                         child: TextField(
@@ -105,18 +104,12 @@ class _CreatePostState extends State<CreatePost> {
                           controller: post,
                           maxLines: null,
                           decoration: InputDecoration(
-                            hintText: widget.category!='gallery'?"Create a post":"Upload a photo",
+                            hintText: widget.category!='gallery'?"Create a post":"Enter caption",
                             hintStyle: Constants.kLoginTextStyle,
                             border: InputBorder.none,
                           ),
                         ),
                       ),
-                      if(widget.category=='gallery')
-                      Padding(
-                        padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(40)),
-                        child: CustomText(text: 'Upload a photo',),
-                      ),
-
 
                       ///image
                       Visibility(
@@ -150,23 +143,29 @@ class _CreatePostState extends State<CreatePost> {
                         }
 
 
-                        var ref = await FirebaseFirestore.instance.collection('posts').add({
-                          'authorID': widget.uid,
-                          'authorName': widget.name,
-                          'authorImage': widget.proPic,
-                          'post': post.text,
-                          'image': url,
-                          'publishedDate': DateTime.now().toString(),
-                          'likes': [],
-                          'following': [],
-                          'category': widget.category
-                        });
+                        if(widget.category=='gallery'&&url.isEmpty){
+                          ToastBar(text: 'Image is empty',color: Colors.red).show();
+                        }
+                        else{
+                          var ref = await FirebaseFirestore.instance.collection('posts').add({
+                            'authorID': widget.uid,
+                            'authorName': widget.name,
+                            'authorImage': widget.proPic,
+                            'post': post.text,
+                            'image': url,
+                            'publishedDate': DateTime.now().toString(),
+                            'likes': [],
+                            'following': [],
+                            'category': widget.category
+                          });
 
-                        ///send notification
-                        NotificationModel.sendPostCreateNotification(author: widget.name,postID: ref.id);
+                          ///send notification
+                          NotificationModel.sendPostCreateNotification(author: widget.name,postID: ref.id);
 
-                        ToastBar(text: 'Posted',color: Colors.green).show();
-                        Navigator.pop(context);
+                          ToastBar(text: 'Posted',color: Colors.green).show();
+                          Navigator.pop(context);
+                        }
+
                       }
                       catch(e){
                         ToastBar(text: 'Something went wrong',color: Colors.red).show();
