@@ -7,15 +7,26 @@ class NotificationModel{
   static getPlayerID(String uid) async {
     var sub = await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: uid).get();
     var user = sub.docs;
-    String notificationID = user[0]['notificationID'];
-    bool notifyOwnPosts = user[0]['notifyOwnPosts'];
-    bool notifyOtherPosts = user[0]['notifyOtherPosts'];
-    Map data = {
-      'notificationID': notificationID,
-      'notifyOwnPosts': notifyOwnPosts,
-      'notifyOtherPosts': notifyOtherPosts,
-    };
-    return data;
+    if(user.isNotEmpty){
+      String notificationID = user[0]['notificationID'];
+      bool notifyOwnPosts = user[0]['notifyOwnPosts'];
+      bool notifyOtherPosts = user[0]['notifyOtherPosts'];
+      Map data = {
+        'notificationID': notificationID,
+        'notifyOwnPosts': notifyOwnPosts,
+        'notifyOtherPosts': notifyOtherPosts,
+      };
+      return data;
+    }
+    else{
+      Map data = {
+        'notificationID': 'asdadadsada',
+        'notifyOwnPosts': false,
+        'notifyOtherPosts': false,
+      };
+      return data;
+    }
+
   }
 
   static setPlayerID() {
