@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:smoke_buddy/notification-model.dart';
 import 'package:smoke_buddy/screens/forums/comments.dart';
+import 'package:smoke_buddy/screens/forums/liked.dart';
 import 'package:smoke_buddy/screens/profile/profile.dart';
 import 'package:smoke_buddy/widgets/toast.dart';
 
@@ -179,6 +180,14 @@ class _PostWidgetState extends State<PostWidget> {
 
                     }
                     },
+
+                  onLongPress: (){
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(builder: (context) => LikedUsers(likeList: widget.likes,uid: widget.uid,)),
+                    );
+                  },
+
                   child: Container(
                     child: Row(
                       children: [

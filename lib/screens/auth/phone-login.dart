@@ -40,7 +40,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
             Padding(
               padding: EdgeInsets.all(ScreenUtil().setWidth(40)),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Container(
                     decoration: BoxDecoration(
