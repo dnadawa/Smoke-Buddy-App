@@ -79,7 +79,7 @@ class _SettingsState extends State<Settings> {
               children: [
                 ///logo
                 Padding(
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(60)),
+                  padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.08),
                   child: Image.asset('assets/images/logo.png'),
                 ),
 

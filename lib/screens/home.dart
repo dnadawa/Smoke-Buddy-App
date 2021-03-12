@@ -68,7 +68,7 @@ class _HomeState extends State<Home> {
               SizedBox(height: ScreenUtil().setHeight(100)),
               ///logo
               Padding(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(60)),
+                padding: EdgeInsets.all(MediaQuery.of(context).size.height*0.04),
                 child: Image.asset('assets/images/logo.png'),
               ),
               // SizedBox(height: ScreenUtil().setHeight(10)),

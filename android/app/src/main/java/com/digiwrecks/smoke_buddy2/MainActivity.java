@@ -1,4 +1,4 @@
-package com.digiwrecks.smoke_buddy;
+package com.digiwrecks.smoke_buddy2;
 
 import io.flutter.embedding.android.FlutterActivity;
 
