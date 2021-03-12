@@ -138,6 +138,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                               ),
                               onPressed: () => Navigator.pop(context)),
 
+                          Expanded(child: SizedBox()),
                           ///logo
                           GestureDetector(
                               onTap: () {
@@ -148,7 +149,12 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                               },
                               child: SizedBox(
                                   height: ScreenUtil().setHeight(100),
-                                  child: Image.asset('assets/images/appbar.png')))
+                                  child: Image.asset('assets/images/appbar.png'))
+                          ),
+                          Expanded(child: SizedBox()),
+                          Expanded(child: SizedBox()),
+                          Expanded(child: SizedBox()),
+                          Expanded(child: SizedBox()),
                         ],
                       ),
                     ),
