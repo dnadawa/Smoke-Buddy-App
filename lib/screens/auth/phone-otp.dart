@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/screens/auth/phone-create-password.dart';
+import 'package:smoke_buddy/screens/auth/phone-enter-password.dart';
 import 'package:smoke_buddy/screens/auth/register.dart';
 import 'package:smoke_buddy/screens/home.dart';
 import 'package:smoke_buddy/widgets/button.dart';
@@ -180,14 +181,15 @@ class _PhoneOTPState extends State<PhoneOTP> {
                       }
                       else{
 
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
-                        prefs.setString('uid', users[0]['id']);
-
                         //navigate  to enter password page
+
+                        // Navigator.of(context).pushAndRemoveUntil(
+                        //     CupertinoPageRoute(builder: (context) =>
+                        //        Home()), (Route<dynamic> route) => false);
 
                         Navigator.of(context).pushAndRemoveUntil(
                             CupertinoPageRoute(builder: (context) =>
-                               Home()), (Route<dynamic> route) => false);
+                                PhoneEnterPassword(password: users[0]['password'], uid: users[0]['id'],)), (Route<dynamic> route) => false);
                       }
 
 
