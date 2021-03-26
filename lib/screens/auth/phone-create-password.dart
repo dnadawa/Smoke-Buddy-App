@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:smoke_buddy/screens/auth/phone-login.dart';
 import 'package:smoke_buddy/screens/auth/register.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
@@ -17,11 +19,12 @@ import '../../constants.dart';
 class PhoneCreatePassword extends StatelessWidget {
   final String uid;
   final String phone;
+  final String type;
 
   TextEditingController confirmPassword = TextEditingController();
   TextEditingController password = TextEditingController();
 
-  PhoneCreatePassword({Key key, this.uid, this.phone}) : super(key: key);
+  PhoneCreatePassword({Key key, this.uid, this.phone, this.type='normal'}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,10 +76,21 @@ class PhoneCreatePassword extends StatelessWidget {
                   text: 'SAVE',
                   onPressed: () async {
                     if(password.text==confirmPassword.text){
-                      Navigator.push(
-                        context,
-                        CupertinoPageRoute(builder: (context) => Register(uid: uid,phone: phone,email: '',password: md5.convert(utf8.encode(password.text)).toString(),)),
-                      );
+                      if(type=='normal'){
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(builder: (context) => Register(uid: uid,phone: phone,email: '',password: md5.convert(utf8.encode(password.text)).toString(),)),
+                        );
+                      }
+                      else{
+                          await FirebaseFirestore.instance.collection('users').doc(uid).update({
+                            'password': md5.convert(utf8.encode(password.text)).toString()
+                          });
+                          ToastBar(text: 'Password changed successfully!',color: Colors.green).show();
+                          Navigator.of(context).pushAndRemoveUntil(
+                              CupertinoPageRoute(builder: (context) =>
+                                  PhoneLogin()), (Route<dynamic> route) => false);
+                      }
                     }
                     else{
                       ToastBar(text: 'Password does not match!',color: Colors.red).show();

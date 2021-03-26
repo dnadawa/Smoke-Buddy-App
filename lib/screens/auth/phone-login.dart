@@ -1,12 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smoke_buddy/constants.dart';
 import 'package:smoke_buddy/screens/auth/email-register.dart';
+import 'package:smoke_buddy/screens/auth/password-reset-otp.dart';
 import 'package:smoke_buddy/screens/auth/phone-otp.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:smoke_buddy/widgets/toast.dart';
 import 'email-login.dart';
 
 class PhoneLogin extends StatefulWidget {
@@ -91,7 +94,38 @@ class _PhoneLoginState extends State<PhoneLogin> {
                 ],
               ),
             ),
-            Spacer(flex: 2),
+            Spacer(flex: 1),
+            ///forget password
+            Padding(
+              padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(80)),
+              child: GestureDetector(
+                onTap: () async {
+                  ToastBar(text: 'Please wait...',color: Colors.orange).show();
+                  if(phone.text.isNotEmpty) {
+
+                    ///check user exists
+                    var sub = await FirebaseFirestore.instance.collection('users').where('phoneNumber', isEqualTo: countryCode+phone.text).get();
+                    var users = sub.docs;
+
+                    if(users.isNotEmpty){
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(builder: (context) => PasswordResetOTP(phone: countryCode+phone.text,uid: users[0]['id'],)),
+                      );
+                    }else{
+                      ToastBar(text: 'There is no user account for '+countryCode+phone.text,color: Colors.red).show();
+                    }
+                  }
+                  else{
+                    ToastBar(text: 'Please fill the phone number',color: Colors.red).show();
+                  }
+                },
+                child: CustomText(
+                  text: 'Forget Password',
+                  isBold: false,
+                ),
+              ),
+            ),
 
             ///loginButton
             SizedBox(
