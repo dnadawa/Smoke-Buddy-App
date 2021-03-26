@@ -120,6 +120,7 @@ class _PostsState extends State<Posts> {
                 itemBuilder: (context,i){
 
                   String image = posts[i]['image'];
+                  String video = posts[i]['video'];
                   String authorName = posts[i]['authorName'];
                   String authorImage = posts[i]['authorImage'];
                   String authorID = posts[i]['authorID'];
@@ -134,6 +135,7 @@ class _PostsState extends State<Posts> {
                     child: PostWidget(
                       image: image,
                       name: authorName,
+                      video: video,
                       date: date,
                       proPic: authorImage,
                       description: post,

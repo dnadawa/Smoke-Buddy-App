@@ -19,7 +19,7 @@ class NotificationPost extends StatefulWidget {
 
 class _NotificationPostState extends State<NotificationPost> {
 
-  String image,authorName,authorImage, authorID ,post, date, uid;
+  String image,authorName,authorImage, authorID ,post, date, uid, video;
   List likes,following;
 
   getPost() async {
@@ -30,6 +30,7 @@ class _NotificationPostState extends State<NotificationPost> {
     await FirebaseFirestore.instance.collection('posts').doc(widget.postID).get().then((value){
      setState(() {
         image = value['image'];
+        video = value['video'];
         authorName = value['authorName'];
         authorImage = value['authorImage'];
         authorID = value['authorID'];
@@ -71,6 +72,7 @@ class _NotificationPostState extends State<NotificationPost> {
                 name: authorName,
                 date: date,
                 proPic: authorImage,
+                video: video,
                 description: post,
                 authorId: authorID,
                 uid: uid,

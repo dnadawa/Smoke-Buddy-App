@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:better_player/better_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chewie/chewie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import 'package:smoke_buddy/screens/forums/comments.dart';
 import 'package:smoke_buddy/screens/forums/liked.dart';
 import 'package:smoke_buddy/screens/profile/profile.dart';
 import 'package:smoke_buddy/widgets/toast.dart';
+import 'package:video_player/video_player.dart';
 
 import '../constants.dart';
 import 'custom-text.dart';
@@ -22,13 +25,14 @@ class PostWidget extends StatefulWidget {
   final String description;
   final String proPic;
   final String image;
+  final String video;
   final String uid;
   final String authorId;
   final List likes;
   final List following;
   final String postId;
 
-  const PostWidget({Key key, this.name, this.date, this.proPic, this.image, this.description, this.uid, this.authorId, this.likes, this.following, this.postId}) : super(key: key);
+  const PostWidget({Key key, this.name, this.date, this.proPic, this.image, this.description, this.uid, this.authorId, this.likes, this.following, this.postId, this.video}) : super(key: key);
 
   @override
   _PostWidgetState createState() => _PostWidgetState();
@@ -38,14 +42,35 @@ class _PostWidgetState extends State<PostWidget> {
 
   bool liked = false;
   bool followed = false;
+  bool isVideoLoading = true;
   List<DocumentSnapshot> comments;
   StreamSubscription<QuerySnapshot> subscription;
+  VideoPlayerController _controller;
+  ChewieController chewieController;
+
+
   getComments(String postID)async{
     subscription = FirebaseFirestore.instance.collection('posts').doc(postID).collection('comments').orderBy('time',descending: true).snapshots().listen((datasnapshot){
       setState(() {
         comments = datasnapshot.docs;
       });
     });
+  }
+
+  initVideo()async{
+    if(widget.video.isNotEmpty){
+      _controller = VideoPlayerController.network(widget.video);
+      await _controller.initialize();
+      chewieController = ChewieController(
+        autoPlay: false,
+        looping: false,
+        videoPlayerController: _controller,
+        autoInitialize: true
+      );
+      setState(() {
+        isVideoLoading = false;
+      });
+    }
   }
 
   @override
@@ -79,6 +104,12 @@ class _PostWidgetState extends State<PostWidget> {
     }
 
     getComments(widget.postId);
+
+
+    ///initializing video
+    initVideo();
+
+
   }
 
   @override
@@ -86,6 +117,8 @@ class _PostWidgetState extends State<PostWidget> {
     // TODO: implement dispose
     super.dispose();
     subscription?.cancel();
+    chewieController.dispose();
+    _controller.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -171,6 +204,28 @@ class _PostWidgetState extends State<PostWidget> {
               ),
             ),
           ),
+
+          ///video
+          Visibility(
+            visible: widget.video!='',
+            child: Padding(
+              padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+              child: Container(
+                height: MediaQuery.of(context).size.height/3,
+                // child: !isVideoLoading?Chewie(controller: chewieController):Image.asset('assets/images/loading.gif'),
+                child:
+                BetterPlayer.network(
+                  widget.video,
+                  betterPlayerConfiguration: BetterPlayerConfiguration(
+                    looping: false,
+                    autoPlay: false,
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+
 
           ///button bar
           Padding(

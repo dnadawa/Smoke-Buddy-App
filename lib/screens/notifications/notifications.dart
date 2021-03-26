@@ -179,6 +179,7 @@ class _NotificationsState extends State<Notifications>{
                           builder: (context, snapshot){
                             if(snapshot.hasData){
                               String image = snapshot.data['image'];
+                              String video = snapshot.data['video'];
                               String authorName = snapshot.data['authorName'];
                               String authorImage = snapshot.data['authorImage'];
                               String authorID = snapshot.data['authorID'];
@@ -205,6 +206,7 @@ class _NotificationsState extends State<Notifications>{
                                     image: image,
                                     name: authorName,
                                     date: date,
+                                    video: video,
                                     proPic: authorImage,
                                     description: post,
                                     authorId: authorID,

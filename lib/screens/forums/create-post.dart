@@ -329,8 +329,9 @@ class _CreatePostState extends State<CreatePost> {
                           videoUrl = await snap.ref.getDownloadURL();
                         }
 
-
-                        if(widget.category=='gallery'&&(imgUrl.isEmpty||videoUrl.isEmpty)){
+                        print(imgUrl);
+                        print(videoUrl);
+                        if(widget.category=='gallery'&&(imgUrl.isEmpty&&videoUrl.isEmpty)){
                           pr.hide();
                           ToastBar(text: 'Image or video is empty',color: Colors.red).show();
                         }
