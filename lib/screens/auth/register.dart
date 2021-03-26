@@ -213,7 +213,7 @@ class _RegisterState extends State<Register> {
                   child: Button(
                     text: 'SAVE',
                     onPressed: () async {
-
+                      String finalPassword = widget.password;
                       if(accept){
                         ToastBar(text: 'Please wait',color: Colors.orange).show();
                         if(username.text.isNotEmpty&&status.text.isNotEmpty&&email.text.isNotEmpty){
@@ -228,6 +228,7 @@ class _RegisterState extends State<Register> {
 
                             ///auth using email
                             if(widget.email!=''){
+                              finalPassword = "";
                               try {
                                 UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
                                     email: widget.email,
@@ -268,7 +269,8 @@ class _RegisterState extends State<Register> {
                               'notifyOtherPosts': true,
                               'following': [],
                               'followers': [],
-                              'ban': false
+                              'ban': false,
+                              'password': finalPassword
                             });
 
                             SharedPreferences prefs = await SharedPreferences.getInstance();

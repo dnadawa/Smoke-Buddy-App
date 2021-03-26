@@ -133,7 +133,7 @@ class _SettingsState extends State<Settings> {
                     ToastBar(text: 'Please wait...',color: Colors.orange).show();
                     await FirebaseAuth.instance.signOut();
                     SharedPreferences prefs = await SharedPreferences.getInstance();
-                    prefs.setString('uid', null);
+                    prefs.remove('uid');
                     Navigator.of(context).pushAndRemoveUntil(
                         CupertinoPageRoute(builder: (context) =>
                             PhoneLogin()), (Route<dynamic> route) => false);

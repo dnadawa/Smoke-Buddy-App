@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smoke_buddy/screens/auth/phone-create-password.dart';
 import 'package:smoke_buddy/screens/auth/register.dart';
 import 'package:smoke_buddy/screens/home.dart';
 import 'package:smoke_buddy/widgets/button.dart';
@@ -168,14 +169,21 @@ class _PhoneOTPState extends State<PhoneOTP> {
                       ToastBar(text: 'Phone Verified!',color: Colors.green).show();
 
                       if(users.isEmpty){
+                        //navigate to create password page
+                        // Navigator.of(context).pushAndRemoveUntil(
+                        //     CupertinoPageRoute(builder: (context) =>
+                        //         Register(uid: auth.currentUser.uid,phone: widget.phone,email: '',password: '',)), (Route<dynamic> route) => false);
+
                         Navigator.of(context).pushAndRemoveUntil(
                             CupertinoPageRoute(builder: (context) =>
-                                Register(uid: auth.currentUser.uid,phone: widget.phone,email: '',password: '',)), (Route<dynamic> route) => false);
+                                PhoneCreatePassword(uid: auth.currentUser.uid,phone: widget.phone,)), (Route<dynamic> route) => false);
                       }
                       else{
 
                         SharedPreferences prefs = await SharedPreferences.getInstance();
                         prefs.setString('uid', users[0]['id']);
+
+                        //navigate  to enter password page
 
                         Navigator.of(context).pushAndRemoveUntil(
                             CupertinoPageRoute(builder: (context) =>
