@@ -1,13 +1,17 @@
 import 'dart:io';
 
+import 'package:chewie/chewie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/toast.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../constants.dart';
 import '../../notification-model.dart';
@@ -28,8 +32,18 @@ class CreatePost extends StatefulWidget {
 class _CreatePostState extends State<CreatePost> {
 
   File image;
+  File video;
   TextEditingController post = TextEditingController();
+  VideoPlayerController _controller;
+  ChewieController chewieController;
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    chewieController.dispose();
+    _controller.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,14 +91,151 @@ class _CreatePostState extends State<CreatePost> {
                             padding: EdgeInsets.all(ScreenUtil().setHeight(15)),
                             child: GestureDetector(
                               onTap: () async {
-                                final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery,imageQuality: 50);
-                                setState(() {
-                                  if (pickedFile != null) {
-                                    image = File(pickedFile.path);
-                                  } else {
-                                    ToastBar(text: 'No image selected',color: Colors.red).show();
-                                  }
-                                });
+                                ///show image video popup
+                                showCupertinoModalPopup(
+                                    context: context,
+                                    builder: (context)=>
+                                        CupertinoActionSheet(
+                                          actions: [
+                                            CupertinoActionSheetAction(
+                                                onPressed: ()async{
+                                                  Navigator.pop(context);
+                                                  showCupertinoModalPopup(
+                                                      context: context,
+                                                      builder: (context)=>
+                                                          CupertinoActionSheet(
+                                                            actions: [
+                                                              CupertinoActionSheetAction(
+                                                                  onPressed: ()async{
+                                                                    final pickedFile = await ImagePicker().getImage(source: ImageSource.camera,imageQuality: 50);
+                                                                    setState(() {
+                                                                      if (pickedFile != null) {
+                                                                        image = File(pickedFile.path);
+                                                                        video = null;
+                                                                      } else {
+                                                                        ToastBar(text: 'No image selected',color: Colors.red).show();
+                                                                      }
+                                                                    });
+                                                                    Navigator.pop(context);
+                                                                  },
+                                                                  child: CustomText(text: 'Camera',)
+                                                              ),
+
+                                                              CupertinoActionSheetAction(
+                                                                  onPressed: () async {
+                                                                    final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery,imageQuality: 50);
+                                                                    setState(() {
+                                                                      if (pickedFile != null) {
+                                                                        image = File(pickedFile.path);
+                                                                        video=null;
+                                                                      } else {
+                                                                        ToastBar(text: 'No image selected',color: Colors.red).show();
+                                                                      }
+                                                                    });
+                                                                    Navigator.pop(context);
+                                                                  },
+                                                                  child: CustomText(text: 'Gallery',)
+                                                              )
+
+                                                            ],
+
+                                                            cancelButton: CupertinoActionSheetAction(
+                                                                onPressed: (){
+                                                                  Navigator.pop(context);
+                                                                },
+                                                                child: CustomText(text: 'Cancel',)
+                                                            ),
+                                                          )
+                                                  );
+                                                },
+                                                child: CustomText(text: 'Image',)
+                                            ),
+
+                                            CupertinoActionSheetAction(
+                                                onPressed: () async {
+                                                  Navigator.pop(context);
+                                                  showCupertinoModalPopup(
+                                                      context: context,
+                                                      builder: (context)=>
+                                                          CupertinoActionSheet(
+                                                            actions: [
+                                                              CupertinoActionSheetAction(
+                                                                  onPressed: ()async{
+                                                                    final pickedFile = await ImagePicker().getVideo(source: ImageSource.camera);
+                                                                    if (pickedFile != null) {
+                                                                        video = File(pickedFile.path);
+                                                                        image = null;
+                                                                        _controller = VideoPlayerController.file(video);
+                                                                        await _controller.initialize();
+                                                                        chewieController = ChewieController(
+                                                                            videoPlayerController: _controller,
+                                                                            looping: false,
+                                                                            autoPlay: false,
+                                                                            aspectRatio: _controller.value.aspectRatio
+                                                                        );
+                                                                        setState(() {});
+                                                                      } else {
+                                                                        ToastBar(text: 'No video selected',color: Colors.red).show();
+                                                                      }
+                                                                    Navigator.pop(context);
+                                                                  },
+                                                                  child: CustomText(text: 'Camera',)
+                                                              ),
+
+                                                              CupertinoActionSheetAction(
+                                                                  onPressed: () async {
+                                                                    final pickedFile = await ImagePicker().getVideo(source: ImageSource.gallery);
+
+                                                                      if (pickedFile != null) {
+                                                                        video = File(pickedFile.path);
+                                                                        image = null;
+                                                                        _controller = VideoPlayerController.file(video);
+                                                                        await _controller.initialize();
+                                                                        chewieController = ChewieController(
+                                                                            videoPlayerController: _controller,
+                                                                            looping: false,
+                                                                            autoPlay: false,
+                                                                            aspectRatio: _controller.value.aspectRatio
+                                                                        );
+                                                                        setState(() {});
+                                                                      } else {
+                                                                        ToastBar(text: 'No video selected',color: Colors.red).show();
+                                                                      }
+
+                                                                    Navigator.pop(context);
+                                                                  },
+                                                                  child: CustomText(text: 'Gallery',)
+                                                              )
+
+                                                            ],
+
+                                                            cancelButton: CupertinoActionSheetAction(
+                                                                onPressed: (){
+                                                                  Navigator.pop(context);
+                                                                },
+                                                                child: CustomText(text: 'Cancel',)
+                                                            ),
+                                                          )
+                                                  );
+                                                },
+                                                child: CustomText(text: 'Video',)
+                                            )
+
+                                          ],
+
+                                          cancelButton: CupertinoActionSheetAction(
+                                              onPressed: (){
+                                                Navigator.pop(context);
+                                              },
+                                              child: CustomText(text: 'Cancel',)
+                                          ),
+                                        )
+                                );
+
+
+
+
+
                                 },
                               child: SizedBox(
                                   height: ScreenUtil().setHeight(60),
@@ -119,6 +270,22 @@ class _CreatePostState extends State<CreatePost> {
                           child: image!=null?Image.file(image):Container(),
                         ),
                       ),
+
+                      ///video
+                      Visibility(
+                        visible: video!=null,
+                        child: Padding(
+                          padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
+                          child: video!=null?
+                              Container(
+                                  height: MediaQuery.of(context).size.height / 3,
+                                  child: Chewie(controller: chewieController))
+                              :Container(),
+                        ),
+                      ),
+
+
+
                     ],
                   ),
                 ),
@@ -136,15 +303,36 @@ class _CreatePostState extends State<CreatePost> {
                     onPressed: ()async{
                       try{
                         ToastBar(text: 'Posting...',color: Colors.orange).show();
-                        String url='';
+                        String imgUrl='';
+                        String videoUrl='';
+
+                        ProgressDialog pr = ProgressDialog(context);
+                        pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
+                        pr.style(
+                            message: 'Uploading...',
+                            borderRadius: 10.0,
+                            backgroundColor: Colors.white,
+                            progressWidget: Center(child: CircularProgressIndicator()),
+                            elevation: 10.0,
+                            insetAnimCurve: Curves.easeInOut,
+                            messageTextStyle: TextStyle(
+                                color: Colors.black, fontSize: ScreenUtil().setSp(35), fontWeight: FontWeight.bold)
+                        );
+
+                        pr.show();
                         if(image!=null){
                           TaskSnapshot snap = await FirebaseStorage.instance.ref('post_images/${widget.uid}/${DateTime.now().millisecondsSinceEpoch.toString()}').putFile(image);
-                          url = await snap.ref.getDownloadURL();
+                          imgUrl = await snap.ref.getDownloadURL();
+                        }
+                        if(video!=null){
+                          TaskSnapshot snap = await FirebaseStorage.instance.ref('post_videos/${widget.uid}/${DateTime.now().millisecondsSinceEpoch.toString()}').putFile(video);
+                          videoUrl = await snap.ref.getDownloadURL();
                         }
 
 
-                        if(widget.category=='gallery'&&url.isEmpty){
-                          ToastBar(text: 'Image is empty',color: Colors.red).show();
+                        if(widget.category=='gallery'&&(imgUrl.isEmpty||videoUrl.isEmpty)){
+                          pr.hide();
+                          ToastBar(text: 'Image or video is empty',color: Colors.red).show();
                         }
                         else{
                           var ref = await FirebaseFirestore.instance.collection('posts').add({
@@ -152,7 +340,8 @@ class _CreatePostState extends State<CreatePost> {
                             'authorName': widget.name,
                             'authorImage': widget.proPic,
                             'post': post.text,
-                            'image': url,
+                            'image': imgUrl,
+                            'video': videoUrl,
                             'publishedDate': DateTime.now().toString(),
                             'likes': [],
                             'following': [],
@@ -162,6 +351,7 @@ class _CreatePostState extends State<CreatePost> {
                           ///send notification
                           NotificationModel.sendPostCreateNotification(author: widget.name,postID: ref.id);
 
+                          pr.hide();
                           ToastBar(text: 'Posted',color: Colors.green).show();
                           Navigator.pop(context);
                         }
