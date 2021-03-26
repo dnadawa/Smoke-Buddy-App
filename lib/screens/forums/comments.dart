@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/notification-model.dart';
+import 'package:smoke_buddy/screens/profile/profile.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/toast.dart';
 
@@ -110,6 +112,12 @@ class _CommentsState extends State<Comments> {
 
                     return ListTile(
                       isThreeLine: true,
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(builder: (context) => Profile(uid: comments[i]['authorID'],)),
+                        );
+                      },
                       leading: CircleAvatar(
                         backgroundImage: CachedNetworkImageProvider(proPic),
                       ),

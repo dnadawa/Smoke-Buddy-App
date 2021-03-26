@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/screens/drawer.dart';
 import 'package:smoke_buddy/screens/home.dart';
+import 'package:smoke_buddy/screens/profile/profile.dart';
 import 'package:smoke_buddy/widgets/bottom-sheet.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/marquee.dart';
@@ -144,18 +145,28 @@ class _NotificationsState extends State<Notifications>{
                         ///notification
                         Padding(
                           padding: EdgeInsets.all(ScreenUtil().setHeight(10)),
-                          child: Row(
-                            children: [
-                              Icon(type=='postLike'?Icons.favorite:
-                              type=='postComment'?Icons.comment:
-                              type=='postFollow'?Icons.addchart:
-                              type=='profileFollow'?Icons.person_add:
-                              Icons.create,color: Constants.kMainTextColor,),
-                              SizedBox(width: ScreenUtil().setHeight(10),),
-                              SizedBox(
-                                  width: ScreenUtil().setWidth(550),
-                                  child: MarqueeWidget(child: CustomText(text: notification,size: ScreenUtil().setSp(35),align: TextAlign.start,))),
-                            ],
+                          child: GestureDetector(
+                            onTap: (){
+                              if(type=='profileFollow'){
+                                Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(builder: (context) => Profile(uid: notifications[i]['followerID'],)),
+                                );
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                Icon(type=='postLike'?Icons.favorite:
+                                type=='postComment'?Icons.comment:
+                                type=='postFollow'?Icons.addchart:
+                                type=='profileFollow'?Icons.person_add:
+                                Icons.create,color: Constants.kMainTextColor,),
+                                SizedBox(width: ScreenUtil().setHeight(10),),
+                                SizedBox(
+                                    width: ScreenUtil().setWidth(550),
+                                    child: MarqueeWidget(child: CustomText(text: notification,size: ScreenUtil().setSp(35),align: TextAlign.start,))),
+                              ],
+                            ),
                           ),
                         ),
 

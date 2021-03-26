@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:smoke_buddy/constants.dart';
 
 import 'extended-wallpaper.dart';
 
@@ -65,6 +66,7 @@ class _WallpaperFeedState extends State<WallpaperFeed> {
               tag: i,
               child: Card(
                 elevation: 5,
+                color: Constants.kFillColor,
                 child: CachedNetworkImage(
                   imageUrl: wallpapers[i]['url'],
                   fit: BoxFit.cover,

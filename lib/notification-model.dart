@@ -58,7 +58,7 @@ class NotificationModel{
       OneSignal.shared.postNotification(OSCreateNotification(
           playerIds: playerIDs,
           content: "$subjectName followed your post.",
-          heading: "Your post followed!",
+          heading: "Your post have been followed!",
           additionalData: {
             'type': 'postFollow',
             'postID': postID
@@ -90,7 +90,7 @@ class NotificationModel{
     OneSignal.shared.postNotification(OSCreateNotification(
         playerIds: playerIDs,
         content: "$subjectName followed you.",
-        heading: "Your have followed!",
+        heading: "Your have a new follower!",
         additionalData: {
           'type': 'profileFollow',
         }
@@ -98,6 +98,7 @@ class NotificationModel{
     await FirebaseFirestore.instance.collection('notifications').add({
       'notification': "$subjectName followed you",
       'type': 'profileFollow',
+      'followerID': uid,
       'uid': [receiverID],
       'time': DateTime.now().toString()
     });
@@ -165,7 +166,7 @@ class NotificationModel{
       OneSignal.shared.postNotification(OSCreateNotification(
           playerIds: authorIDs,
           content: "$subjectName liked your post.",
-          heading: "Your post liked!",
+          heading: "Your post have been liked!",
           additionalData: {
             'type': 'postLike',
             'postID': postID
@@ -200,7 +201,7 @@ class NotificationModel{
       OneSignal.shared.postNotification(OSCreateNotification(
           playerIds: authorIDs,
           content: "$subjectName commented your post.",
-          heading: "Your post commented!",
+          heading: "Your post have been commented!",
           additionalData: {
             'type': 'postComment',
             'postID': postID

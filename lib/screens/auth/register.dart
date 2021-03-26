@@ -226,61 +226,70 @@ class _RegisterState extends State<Register> {
 
                           try{
 
-                            ///auth using email
-                            if(widget.email!=''){
-                              finalPassword = "";
-                              try {
-                                UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                                    email: widget.email,
-                                    password: widget.password
-                                );
+                            ///check user exists
+                            var sub = await FirebaseFirestore.instance.collection('users').where('name', isEqualTo: username.text).get();
+                            var users = sub.docs;
+                            if(users.isNotEmpty){
+                              ToastBar(text: 'NAME ALREADY IN USE',color: Colors.orange).show();
+                            }
+                            else{
+                              ///auth using email
+                              if(widget.email!=''){
+                                finalPassword = "";
+                                try {
+                                  UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                                      email: widget.email,
+                                      password: widget.password
+                                  );
 
-                                uid = userCredential.user.uid;
-                              } on FirebaseAuthException catch (e) {
-                                if (e.code == 'weak-password') {
-                                  ToastBar(text: 'The password provided is too weak',color: Colors.red).show();
-                                } else if (e.code == 'email-already-in-use') {
-                                  ToastBar(text: 'The account already exists for that email',color: Colors.red).show();
+                                  uid = userCredential.user.uid;
+                                } on FirebaseAuthException catch (e) {
+                                  if (e.code == 'weak-password') {
+                                    ToastBar(text: 'The password provided is too weak',color: Colors.red).show();
+                                  } else if (e.code == 'email-already-in-use') {
+                                    ToastBar(text: 'The account already exists for that email',color: Colors.red).show();
+                                  }
+                                } catch (e) {
+                                  print(e);
                                 }
-                              } catch (e) {
-                                print(e);
                               }
+
+
+                              ///image upload
+                              String url = 'https://www.kindpng.com/picc/m/22-223965_no-profile-picture-icon-circle-member-icon-png.png';
+                              if(image!=null){
+                                TaskSnapshot snap = await storage.ref('users_profiles/'+uid).putFile(image);
+                                url = await snap.ref.getDownloadURL();
+                              }
+
+
+                              await FirebaseFirestore.instance.collection('users').doc(uid).set({
+                                'id': uid,
+                                'name': username.text,
+                                'status': status.text,
+                                'email': email.text,
+                                'phoneNumber': widget.phone,
+                                'gender': gender,
+                                'proPic': url,
+                                'hide': false,
+                                'notifyOwnPosts': true,
+                                'notifyOtherPosts': true,
+                                'following': [],
+                                'followers': [],
+                                'ban': false,
+                                'password': finalPassword
+                              });
+
+                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                              prefs.setString('uid', uid);
+
+                              ToastBar(text: 'Registered Successfully!',color: Colors.green).show();
+
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  CupertinoPageRoute(builder: (context) =>
+                                      Home()), (Route<dynamic> route) => false);
                             }
 
-
-                            ///image upload
-                            String url = 'https://www.kindpng.com/picc/m/22-223965_no-profile-picture-icon-circle-member-icon-png.png';
-                            if(image!=null){
-                              TaskSnapshot snap = await storage.ref('users_profiles/'+uid).putFile(image);
-                              url = await snap.ref.getDownloadURL();
-                            }
-
-
-                            await FirebaseFirestore.instance.collection('users').doc(uid).set({
-                              'id': uid,
-                              'name': username.text,
-                              'status': status.text,
-                              'email': email.text,
-                              'phoneNumber': widget.phone,
-                              'gender': gender,
-                              'proPic': url,
-                              'hide': false,
-                              'notifyOwnPosts': true,
-                              'notifyOtherPosts': true,
-                              'following': [],
-                              'followers': [],
-                              'ban': false,
-                              'password': finalPassword
-                            });
-
-                            SharedPreferences prefs = await SharedPreferences.getInstance();
-                            prefs.setString('uid', uid);
-
-                            ToastBar(text: 'Registered Successfully!',color: Colors.green).show();
-
-                            Navigator.of(context).pushAndRemoveUntil(
-                                CupertinoPageRoute(builder: (context) =>
-                                    Home()), (Route<dynamic> route) => false);
 
                           }
                           catch(e){

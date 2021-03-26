@@ -588,6 +588,12 @@ class _MenuDrawerState extends State<MenuDrawer> {
                                                         postID: postID,)),
                                             );
                                           }
+                                          else{
+                                            Navigator.push(
+                                              context,
+                                              CupertinoPageRoute(builder: (context) => Profile(uid: notifications[i]['followerID'],)),
+                                            );
+                                          }
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
