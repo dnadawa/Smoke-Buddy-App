@@ -71,7 +71,7 @@ class EmailLogin extends StatelessWidget {
                     }
                   },
                   child: CustomText(
-                    text: 'Forget Password',
+                    text: 'RESET PASSWORD',
                     isBold: false,
                   ),
                 ),

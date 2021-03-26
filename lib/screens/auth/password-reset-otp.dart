@@ -163,7 +163,6 @@ class _PasswordResetOTPState extends State<PasswordResetOTP> {
                       PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(verificationId: gVerificationId, smsCode: code.text);
                       await auth.signInWithCredential(phoneAuthCredential);
 
-
                       Navigator.of(context).pushAndRemoveUntil(
                           CupertinoPageRoute(builder: (context) =>
                               PhoneCreatePassword(uid: widget.uid,phone: widget.phone,type: 'reset',)), (Route<dynamic> route) => false);

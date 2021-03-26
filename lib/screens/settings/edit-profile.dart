@@ -2,10 +2,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smoke_buddy/screens/auth/password-reset-otp.dart';
 import 'package:smoke_buddy/widgets/bottom-sheet.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
@@ -112,7 +115,34 @@ class _EditProfileState extends State<EditProfile> {
                           controller: status,
                         ),
                       ),
-                      
+
+                      ///forget password
+                      Padding(
+                        padding: EdgeInsets.only(top: ScreenUtil().setHeight(10)),
+                        child: GestureDetector(
+                          onTap: () async {
+                            var sub = await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: widget.uid).get();
+                            var users = sub.docs;
+
+                            if(users[0]['phoneNumber']==''){
+                              ToastBar(text: 'Please wait',color: Colors.orange).show();
+                              FirebaseAuth auth = FirebaseAuth.instance;
+                              await auth.sendPasswordResetEmail(email: users[0]['email']);
+                              ToastBar(text: 'Password reset link sent to your email!',color: Colors.green).show();
+                            }
+                            else{
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(builder: (context) => PasswordResetOTP(phone: users[0]['phoneNumber'],uid: users[0]['id'],)),
+                              );
+                            }
+
+                          },
+                          child: CustomText(
+                            text: 'CHANGE PASSWORD',
+                          ),
+                        ),
+                      ),
                       
                       ///button
                       Padding(

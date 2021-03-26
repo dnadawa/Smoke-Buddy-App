@@ -121,7 +121,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
                   }
                 },
                 child: CustomText(
-                  text: 'Forget Password',
+                  text: 'RESET PASSWORD',
                   isBold: false,
                 ),
               ),
