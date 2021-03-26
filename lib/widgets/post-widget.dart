@@ -111,6 +111,35 @@ class _PostWidgetState extends State<PostWidget> {
                 CupertinoPageRoute(builder: (context) => Profile(uid: widget.authorId,)),
               );
             },
+            trailing: widget.uid==widget.authorId?IconButton(
+              icon: Icon(Icons.delete,color: Colors.black,),
+              onPressed: (){
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: CustomText(text: 'Delete Post',),
+                      content: CustomText(text: 'Are you sure you want to delete the post?',isBold: false,),
+                      actions: [
+                        TextButton(onPressed: () async {
+                          try{
+                            await FirebaseFirestore.instance.collection('posts').doc(widget.postId).delete();
+                            ToastBar(text: 'Post deleted!',color: Colors.green).show();
+                            Navigator.pop(context);
+                          }
+                          catch(e){
+                            ToastBar(text: 'Something went wrong',color: Colors.red).show();
+                          }
+                        }, child: CustomText(text: "YES",)),
+                        TextButton(onPressed: (){
+                          Navigator.pop(context);
+                        }, child: CustomText(text: "NO",)),
+                      ],
+                    );
+                  },
+                );
+              },
+            ):null,
           ),
 
           ///text
@@ -252,7 +281,7 @@ class _PostWidgetState extends State<PostWidget> {
                   child: Container(
                     child: Row(
                       children: [
-                        Icon(followed?Icons.notifications_active:Icons.notifications_none, color: followed?Colors.blue:Colors.black,),
+                        Icon(followed?Icons.notifications_active:Icons.notifications_none, color: followed?Color(0xff77983d):Colors.black,),
                         SizedBox(width: ScreenUtil().setWidth(10),),
                         CustomText(text: followed?'Following':'Follow',)
                       ],

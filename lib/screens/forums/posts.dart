@@ -101,7 +101,7 @@ class _PostsState extends State<Posts> {
                       ),
                       child: Padding(
                         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                        child: CustomText(text: widget.category!='gallery'?"Create a post":"Upload a photo",size: ScreenUtil().setSp(25),align: TextAlign.start,),
+                        child: CustomText(text: widget.category!='gallery'?"Create a post":"Upload media",size: ScreenUtil().setSp(25),align: TextAlign.start,),
                       ),
                     ),
                   ),
