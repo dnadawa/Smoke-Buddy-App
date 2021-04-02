@@ -58,10 +58,10 @@ class _EmailOTPState extends State<EmailOTP> {
     try {
       final sendReport = await send(message, smtpServer);
       print('Message sent: ' + sendReport.toString());
-      ToastBar(text: 'OTP send to your email!',color: Colors.green).show();
+      ToastBar(text: 'OTP send to your email!',color: Colors.green).show(context);
     } on MailerException catch (e) {
       print('Message not sent.');
-      ToastBar(text: 'Error sending email!',color: Colors.red).show();
+      ToastBar(text: 'Error sending email!',color: Colors.red).show(context);
       for (var p in e.problems) {
         print('Problem: ${p.code}: ${p.msg}');
       }
@@ -172,14 +172,14 @@ class _EmailOTPState extends State<EmailOTP> {
                     print(randomCode);
                     print(code.text);
                     if(code.text==randomCode.toString()){
-                      ToastBar(text: 'Email Verified',color: Colors.green).show();
+                      ToastBar(text: 'Email Verified',color: Colors.green).show(context);
                       Navigator.push(
                         context,
                         CupertinoPageRoute(builder: (context) => Register(phone: '',uid: '',password: widget.password,email: widget.email,)),
                       );
                     }
                     else{
-                      ToastBar(text: 'OTP is incorrect!',color: Colors.red).show();
+                      ToastBar(text: 'OTP is incorrect!',color: Colors.red).show(context);
                     }
                   },
                 ),

@@ -177,7 +177,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                               child: Button(
                                 text: profileFollowers.contains(loggedUid)?'UNFOLLOW':'FOLLOW',
                                 onPressed: () async {
-                                  ToastBar(text: 'Please wait...',color: Colors.orange).show();
+                                  ToastBar(text: 'Please wait...',color: Colors.orange).show(context);
 
                                   ///add him to my following list
                                   if(myFollowing.contains(widget.uid)){
@@ -206,7 +206,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                   });
 
                                   getProfileData();
-                                  ToastBar(text: 'Followed',color: Colors.green).show();
+                                  ToastBar(text: profileFollowers.contains(loggedUid)?'Followed':'Unfollowed',color: Colors.green).show(context);
                                 },
                               ),
                             ):Container(),
@@ -274,7 +274,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                         //               child: Button(
                         //                 text: profileFollowers.contains(loggedUid)?'UNFOLLOW':'FOLLOW',
                         //                 onPressed: () async {
-                        //                   ToastBar(text: 'Please wait...',color: Colors.orange).show();
+                        //                   ToastBar(text: 'Please wait...',color: Colors.orange).show(context);
                         //
                         //                   ///add him to my following list
                         //                   if(myFollowing.contains(widget.uid)){
@@ -303,7 +303,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                         //                   });
                         //
                         //                   getProfileData();
-                        //                   ToastBar(text: 'Followed',color: Colors.green).show();
+                        //                   ToastBar(text: 'Followed',color: Colors.green).show(context);
                         //                 },
                         //               ),
                         //             ):Center(child: CircularProgressIndicator(),),

@@ -42,12 +42,12 @@ class _PasswordResetOTPState extends State<PasswordResetOTP> {
       },
       verificationFailed: (FirebaseAuthException e) {
         print('verification failed'+e.toString());
-        ToastBar(text: 'Too many Requests! Please Try Again Later!',color: Colors.red).show();
+        ToastBar(text: 'Too many Requests! Please Try Again Later!',color: Colors.red).show(context);
       },
       codeSent: (String verificationId, int resendToken) async {
         print('code sent');
         gVerificationId = verificationId;
-        ToastBar(text: 'Code Sent!',color: Colors.orange).show();
+        ToastBar(text: 'Code Sent!',color: Colors.orange).show(context);
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         setState(() {
@@ -159,7 +159,7 @@ class _PasswordResetOTPState extends State<PasswordResetOTP> {
                   onPressed: () async {
 
                     try{
-                      ToastBar(text: 'Please wait...',color: Colors.orangeAccent).show();
+                      ToastBar(text: 'Please wait...',color: Colors.orangeAccent).show(context);
                       PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(verificationId: gVerificationId, smsCode: code.text);
                       await auth.signInWithCredential(phoneAuthCredential);
 
@@ -170,14 +170,14 @@ class _PasswordResetOTPState extends State<PasswordResetOTP> {
                     }
                     on FirebaseAuthException catch(e){
                       if(e.code == 'session-expired'){
-                        ToastBar(text: 'Code is expired!',color: Colors.red).show();
+                        ToastBar(text: 'Code is expired!',color: Colors.red).show(context);
                       }
                       else if(e.code == 'invalid-verification-code'){
-                        ToastBar(text: 'Code is invalid!',color: Colors.red).show();
+                        ToastBar(text: 'Code is invalid!',color: Colors.red).show(context);
                       }
                     }
                     catch(e){
-                      ToastBar(text: 'Something went wrong!',color: Colors.red).show();
+                      ToastBar(text: 'Something went wrong!',color: Colors.red).show(context);
                     }
                     },
                 ),

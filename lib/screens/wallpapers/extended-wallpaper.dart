@@ -61,13 +61,13 @@ class _ExtendedWallpaperState extends State<ExtendedWallpaper> {
                   child: FloatingActionButton(
                     onPressed: () async {
                       try {
-                        ToastBar(text: 'Downloading...',color: Colors.orange).show();
+                        ToastBar(text: 'Downloading...',color: Colors.orange).show(context);
                         var imageId = await ImageDownloader.downloadImage(widget.wallpapers[i]['url']);
                         var path = await ImageDownloader.findPath(imageId);
-                        ToastBar(text: 'Downloaded to $path',color: Colors.green).show();
+                        ToastBar(text: 'Downloaded to $path',color: Colors.green).show(context);
                       } on PlatformException catch (error) {
                         print(error.toString());
-                        ToastBar(text: 'Something went wrong',color: Colors.red).show();
+                        ToastBar(text: 'Something went wrong',color: Colors.red).show(context);
                       }
                     },
                     child: Icon(Icons.download_rounded,color: Theme.of(context).primaryColor,),

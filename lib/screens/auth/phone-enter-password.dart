@@ -78,7 +78,7 @@ class PhoneEnterPassword extends StatelessWidget {
                               Home()), (Route<dynamic> route) => false);
                     }
                     else{
-                      ToastBar(text: 'Password is incorrect',color: Colors.red).show();
+                      ToastBar(text: 'Password is incorrect',color: Colors.red).show(context);
                     }
                   },
                 ),

@@ -113,7 +113,7 @@ class _CreatePostState extends State<CreatePost> {
                                                                         image = File(pickedFile.path);
                                                                         video = null;
                                                                       } else {
-                                                                        ToastBar(text: 'No image selected',color: Colors.red).show();
+                                                                        ToastBar(text: 'No image selected',color: Colors.red).show(context);
                                                                       }
                                                                     });
                                                                     Navigator.pop(context);
@@ -129,7 +129,7 @@ class _CreatePostState extends State<CreatePost> {
                                                                         image = File(pickedFile.path);
                                                                         video=null;
                                                                       } else {
-                                                                        ToastBar(text: 'No image selected',color: Colors.red).show();
+                                                                        ToastBar(text: 'No image selected',color: Colors.red).show(context);
                                                                       }
                                                                     });
                                                                     Navigator.pop(context);
@@ -175,7 +175,7 @@ class _CreatePostState extends State<CreatePost> {
                                                                         );
                                                                         setState(() {});
                                                                       } else {
-                                                                        ToastBar(text: 'No video selected',color: Colors.red).show();
+                                                                        ToastBar(text: 'No video selected',color: Colors.red).show(context);
                                                                       }
                                                                     Navigator.pop(context);
                                                                   },
@@ -199,7 +199,7 @@ class _CreatePostState extends State<CreatePost> {
                                                                         );
                                                                         setState(() {});
                                                                       } else {
-                                                                        ToastBar(text: 'No video selected',color: Colors.red).show();
+                                                                        ToastBar(text: 'No video selected',color: Colors.red).show(context);
                                                                       }
 
                                                                     Navigator.pop(context);
@@ -302,7 +302,7 @@ class _CreatePostState extends State<CreatePost> {
                     text: 'POST',
                     onPressed: ()async{
                       try{
-                        ToastBar(text: 'Posting...',color: Colors.orange).show();
+                        ToastBar(text: 'Posting...',color: Colors.orange).show(context);
                         String imgUrl='';
                         String videoUrl='';
 
@@ -333,7 +333,7 @@ class _CreatePostState extends State<CreatePost> {
                         print(videoUrl);
                         if(widget.category=='gallery'&&(imgUrl.isEmpty&&videoUrl.isEmpty)){
                           pr.hide();
-                          ToastBar(text: 'Image or video is empty',color: Colors.red).show();
+                          ToastBar(text: 'Image or video is empty',color: Colors.red).show(context);
                         }
                         else{
                           var ref = await FirebaseFirestore.instance.collection('posts').add({
@@ -353,13 +353,13 @@ class _CreatePostState extends State<CreatePost> {
                           NotificationModel.sendPostCreateNotification(author: widget.name,postID: ref.id);
 
                           pr.hide();
-                          ToastBar(text: 'Posted',color: Colors.green).show();
+                          ToastBar(text: 'Posted',color: Colors.green).show(context);
                           Navigator.pop(context);
                         }
 
                       }
                       catch(e){
-                        ToastBar(text: 'Something went wrong',color: Colors.red).show();
+                        ToastBar(text: 'Something went wrong',color: Colors.red).show(context);
                       }
                     },
                   ),

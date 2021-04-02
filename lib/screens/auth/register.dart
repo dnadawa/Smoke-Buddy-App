@@ -47,7 +47,7 @@ class _RegisterState extends State<Register> {
       if (pickedFile != null) {
         image = File(pickedFile.path);
       } else {
-        ToastBar(text: 'No image selected',color: Colors.red).show();
+        ToastBar(text: 'No image selected',color: Colors.red).show(context);
       }
     });
   }
@@ -215,7 +215,7 @@ class _RegisterState extends State<Register> {
                     onPressed: () async {
                       String finalPassword = widget.password;
                       if(accept){
-                        ToastBar(text: 'Please wait',color: Colors.orange).show();
+                        ToastBar(text: 'Please wait',color: Colors.orange).show(context);
                         if(username.text.isNotEmpty&&status.text.isNotEmpty&&email.text.isNotEmpty){
                           String gender;
                           switch(_gender.index){
@@ -230,7 +230,7 @@ class _RegisterState extends State<Register> {
                             var sub = await FirebaseFirestore.instance.collection('users').where('name', isEqualTo: username.text).get();
                             var users = sub.docs;
                             if(users.isNotEmpty){
-                              ToastBar(text: 'NAME ALREADY IN USE',color: Colors.orange).show();
+                              ToastBar(text: 'NAME ALREADY IN USE',color: Colors.orange).show(context);
                             }
                             else{
                               ///auth using email
@@ -245,9 +245,9 @@ class _RegisterState extends State<Register> {
                                   uid = userCredential.user.uid;
                                 } on FirebaseAuthException catch (e) {
                                   if (e.code == 'weak-password') {
-                                    ToastBar(text: 'The password provided is too weak',color: Colors.red).show();
+                                    ToastBar(text: 'The password provided is too weak',color: Colors.red).show(context);
                                   } else if (e.code == 'email-already-in-use') {
-                                    ToastBar(text: 'The account already exists for that email',color: Colors.red).show();
+                                    ToastBar(text: 'The account already exists for that email',color: Colors.red).show(context);
                                   }
                                 } catch (e) {
                                   print(e);
@@ -283,7 +283,7 @@ class _RegisterState extends State<Register> {
                               SharedPreferences prefs = await SharedPreferences.getInstance();
                               prefs.setString('uid', uid);
 
-                              ToastBar(text: 'Registered Successfully!',color: Colors.green).show();
+                              ToastBar(text: 'Registered Successfully!',color: Colors.green).show(context);
 
                               Navigator.of(context).pushAndRemoveUntil(
                                   CupertinoPageRoute(builder: (context) =>
@@ -294,18 +294,18 @@ class _RegisterState extends State<Register> {
                           }
                           catch(e){
                             print(e.toString());
-                            ToastBar(text: 'Something went wrong!',color: Colors.red).show();
+                            ToastBar(text: 'Something went wrong!',color: Colors.red).show(context);
                           }
 
                         }
                         else{
-                          ToastBar(text: 'Please fill all fields!',color: Colors.red).show();
+                          ToastBar(text: 'Please fill all fields!',color: Colors.red).show(context);
                         }
 
 
                       }
                       else{
-                        ToastBar(text: 'You must accept terms and conditions to continue',color: Colors.red).show();
+                        ToastBar(text: 'You must accept terms and conditions to continue',color: Colors.red).show(context);
                       }
 
 

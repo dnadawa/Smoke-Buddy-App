@@ -157,11 +157,11 @@ class _PostWidgetState extends State<PostWidget> {
                         TextButton(onPressed: () async {
                           try{
                             await FirebaseFirestore.instance.collection('posts').doc(widget.postId).delete();
-                            ToastBar(text: 'Post deleted!',color: Colors.green).show();
+                            ToastBar(text: 'Post deleted!',color: Colors.green).show(context);
                             Navigator.pop(context);
                           }
                           catch(e){
-                            ToastBar(text: 'Something went wrong',color: Colors.red).show();
+                            ToastBar(text: 'Something went wrong',color: Colors.red).show(context);
                           }
                         }, child: CustomText(text: "YES",)),
                         TextButton(onPressed: (){

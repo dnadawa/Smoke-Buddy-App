@@ -125,10 +125,10 @@ class _EditProfileState extends State<EditProfile> {
                             var users = sub.docs;
 
                             if(users[0]['phoneNumber']==''){
-                              ToastBar(text: 'Please wait',color: Colors.orange).show();
+                              ToastBar(text: 'Please wait',color: Colors.orange).show(context);
                               FirebaseAuth auth = FirebaseAuth.instance;
                               await auth.sendPasswordResetEmail(email: users[0]['email']);
-                              ToastBar(text: 'Password reset link sent to your email!',color: Colors.green).show();
+                              ToastBar(text: 'Password reset link sent to your email!',color: Colors.green).show(context);
                             }
                             else{
                               Navigator.push(
@@ -153,13 +153,13 @@ class _EditProfileState extends State<EditProfile> {
                           child: Button(
                             text: 'SAVE',
                             onPressed: () async {
-                              ToastBar(text: 'Please wait',color: Colors.orange).show();
+                              ToastBar(text: 'Please wait',color: Colors.orange).show(context);
                               await FirebaseFirestore.instance.collection('users').doc(widget.uid).update({
                                 'name': name.text,
                                 'status': status.text,
                                 'proPic': image
                               });
-                              ToastBar(text: 'Account updated!',color: Colors.green).show();
+                              ToastBar(text: 'Account updated!',color: Colors.green).show(context);
                             },
                           ),
                         ),
@@ -180,13 +180,13 @@ class _EditProfileState extends State<EditProfile> {
                       if (pickedFile != null) {
                           pickedImage = File(pickedFile.path);
                       } else {
-                          ToastBar(text: 'No image selected',color: Colors.red).show();
+                          ToastBar(text: 'No image selected',color: Colors.red).show(context);
                       }
-                      ToastBar(text: 'Uploading...',color: Colors.orange).show();
+                      ToastBar(text: 'Uploading...',color: Colors.orange).show(context);
                       TaskSnapshot snap = await storage.ref('users_profiles/'+DateTime.now().millisecondsSinceEpoch.toString()).putFile(pickedImage);
                       image = await snap.ref.getDownloadURL();
                       setState(() {});
-                      ToastBar(text: 'Image uploaded!',color: Colors.green).show();
+                      ToastBar(text: 'Image uploaded!',color: Colors.green).show(context);
                       },
                     child: CircleAvatar(
                         backgroundColor: Colors.white,

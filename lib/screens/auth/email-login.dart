@@ -61,13 +61,13 @@ class EmailLogin extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () async {
                     if(email.text.isNotEmpty) {
-                      ToastBar(text: 'Please wait',color: Colors.orange).show();
+                      ToastBar(text: 'Please wait',color: Colors.orange).show(context);
                       FirebaseAuth auth = FirebaseAuth.instance;
                       await auth.sendPasswordResetEmail(email: email.text);
-                      ToastBar(text: 'Password reset link sent to your email!',color: Colors.green).show();
+                      ToastBar(text: 'Password reset link sent to your email!',color: Colors.green).show(context);
                     }
                     else{
-                      ToastBar(text: 'Please fill the email',color: Colors.red).show();
+                      ToastBar(text: 'Please fill the email',color: Colors.red).show(context);
                     }
                   },
                   child: CustomText(
@@ -85,7 +85,7 @@ class EmailLogin extends StatelessWidget {
                   text: 'SAVE',
                   onPressed: () async {
 
-                    ToastBar(text: 'Please wait',color: Colors.orange).show();
+                    ToastBar(text: 'Please wait',color: Colors.orange).show(context);
 
                     try {
                       UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -93,7 +93,7 @@ class EmailLogin extends StatelessWidget {
                           password: password.text
                       );
 
-                    ToastBar(text: 'Logged in!',color: Colors.green).show();
+                    ToastBar(text: 'Logged in!',color: Colors.green).show(context);
 
                     String uid = userCredential.user.uid;
                       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -105,9 +105,9 @@ class EmailLogin extends StatelessWidget {
 
                     } on FirebaseAuthException catch (e) {
                       if (e.code == 'user-not-found') {
-                        ToastBar(text: 'No user found for that email',color: Colors.red).show();
+                        ToastBar(text: 'No user found for that email',color: Colors.red).show(context);
                       } else if (e.code == 'wrong-password') {
-                        ToastBar(text: 'Password incorrect',color: Colors.red).show();
+                        ToastBar(text: 'Password incorrect',color: Colors.red).show(context);
                       }
                     }
 

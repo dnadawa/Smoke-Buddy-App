@@ -31,7 +31,7 @@ class _HomeState extends State<Home> {
     var user = sub.docs;
     bool isBan = user[0]['ban'];
     if(isBan){
-      ToastBar(text: 'You have banned from the app',color: Colors.red).show();
+      ToastBar(text: 'You have banned from the app',color: Colors.red).show(context);
       await FirebaseAuth.instance.signOut();
       prefs.setString('uid', null);
       Navigator.of(context).pushAndRemoveUntil(

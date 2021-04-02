@@ -154,7 +154,7 @@ class _CommentsState extends State<Comments> {
                         suffixIcon: IconButton(
                           icon: Icon(Icons.send,color: Constants.kMainTextColor,),
                           onPressed: () async {
-                            ToastBar(text: 'Commenting...',color: Colors.orange).show();
+                            ToastBar(text: 'Commenting...',color: Colors.orange).show(context);
                             await FirebaseFirestore.instance.collection('posts').doc(widget.postID).collection('comments').add({
                               'time': DateTime.now().toString(),
                               'comment': comment.text,
@@ -166,7 +166,7 @@ class _CommentsState extends State<Comments> {
                             ///sendNotification
                             NotificationModel.sendCommentNotification(postID: widget.postID,receiverID: widget.authorID,following: widget.following, likes: widget.likes, comments: commentersIDs);
 
-                            ToastBar(text: 'Comment added!',color: Colors.green).show();
+                            ToastBar(text: 'Comment added!',color: Colors.green).show(context);
                             comment.clear();
                           },
                         ),

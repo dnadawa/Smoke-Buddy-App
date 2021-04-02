@@ -71,7 +71,7 @@ class EmailRegister extends StatelessWidget {
                       );
                     }
                     else{
-                      ToastBar(text: 'Password does not match!',color: Colors.red).show();
+                      ToastBar(text: 'Password does not match!',color: Colors.red).show(context);
                     }
 
 

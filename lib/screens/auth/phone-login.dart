@@ -100,7 +100,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
               padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(80)),
               child: GestureDetector(
                 onTap: () async {
-                  ToastBar(text: 'Please wait...',color: Colors.orange).show();
+                  ToastBar(text: 'Please wait...',color: Colors.orange).show(context);
                   if(phone.text.isNotEmpty) {
 
                     ///check user exists
@@ -113,11 +113,11 @@ class _PhoneLoginState extends State<PhoneLogin> {
                         CupertinoPageRoute(builder: (context) => PasswordResetOTP(phone: countryCode+phone.text,uid: users[0]['id'],)),
                       );
                     }else{
-                      ToastBar(text: 'There is no user account for '+countryCode+phone.text,color: Colors.red).show();
+                      ToastBar(text: 'There is no user account for '+countryCode+phone.text,color: Colors.red).show(context);
                     }
                   }
                   else{
-                    ToastBar(text: 'Please fill the phone number',color: Colors.red).show();
+                    ToastBar(text: 'Please fill the phone number',color: Colors.red).show(context);
                   }
                 },
                 child: CustomText(

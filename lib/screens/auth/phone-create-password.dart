@@ -89,14 +89,14 @@ class PhoneCreatePassword extends StatelessWidget {
                           });
                           SharedPreferences prefs = await SharedPreferences.getInstance();
                           prefs.remove('uid');
-                          ToastBar(text: 'Password changed successfully!',color: Colors.green).show();
+                          ToastBar(text: 'Password changed successfully!',color: Colors.green).show(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               CupertinoPageRoute(builder: (context) =>
                                   PhoneLogin()), (Route<dynamic> route) => false);
                       }
                     }
                     else{
-                      ToastBar(text: 'Password does not match!',color: Colors.red).show();
+                      ToastBar(text: 'Password does not match!',color: Colors.red).show(context);
                     }
                   },
                 ),

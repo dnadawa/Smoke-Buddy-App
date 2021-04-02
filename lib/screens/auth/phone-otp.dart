@@ -41,12 +41,12 @@ class _PhoneOTPState extends State<PhoneOTP> {
       },
       verificationFailed: (FirebaseAuthException e) {
         print('verification failed'+e.toString());
-        ToastBar(text: 'Too many Requests! Please Try Again Later!',color: Colors.red).show();
+        ToastBar(text: 'Too many Requests! Please Try Again Later!',color: Colors.red).show(context);
       },
       codeSent: (String verificationId, int resendToken) async {
         print('code sent');
         gVerificationId = verificationId;
-        ToastBar(text: 'Code Sent!',color: Colors.orange).show();
+        ToastBar(text: 'Code Sent!',color: Colors.orange).show(context);
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         setState(() {
@@ -158,7 +158,7 @@ class _PhoneOTPState extends State<PhoneOTP> {
                   onPressed: () async {
 
                     try{
-                      ToastBar(text: 'Please wait...',color: Colors.orangeAccent).show();
+                      ToastBar(text: 'Please wait...',color: Colors.orangeAccent).show(context);
                       PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(verificationId: gVerificationId, smsCode: code.text);
                       await auth.signInWithCredential(phoneAuthCredential);
 
@@ -167,7 +167,7 @@ class _PhoneOTPState extends State<PhoneOTP> {
                       var sub = await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: auth.currentUser.uid).get();
                       var users = sub.docs;
 
-                      ToastBar(text: 'Phone Verified!',color: Colors.green).show();
+                      ToastBar(text: 'Phone Verified!',color: Colors.green).show(context);
 
                       if(users.isEmpty){
                         //navigate to create password page
@@ -198,14 +198,14 @@ class _PhoneOTPState extends State<PhoneOTP> {
                     }
                     on FirebaseAuthException catch(e){
                       if(e.code == 'session-expired'){
-                        ToastBar(text: 'Code is expired!',color: Colors.red).show();
+                        ToastBar(text: 'Code is expired!',color: Colors.red).show(context);
                       }
                       else if(e.code == 'invalid-verification-code'){
-                        ToastBar(text: 'Code is invalid!',color: Colors.red).show();
+                        ToastBar(text: 'Code is invalid!',color: Colors.red).show(context);
                       }
                     }
                     catch(e){
-                      ToastBar(text: 'Something went wrong!',color: Colors.red).show();
+                      ToastBar(text: 'Something went wrong!',color: Colors.red).show(context);
                     }
                     },
                 ),

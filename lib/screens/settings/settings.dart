@@ -130,14 +130,14 @@ class _SettingsState extends State<Settings> {
                   dense: true,
                   trailing: Icon(Icons.arrow_forward_ios),
                   onTap: () async {
-                    ToastBar(text: 'Please wait...',color: Colors.orange).show();
+                    ToastBar(text: 'Please wait...',color: Colors.orange).show(context);
                     await FirebaseAuth.instance.signOut();
                     SharedPreferences prefs = await SharedPreferences.getInstance();
                     prefs.remove('uid');
                     Navigator.of(context).pushAndRemoveUntil(
                         CupertinoPageRoute(builder: (context) =>
                             PhoneLogin()), (Route<dynamic> route) => false);
-                    ToastBar(text: 'Logged out!',color: Colors.green).show();
+                    ToastBar(text: 'Logged out!',color: Colors.green).show(context);
                   },
                 ),
 
