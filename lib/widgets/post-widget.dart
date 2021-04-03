@@ -77,7 +77,7 @@ class _PostWidgetState extends State<PostWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    getComments(widget.postId);
     ///for likes
     if(widget.likes.contains(widget.uid)){
       setState(() {
@@ -103,7 +103,7 @@ class _PostWidgetState extends State<PostWidget> {
       });
     }
 
-    getComments(widget.postId);
+
 
 
     ///initializing video
@@ -123,6 +123,7 @@ class _PostWidgetState extends State<PostWidget> {
   @override
   Widget build(BuildContext context) {
     return  Container(
+      key: UniqueKey(),
       decoration: BoxDecoration(
           color: Constants.kFillColor,
           borderRadius: BorderRadius.circular(10),
@@ -158,6 +159,8 @@ class _PostWidgetState extends State<PostWidget> {
                           try{
                             await FirebaseFirestore.instance.collection('posts').doc(widget.postId).delete();
                             ToastBar(text: 'Post deleted!',color: Colors.green).show(context);
+                            subscription.cancel();
+                            getComments(widget.postId);
                             Navigator.pop(context);
                           }
                           catch(e){

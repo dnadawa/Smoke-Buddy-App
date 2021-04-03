@@ -15,6 +15,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../constants.dart';
 import '../../notification-model.dart';
+import 'forums.dart';
 
 class CreatePost extends StatefulWidget {
 
@@ -354,7 +355,10 @@ class _CreatePostState extends State<CreatePost> {
 
                           pr.hide();
                           ToastBar(text: 'Posted',color: Colors.green).show(context);
-                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(builder: (context) => Forums(index: widget.category=='status'?0:widget.category=='gallery'?1:widget.category=='grow'?2:3,)),
+                          );
                         }
 
                       }
