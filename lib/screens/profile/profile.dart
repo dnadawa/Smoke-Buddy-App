@@ -104,6 +104,22 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: (){
+          Navigator.pop(context);
+        }),
+        title: SizedBox(
+          width: ScreenUtil().setWidth(430),
+          child: GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(builder: (context) => Home()),
+                );
+              },
+              child: Image.asset('assets/images/appbar.png')),
+        ),
+      ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -113,52 +129,52 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
             ///backdrop
             Column(
               children: [
-                ///status bar
-                Container(
-                  height: ScreenUtil().statusBarHeight,
-                  color: Theme.of(context).primaryColor.withOpacity(0.9),
-                ),
+                // ///status bar
+                // Container(
+                //   height: ScreenUtil().statusBarHeight,
+                //   color: Theme.of(context).primaryColor.withOpacity(0.9),
+                // ),
 
                 ///dark green container
                 Container(
-                  height: MediaQuery.of(context).size.height / 4,
+                  height: MediaQuery.of(context).size.height / 6,
                   color: Theme.of(context).primaryColor,
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      // padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.04),
-                      padding: EdgeInsets.only(top: ScreenUtil().setHeight(70)),
-                      child: Row(
-                        children: [
-                          ///backbutton
-                          IconButton(
-                              icon: Icon(
-                                Icons.arrow_back_ios,
-                                color: Constants.kYellow,
-                              ),
-                              onPressed: () => Navigator.pop(context)),
-
-                          Expanded(child: SizedBox()),
-                          ///logo
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(builder: (context) => Home()),
-                                );
-                              },
-                              child: SizedBox(
-                                  height: ScreenUtil().setHeight(100),
-                                  child: Image.asset('assets/images/appbar.png'))
-                          ),
-                          Expanded(child: SizedBox()),
-                          Expanded(child: SizedBox()),
-                          Expanded(child: SizedBox()),
-                          Expanded(child: SizedBox()),
-                        ],
-                      ),
-                    ),
-                  ),
+                  // child: Align(
+                  //   alignment: Alignment.topLeft,
+                  //   child: Padding(
+                  //     // padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.04),
+                  //     padding: EdgeInsets.only(top: ScreenUtil().setHeight(70)),
+                  //     child: Row(
+                  //       children: [
+                  //         ///backbutton
+                  //         IconButton(
+                  //             icon: Icon(
+                  //               Icons.arrow_back_ios,
+                  //               color: Constants.kYellow,
+                  //             ),
+                  //             onPressed: () => Navigator.pop(context)),
+                  //
+                  //         Expanded(child: SizedBox()),
+                  //         ///logo
+                  //         GestureDetector(
+                  //             onTap: () {
+                  //               Navigator.push(
+                  //                 context,
+                  //                 CupertinoPageRoute(builder: (context) => Home()),
+                  //               );
+                  //             },
+                  //             child: SizedBox(
+                  //                 height: ScreenUtil().setHeight(100),
+                  //                 child: Image.asset('assets/images/appbar.png'))
+                  //         ),
+                  //         Expanded(child: SizedBox()),
+                  //         Expanded(child: SizedBox()),
+                  //         Expanded(child: SizedBox()),
+                  //         Expanded(child: SizedBox()),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                 ),
 
                 SizedBox(height: ScreenUtil().setHeight(80),),
@@ -373,7 +389,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
             Align(
               alignment: Alignment.topCenter,
               child: Padding(
-                padding: EdgeInsets.only(top: ScreenUtil().setHeight(300)),
+                padding: EdgeInsets.only(top: ScreenUtil().setHeight(120)),
                 child: Container(
                   width: ScreenUtil().setWidth(600),
                   height: ScreenUtil().setWidth(250),
@@ -401,7 +417,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
             Align(
                 alignment: Alignment.topCenter,
                 child: Padding(
-                  padding: EdgeInsets.only(top: ScreenUtil().setHeight(220)),
+                  padding: EdgeInsets.only(top: ScreenUtil().setHeight(45)),
                   child: CircleAvatar(
                     backgroundColor: Colors.white,
                     backgroundImage: CachedNetworkImageProvider(proPic),
