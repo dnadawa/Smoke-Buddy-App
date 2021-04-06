@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,6 +12,7 @@ import 'package:smoke_buddy/notification-model.dart';
 import 'package:smoke_buddy/screens/profile/profile.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
 
@@ -123,7 +125,25 @@ class _CommentsState extends State<Comments> {
                       ),
                       contentPadding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
                       title: CustomText(text: name==userName?'Me':name,align: TextAlign.start,),
-                      subtitle: CustomText(text: DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(time))+'\n'+comment,align: TextAlign.start,isBold: false,size: ScreenUtil().setSp(25),),
+                      // subtitle: CustomText(text: DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(time))+'\n'+comment,align: TextAlign.start,isBold: false,size: ScreenUtil().setSp(25),),
+                      subtitle: Linkify(
+                        onOpen: (link) async {
+                          if (await canLaunch(link.url)) {
+                            await launch(link.url);
+                          } else {
+                            ToastBar(text: 'Could not launch url!',color: Colors.red).show(context);
+                          }
+                        },
+                        style: TextStyle(
+                          color: Constants.kMainTextColor,
+                          fontSize: ScreenUtil().setSp(25),
+                          letterSpacing: 0.6,
+                          fontFamily: 'Antonio',
+                        ),
+                        textAlign: TextAlign.start,
+                        text: DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(time))+'\n'+comment,
+
+                      ),
                     );
                   },
                 ):Center(child: CircularProgressIndicator(),),

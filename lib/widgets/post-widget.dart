@@ -6,6 +6,7 @@ import 'package:chewie/chewie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:smoke_buddy/notification-model.dart';
@@ -13,6 +14,7 @@ import 'package:smoke_buddy/screens/forums/comments.dart';
 import 'package:smoke_buddy/screens/forums/liked.dart';
 import 'package:smoke_buddy/screens/profile/profile.dart';
 import 'package:smoke_buddy/widgets/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 import '../constants.dart';
@@ -182,13 +184,31 @@ class _PostWidgetState extends State<PostWidget> {
           if(widget.description!='')
           Padding(
             padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
-            child: CustomText(
+            child: Linkify(
+              onOpen: (link) async {
+                if (await canLaunch(link.url)) {
+                await launch(link.url);
+                } else {
+                ToastBar(text: 'Could not launch url!',color: Colors.red).show(context);
+                }
+              },
+              style: TextStyle(
+                  color: Constants.kMainTextColor,
+                  fontSize: ScreenUtil().setSp(35),
+                  letterSpacing: 0.6,
+                  fontFamily: 'Antonio',
+              ),
+              textAlign: TextAlign.start,
               text: widget.description,
-              align: TextAlign.start,
-              isBold: false,
-              size: ScreenUtil().setSp(35),
+
             ),
           ),
+          // CustomText(
+          //   text: widget.description,
+          //   align: TextAlign.start,
+          //   isBold: false,
+          //   size: ScreenUtil().setSp(35),
+          // )
 
           ///image
           Visibility(
