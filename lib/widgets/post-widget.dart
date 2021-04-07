@@ -147,7 +147,9 @@ class _PostWidgetState extends State<PostWidget> {
                 CupertinoPageRoute(builder: (context) => Profile(uid: widget.authorId,)),
               );
             },
-            trailing: widget.uid==widget.authorId?IconButton(
+            trailing: widget.uid==widget.authorId
+                ?
+            IconButton(
               icon: Icon(Icons.delete,color: Colors.black,),
               onPressed: (){
                 showDialog(
@@ -177,7 +179,39 @@ class _PostWidgetState extends State<PostWidget> {
                   },
                 );
               },
-            ):null,
+            )
+                :
+            IconButton(
+              icon: Icon(CupertinoIcons.exclamationmark_bubble_fill,color: Colors.black,),
+              onPressed: (){
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: CustomText(text: 'Report Post',),
+                      content: CustomText(text: 'Are you sure you want to report this post?',isBold: false,),
+                      actions: [
+                        TextButton(onPressed: () async {
+                          try{
+                            await FirebaseFirestore.instance.collection('posts').doc(widget.postId).update({
+                              'report': 'pending'
+                            });
+                            ToastBar(text: 'Report Sent!',color: Colors.green).show(context);
+                            Navigator.pop(context);
+                          }
+                          catch(e){
+                            ToastBar(text: 'Something went wrong',color: Colors.red).show(context);
+                          }
+                        }, child: CustomText(text: "YES",)),
+                        TextButton(onPressed: (){
+                          Navigator.pop(context);
+                        }, child: CustomText(text: "NO",)),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
           ),
 
           ///text
