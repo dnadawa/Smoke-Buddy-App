@@ -125,8 +125,8 @@ class EmailLogin extends StatelessWidget {
                               password: password.text
                           );
 
-                          ToastBar(text: 'Logged in!', color: Colors.green)
-                              .show(context);
+                          // ToastBar(text: 'Logged in!', color: Colors.green)
+                          //     .show(context);
 
                           String uid = userCredential.user.uid;
                           SharedPreferences prefs = await SharedPreferences

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,11 +34,13 @@ class _HomeState extends State<Home> {
     bool isBan = user[0]['ban'];
     if(isBan){
       ToastBar(text: 'You have banned from the app',color: Colors.red).show(context);
-      await FirebaseAuth.instance.signOut();
-      prefs.remove('uid');
-      Navigator.of(context).pushAndRemoveUntil(
-          CupertinoPageRoute(builder: (context) =>
-              PhoneLogin()), (Route<dynamic> route) => false);
+      Timer(Duration(seconds: 1),() async {
+        await FirebaseAuth.instance.signOut();
+        prefs.remove('uid');
+        Navigator.of(context).pushAndRemoveUntil(
+            CupertinoPageRoute(builder: (context) =>
+                PhoneLogin()), (Route<dynamic> route) => false);
+      });
     }
   }
 
