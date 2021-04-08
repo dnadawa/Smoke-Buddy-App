@@ -13,6 +13,7 @@ import 'package:smoke_buddy/notification-model.dart';
 import 'package:smoke_buddy/screens/forums/comments.dart';
 import 'package:smoke_buddy/screens/forums/liked.dart';
 import 'package:smoke_buddy/screens/profile/profile.dart';
+import 'package:smoke_buddy/screens/wallpapers/extended-wallpaper.dart';
 import 'package:smoke_buddy/widgets/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
@@ -253,10 +254,18 @@ class _PostWidgetState extends State<PostWidget> {
                 constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(context).size.height/2
                 ),
-                child: CachedNetworkImage(
-                  imageUrl: widget.image,
-                  fit: BoxFit.fitHeight,
-                  placeholder: (context,url)=>Image.asset('assets/images/loading.gif'),
+                child: GestureDetector(
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ExtendedWallpaper(index: 0,wallpapers: [{'url': widget.image}],isDownloadable: false,)),
+                    );
+                  },
+                  child: CachedNetworkImage(
+                    imageUrl: widget.image,
+                    fit: BoxFit.fitHeight,
+                    placeholder: (context,url)=>Image.asset('assets/images/loading.gif'),
+                  ),
                 ),
               ),
             ),

@@ -9,7 +9,8 @@ class ExtendedWallpaper extends StatefulWidget {
 
   final int index;
   final List wallpapers;
-  const ExtendedWallpaper({Key key, this.index, this.wallpapers}) : super(key: key);
+  final bool isDownloadable;
+  const ExtendedWallpaper({Key key, this.index, this.wallpapers, this.isDownloadable=true}) : super(key: key);
 
   @override
   _ExtendedWallpaperState createState() => _ExtendedWallpaperState();
@@ -54,6 +55,7 @@ class _ExtendedWallpaperState extends State<ExtendedWallpaper> {
               
               
               ///download button
+              if(widget.isDownloadable)
               Align(
                 alignment: Alignment.bottomRight,
                 child: Padding(

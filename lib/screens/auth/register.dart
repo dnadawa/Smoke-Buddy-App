@@ -283,7 +283,7 @@ class _RegisterState extends State<Register> {
                               await FirebaseFirestore.instance.collection('users').doc('sxdu6NkXuceOCJHzZWgQqDZQhfx2').update({
                                 'followers': FieldValue.arrayUnion([uid])
                               });
-                              
+
 
                               SharedPreferences prefs = await SharedPreferences.getInstance();
                               prefs.setString('uid', uid);
