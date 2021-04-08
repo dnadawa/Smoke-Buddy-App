@@ -9,6 +9,7 @@ import 'package:smoke_buddy/widgets/tab-button.dart';
 
 import '../../constants.dart';
 import 'admin-posts.dart';
+import 'ban-users.dart';
 
 class AdminForums extends StatefulWidget {
 
@@ -89,9 +90,17 @@ class _AdminForumsState extends State<AdminForums>  with SingleTickerProviderSta
         actions: [
           Padding(
             padding:  EdgeInsets.only(right: ScreenUtil().setSp(20)),
-            child: CircleAvatar(
-              child: Icon(Icons.app_blocking_rounded,color: Colors.red,),
-              backgroundColor: Colors.white,
+            child: GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(builder: (context) => BanUsers()),
+                );
+              },
+              child: CircleAvatar(
+                child: Icon(Icons.app_blocking_rounded,color: Colors.red,),
+                backgroundColor: Colors.white,
+              ),
             ),
           )
         ],

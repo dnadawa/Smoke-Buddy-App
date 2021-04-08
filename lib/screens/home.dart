@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
     if(isBan){
       ToastBar(text: 'You have banned from the app',color: Colors.red).show(context);
       await FirebaseAuth.instance.signOut();
-      prefs.setString('uid', null);
+      prefs.remove('uid');
       Navigator.of(context).pushAndRemoveUntil(
           CupertinoPageRoute(builder: (context) =>
               PhoneLogin()), (Route<dynamic> route) => false);
