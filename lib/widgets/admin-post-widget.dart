@@ -182,7 +182,15 @@ class _AdminPostWidgetState extends State<AdminPostWidget> {
                     text: 'Remove Post',
                     color: Colors.red,
                     fontSize: 25,
-                    onPressed: (){},
+                    onPressed: ()async{
+                      try{
+                        await FirebaseFirestore.instance.collection('posts').doc(widget.postId).delete();
+                        ToastBar(text: 'Removed',color: Colors.green).show(context);
+                      }
+                      catch(e){
+                        ToastBar(text: 'Something went wrong',color: Colors.red).show(context);
+                      }
+                    },
                   ),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(10),),
@@ -190,7 +198,17 @@ class _AdminPostWidgetState extends State<AdminPostWidget> {
                   child: Button(
                     text: 'Discard Report',
                     fontSize: 25,
-                    onPressed: (){},
+                    onPressed: ()async{
+                      try{
+                        await FirebaseFirestore.instance.collection('posts').doc(widget.postId).update({
+                          'report': 'none'
+                        });
+                        ToastBar(text: 'Discarded',color: Colors.green).show(context);
+                      }
+                      catch(e){
+                        ToastBar(text: 'Something went wrong',color: Colors.red).show(context);
+                      }
+                    },
                   ),
                 )
               ],

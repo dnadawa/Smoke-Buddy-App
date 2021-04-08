@@ -104,7 +104,7 @@ class EmailLogin extends StatelessWidget {
 
                     ToastBar(text: 'Please wait',color: Colors.orange).show(context);
 
-                    try {
+
 
                       var sub = await FirebaseFirestore.instance.collection('admin').where('email', isEqualTo: email.text).where('password', isEqualTo: md5.convert(utf8.encode(password.text)).toString()).get();
                       var admin = sub.docs;
@@ -115,33 +115,38 @@ class EmailLogin extends StatelessWidget {
                             CupertinoPageRoute(builder: (context) =>
                                 AdminForums(index: 0,)), (Route<dynamic> route) => false);
                       }
-                      else{
-                        //do others
-                        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                            email: email.text,
-                            password: password.text
-                        );
+                      else {
+                        try {
+                          print("entering else");
+                          //do others
+                          UserCredential userCredential = await FirebaseAuth
+                              .instance.signInWithEmailAndPassword(
+                              email: email.text,
+                              password: password.text
+                          );
 
-                        ToastBar(text: 'Logged in!',color: Colors.green).show(context);
+                          ToastBar(text: 'Logged in!', color: Colors.green)
+                              .show(context);
 
-                        String uid = userCredential.user.uid;
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
-                        prefs.setString('uid', uid);
+                          String uid = userCredential.user.uid;
+                          SharedPreferences prefs = await SharedPreferences
+                              .getInstance();
+                          prefs.setString('uid', uid);
 
-                        Navigator.of(context).pushAndRemoveUntil(
-                            CupertinoPageRoute(builder: (context) =>
-                                Home()), (Route<dynamic> route) => false);
+                          Navigator.of(context).pushAndRemoveUntil(
+                              CupertinoPageRoute(builder: (context) =>
+                                  Home()), (Route<dynamic> route) => false);
+                        } on FirebaseAuthException catch (e) {
+                          if (e.code == 'user-not-found') {
+                            ToastBar(text: 'No user found for that email',
+                                color: Colors.red).show(context);
+                          } else if (e.code == 'wrong-password') {
+                            ToastBar(
+                                text: 'Password incorrect', color: Colors.red)
+                                .show(context);
+                          }
+                        }
                       }
-
-
-                    } on FirebaseAuthException catch (e) {
-                      if (e.code == 'user-not-found') {
-                        ToastBar(text: 'No user found for that email',color: Colors.red).show(context);
-                      } else if (e.code == 'wrong-password') {
-                        ToastBar(text: 'Password incorrect',color: Colors.red).show(context);
-                      }
-                    }
-
                     },
                 ),
               ),

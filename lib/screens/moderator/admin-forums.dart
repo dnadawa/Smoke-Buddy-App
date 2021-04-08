@@ -61,14 +61,7 @@ class _AdminForumsState extends State<AdminForums>  with SingleTickerProviderSta
       appBar: AppBar(
         title: SizedBox(
           width: ScreenUtil().setWidth(430),
-          child: GestureDetector(
-              onTap: (){
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(builder: (context) => Home()),
-                );
-              },
-              child: Image.asset('assets/images/appbar.png')),
+          child: Image.asset('assets/images/appbar.png'),
         ),
         bottom: TabBar(
           controller: AdminForums.tabController,
