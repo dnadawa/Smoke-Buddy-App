@@ -177,7 +177,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                   // ),
                 ),
 
-                SizedBox(height: ScreenUtil().setHeight(80),),
+                SizedBox(height: ScreenUtil().setHeight(140),),
 
 
                     Expanded(

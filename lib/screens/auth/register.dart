@@ -274,11 +274,16 @@ class _RegisterState extends State<Register> {
                                 'hide': false,
                                 'notifyOwnPosts': true,
                                 'notifyOtherPosts': true,
-                                'following': [],
+                                'following': ['sxdu6NkXuceOCJHzZWgQqDZQhfx2'],
                                 'followers': [],
                                 'ban': false,
                                 'password': finalPassword
                               });
+
+                              await FirebaseFirestore.instance.collection('users').doc('sxdu6NkXuceOCJHzZWgQqDZQhfx2').update({
+                                'followers': FieldValue.arrayUnion([uid])
+                              });
+                              
 
                               SharedPreferences prefs = await SharedPreferences.getInstance();
                               prefs.setString('uid', uid);
