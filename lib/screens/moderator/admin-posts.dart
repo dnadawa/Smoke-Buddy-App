@@ -1,16 +1,12 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smoke_buddy/constants.dart';
-import 'package:smoke_buddy/screens/forums/create-post.dart';
 import 'package:smoke_buddy/widgets/admin-post-widget.dart';
-import 'package:smoke_buddy/widgets/custom-text.dart';
-import 'package:smoke_buddy/widgets/post-widget.dart';
+
 
 class AdminPosts extends StatefulWidget {
 

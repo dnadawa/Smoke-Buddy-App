@@ -48,7 +48,6 @@ dependencies:
   video_player: ^2.1.0
   chewie: ^1.0.0
   progress_dialog: ^1.2.4
-  better_player: ^0.0.63
   crypto: ^3.0.0
   flutter_linkify: ^5.0.0
 

@@ -41,9 +41,9 @@ class _CreatePostState extends State<CreatePost> {
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     chewieController.dispose();
     _controller.dispose();
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {

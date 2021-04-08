@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'custom-text.dart';
 
 class AppBottomSheet extends StatelessWidget {
   @override

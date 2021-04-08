@@ -1,23 +1,15 @@
-import 'dart:async';
-
-import 'package:better_player/better_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chewie/chewie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:intl/intl.dart';
-import 'package:smoke_buddy/notification-model.dart';
-import 'package:smoke_buddy/screens/forums/comments.dart';
-import 'package:smoke_buddy/screens/forums/liked.dart';
 import 'package:smoke_buddy/screens/profile/profile.dart';
 import 'package:smoke_buddy/screens/wallpapers/extended-wallpaper.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/toast.dart';
+import 'package:smoke_buddy/widgets/video-widget.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:video_player/video_player.dart';
 
 import '../constants.dart';
 import 'custom-text.dart';
@@ -43,46 +35,6 @@ class AdminPostWidget extends StatefulWidget {
 }
 
 class _AdminPostWidgetState extends State<AdminPostWidget> {
-
-  bool isVideoLoading = true;
-
-  VideoPlayerController _controller;
-  ChewieController chewieController;
-
-
-
-
-  initVideo()async{
-    if(widget.video.isNotEmpty){
-      _controller = VideoPlayerController.network(widget.video);
-      await _controller.initialize();
-      chewieController = ChewieController(
-        autoPlay: false,
-        looping: false,
-        videoPlayerController: _controller,
-        autoInitialize: true
-      );
-      setState(() {
-        isVideoLoading = false;
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    ///initializing video
-    initVideo();
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    chewieController.dispose();
-    _controller.dispose();
-  }
   @override
   Widget build(BuildContext context) {
     return  Container(
@@ -161,24 +113,19 @@ class _AdminPostWidgetState extends State<AdminPostWidget> {
           ),
 
           ///video
-          Visibility(
-            visible: widget.video!='',
-            child: Padding(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-              child: Container(
-                height: MediaQuery.of(context).size.height/3,
-                // child: !isVideoLoading?Chewie(controller: chewieController):Image.asset('assets/images/loading.gif'),
-                child:
-                BetterPlayer.network(
-                  widget.video,
-                  betterPlayerConfiguration: BetterPlayerConfiguration(
-                    looping: false,
-                    autoPlay: false,
-                  ),
-                ),
+          if(widget.video!='')
+            GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(builder: (context) => VideoWidget(url: widget.video,)),
+                );
+              },
+              child: Padding(
+                padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+                child: Icon(Icons.play_circle_fill,size: ScreenUtil().setHeight(120),color: Colors.white,),
               ),
             ),
-          ),
 
 
           ///buttons
