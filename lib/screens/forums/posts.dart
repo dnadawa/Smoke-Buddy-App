@@ -50,7 +50,6 @@ class _PostsState extends State<Posts> {
     });
   }
 
-
   @override
   void initState() {
     // TODO: implement initState

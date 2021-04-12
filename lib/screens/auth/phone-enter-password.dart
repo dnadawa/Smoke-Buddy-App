@@ -78,6 +78,11 @@ class PhoneEnterPassword extends StatelessWidget {
                               Home()), (Route<dynamic> route) => false);
                     }
                     else{
+                      FocusScopeNode currentFocus = FocusScope.of(context);
+
+                      if (!currentFocus.hasPrimaryFocus) {
+                        currentFocus.unfocus();
+                      }
                       ToastBar(text: 'Password is incorrect',color: Colors.red).show(context);
                     }
                   },
