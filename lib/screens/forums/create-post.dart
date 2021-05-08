@@ -7,11 +7,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/toast.dart';
 import 'package:video_player/video_player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../constants.dart';
 import '../../notification-model.dart';
@@ -303,9 +305,9 @@ class _CreatePostState extends State<CreatePost> {
                     text: 'POST',
                     onPressed: ()async{
                       try{
-                        ToastBar(text: 'Posting...',color: Colors.orange).show(context);
                         String imgUrl='';
                         String videoUrl='';
+                        String videoThumbnail='';
 
                         ProgressDialog pr = ProgressDialog(context);
                         pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
@@ -320,21 +322,37 @@ class _CreatePostState extends State<CreatePost> {
                                 color: Colors.black, fontSize: ScreenUtil().setSp(35), fontWeight: FontWeight.bold)
                         );
 
-                        pr.show();
+                        await pr.show();
                         if(image!=null){
                           TaskSnapshot snap = await FirebaseStorage.instance.ref('post_images/${widget.uid}/${DateTime.now().millisecondsSinceEpoch.toString()}').putFile(image);
                           imgUrl = await snap.ref.getDownloadURL();
                         }
                         if(video!=null){
+                          ///upload video
                           TaskSnapshot snap = await FirebaseStorage.instance.ref('post_videos/${widget.uid}/${DateTime.now().millisecondsSinceEpoch.toString()}').putFile(video);
                           videoUrl = await snap.ref.getDownloadURL();
+
+                          ///generate thumbnail
+                          String fileName = await VideoThumbnail.thumbnailFile(
+                              video: video.path,
+                              thumbnailPath: (await getTemporaryDirectory()).path,
+                              imageFormat: ImageFormat.JPEG,
+                              maxHeight: 250,
+                              quality: 50,
+                            );
+                          File thumbnail = File(fileName);
+
+                          ///upload thumbnail
+                          TaskSnapshot snap2 = await FirebaseStorage.instance.ref('thumbnails/${widget.uid}/${DateTime.now().millisecondsSinceEpoch.toString()}').putFile(thumbnail);
+                          videoThumbnail = await snap2.ref.getDownloadURL();
+
                         }
 
                         print(imgUrl);
                         print(videoUrl);
                         if(widget.category=='gallery'&&(imgUrl.isEmpty&&videoUrl.isEmpty)){
-                          pr.hide();
                           ToastBar(text: 'Image or video is empty',color: Colors.red).show(context);
+                          await pr.hide();
                         }
                         else{
                           var ref = await FirebaseFirestore.instance.collection('posts').add({
@@ -344,6 +362,7 @@ class _CreatePostState extends State<CreatePost> {
                             'post': post.text,
                             'image': imgUrl,
                             'video': videoUrl,
+                            'thumbnail': videoThumbnail,
                             'publishedDate': DateTime.now().toString(),
                             'likes': [],
                             'following': [],
@@ -360,7 +379,6 @@ class _CreatePostState extends State<CreatePost> {
                             CupertinoPageRoute(builder: (context) => Forums(index: widget.category=='status'?0:widget.category=='gallery'?1:widget.category=='grow'?2:3,)),
                           );
                         }
-
                       }
                       catch(e){
                         ToastBar(text: 'Something went wrong',color: Colors.red).show(context);

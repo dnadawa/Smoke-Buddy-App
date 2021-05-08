@@ -124,6 +124,7 @@ class _PostsState extends State<Posts> {
                   String authorImage = posts[i]['authorImage'];
                   String authorID = posts[i]['authorID'];
                   String post = posts[i]['post'];
+                  String thumbnail = posts[i]['thumbnail'];
                   String date = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(posts[i]['publishedDate']));
                   List likes = posts[i]['likes'];
                   List following = posts[i]['following'];
@@ -139,6 +140,7 @@ class _PostsState extends State<Posts> {
                       proPic: authorImage,
                       description: post,
                       authorId: authorID,
+                      thumbnail: thumbnail,
                       uid: uid,
                       following: following,
                       likes: likes,

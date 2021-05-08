@@ -184,6 +184,7 @@ class _NotificationsState extends State<Notifications>{
                               String authorImage = snapshot.data['authorImage'];
                               String authorID = snapshot.data['authorID'];
                               String post = snapshot.data['post'];
+                              String thumbnail = snapshot.data['thumbnail'];
                               String date =snapshot.data['publishedDate'];
                               List likes = snapshot.data['likes'];
                               List following = snapshot.data['following'];
@@ -208,6 +209,7 @@ class _NotificationsState extends State<Notifications>{
                                     date: date,
                                     video: video,
                                     proPic: authorImage,
+                                    thumbnail: thumbnail,
                                     description: post,
                                     authorId: authorID,
                                     uid: uid,

@@ -61,6 +61,7 @@ class _PostsState extends State<Posts> {
             String authorName = widget.posts[i]['authorName'];
             String authorImage = widget.posts[i]['authorImage'];
             String authorID = widget.posts[i]['authorID'];
+            String thumbnail = widget.posts[i]['thumbnail'];
             String post = widget.posts[i]['post'];
             String date = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(widget.posts[i]['publishedDate']));
             List likes = widget.posts[i]['likes'];
@@ -74,6 +75,7 @@ class _PostsState extends State<Posts> {
                 date: date,
                 video: video,
                 proPic: authorImage,
+                thumbnail: thumbnail,
                 description: post,
                 authorId: authorID,
                 uid: widget.loggedID,

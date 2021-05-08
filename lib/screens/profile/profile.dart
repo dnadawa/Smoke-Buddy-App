@@ -32,6 +32,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   String proPic = 'https://media2.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif';
   String name='n/a';
   String status='n/a';
+  String email='n/a';
   String loggedUid;
   List profileFollowing;
   List myFollowing;
@@ -60,6 +61,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
       setState(() {
         proPic = users[0]['proPic'];
         name = users[0]['name'];
+        email = users[0]['email'];
         status = users[0]['status'];
         profileFollowing = users[0]['following'];
         profileFollowers = users[0]['followers'];
@@ -411,7 +413,8 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         SizedBox(height: ScreenUtil().setHeight(60),),
-                        CustomText(text: name,size: ScreenUtil().setSp(50),),
+                        CustomText(text: name,size: ScreenUtil().setSp(45),),
+                        CustomText(text: email),
                         MarqueeWidget(child: CustomText(text: status,isBold: false,)),
                       ],
                     ),

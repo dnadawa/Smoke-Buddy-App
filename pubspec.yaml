@@ -50,6 +50,8 @@ dependencies:
   progress_dialog: ^1.2.4
   crypto: ^3.0.0
   flutter_linkify: ^5.0.0
+  video_thumbnail: ^0.3.3
+  path_provider: ^2.0.1
 
 dev_dependencies:
   flutter_test:

@@ -16,9 +16,6 @@ import 'package:smoke_buddy/widgets/toast.dart';
 import 'package:smoke_buddy/widgets/video-widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
-
-
 import '../constants.dart';
 import 'custom-text.dart';
 
@@ -35,8 +32,9 @@ class PostWidget extends StatefulWidget {
   final List likes;
   final List following;
   final String postId;
+  final String thumbnail;
 
-  const PostWidget({Key key, this.name, this.date, this.proPic, this.image, this.description, this.uid, this.authorId, this.likes, this.following, this.postId, this.video}) : super(key: key);
+  const PostWidget({Key key, this.name, this.date, this.proPic, this.image, this.description, this.uid, this.authorId, this.likes, this.following, this.postId, this.video, this.thumbnail}) : super(key: key);
 
   @override
   _PostWidgetState createState() => _PostWidgetState();
@@ -48,7 +46,9 @@ class _PostWidgetState extends State<PostWidget> {
   bool followed = false;
   List<DocumentSnapshot> comments;
   StreamSubscription<QuerySnapshot> subscription;
-  
+  String proPic = "";
+  String name = "loading";
+
 
   getComments(String postID)async{
     subscription = FirebaseFirestore.instance.collection('posts').doc(postID).collection('comments').orderBy('time',descending: true).snapshots().listen((datasnapshot){
@@ -58,12 +58,22 @@ class _PostWidgetState extends State<PostWidget> {
     });
   }
 
+  getAuthorDetails() async {
+    var sub = await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: widget.authorId).get();
+    var user = sub.docs;
+    setState(() {
+      proPic = user[0]['proPic'];
+      name = user[0]['name'];
+    });
+  }
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getComments(widget.postId);
+    getAuthorDetails();
     ///for likes
     if(widget.likes.contains(widget.uid)){
       setState(() {
@@ -112,9 +122,9 @@ class _PostWidgetState extends State<PostWidget> {
           ///propic and name
           ListTile(
             leading: CircleAvatar(
-              backgroundImage: CachedNetworkImageProvider(widget.proPic),
+              backgroundImage: CachedNetworkImageProvider(proPic),
             ),
-            title: CustomText(text: widget.uid==widget.authorId?'Me':widget.name,align: TextAlign.start,),
+            title: CustomText(text: widget.uid==widget.authorId?'Me':name,align: TextAlign.start,),
             subtitle: CustomText(text: widget.date,align: TextAlign.start,isBold: false,size: ScreenUtil().setSp(25),),
             onTap: (){
               Navigator.push(
@@ -256,7 +266,17 @@ class _PostWidgetState extends State<PostWidget> {
             },
             child: Padding(
               padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-              child: Icon(Icons.play_circle_fill,size: ScreenUtil().setHeight(120),color: Colors.white,),
+              child: Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  CachedNetworkImage(
+                    imageUrl: widget.thumbnail,
+                    fit: BoxFit.fitHeight,
+                    placeholder: (context,url)=>Image.asset('assets/images/loading.gif'),
+                  ),
+                  Icon(Icons.play_circle_fill,size: ScreenUtil().setHeight(120),color: Colors.white,),
+                ],
+              ),
             ),
           ),
 

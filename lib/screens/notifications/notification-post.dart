@@ -19,7 +19,7 @@ class NotificationPost extends StatefulWidget {
 
 class _NotificationPostState extends State<NotificationPost> {
 
-  String image,authorName,authorImage, authorID ,post, date, uid, video;
+  String image,authorName,authorImage, authorID ,post, date, uid, video, thumbnail;
   List likes,following;
 
   getPost() async {
@@ -34,6 +34,7 @@ class _NotificationPostState extends State<NotificationPost> {
         authorName = value['authorName'];
         authorImage = value['authorImage'];
         authorID = value['authorID'];
+        thumbnail = value['thumbnail'];
         post = value['post'];
         date = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(value['publishedDate']));
         likes = value['likes'];
@@ -75,6 +76,7 @@ class _NotificationPostState extends State<NotificationPost> {
                 video: video,
                 description: post,
                 authorId: authorID,
+                thumbnail: thumbnail,
                 uid: uid,
                 following: following,
                 likes: likes,

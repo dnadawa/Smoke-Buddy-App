@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/screens/auth/phone-login.dart';
 import 'package:smoke_buddy/screens/auth/register.dart';
+import 'package:smoke_buddy/screens/home.dart';
 import 'package:smoke_buddy/widgets/button.dart';
 import 'package:smoke_buddy/widgets/custom-text.dart';
 import 'package:smoke_buddy/widgets/input-field.dart';
@@ -87,12 +88,10 @@ class PhoneCreatePassword extends StatelessWidget {
                           await FirebaseFirestore.instance.collection('users').doc(uid).update({
                             'password': md5.convert(utf8.encode(password.text)).toString()
                           });
-                          SharedPreferences prefs = await SharedPreferences.getInstance();
-                          prefs.remove('uid');
                           ToastBar(text: 'Password changed successfully!',color: Colors.green).show(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               CupertinoPageRoute(builder: (context) =>
-                                  PhoneLogin()), (Route<dynamic> route) => false);
+                                  Home()), (Route<dynamic> route) => false);
                       }
                     }
                     else{
