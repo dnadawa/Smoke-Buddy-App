@@ -178,13 +178,13 @@ class _NotificationsState extends State<Notifications>{
                           future: getPost(postID),
                           builder: (context, snapshot){
                             if(snapshot.hasData){
-                              String image = snapshot.data['image'];
-                              String video = snapshot.data['video'];
+                              String image = snapshot.data['image'] ?? "";
+                              String video = snapshot.data['video'] ?? "";
                               String authorName = snapshot.data['authorName'];
                               String authorImage = snapshot.data['authorImage'];
                               String authorID = snapshot.data['authorID'];
                               String post = snapshot.data['post'];
-                              String thumbnail = snapshot.data['thumbnail'];
+                              String thumbnail = snapshot.data['thumbnail'] ?? "";
                               String date =snapshot.data['publishedDate'];
                               List likes = snapshot.data['likes'];
                               List following = snapshot.data['following'];

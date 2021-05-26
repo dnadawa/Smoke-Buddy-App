@@ -13,14 +13,16 @@ class InputField extends StatelessWidget {
   final Widget suffix;
   final Widget prefix;
   final bool isLabel;
+  final bool enabled;
 
-  const InputField({Key key, this.hint, this.type, this.isPassword=false, this.controller, this.suffix, this.prefix, this.isLabel=false}) : super(key: key);
+  const InputField({Key key, this.hint, this.type, this.isPassword=false, this.controller, this.suffix, this.prefix, this.isLabel=false, this.enabled=true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       keyboardType: type,
       controller: controller,
+      enabled: enabled,
       obscureText: isPassword,
       style: TextStyle(
         fontFamily: 'Antonio',
@@ -43,6 +45,10 @@ class InputField extends StatelessWidget {
         enabledBorder:OutlineInputBorder(
             borderRadius: BorderRadius.circular(25),
             borderSide: BorderSide(color: Constants.kFillOutlineColor, width: 2),
+        ),
+        disabledBorder:OutlineInputBorder(
+          borderRadius: BorderRadius.circular(25),
+          borderSide: BorderSide(color: Constants.kFillOutlineColor, width: 2),
         ),
         focusedBorder:OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),

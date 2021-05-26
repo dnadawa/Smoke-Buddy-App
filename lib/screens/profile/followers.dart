@@ -46,7 +46,10 @@ class _FollowersState extends State<Followers> {
               if(snapshot.hasData){
                 return ListTile(
                   leading: CircleAvatar(
-                    backgroundImage: CachedNetworkImageProvider(snapshot.data['image']),
+                    backgroundColor: Colors.white,
+                    child: ClipOval(
+                      child: CachedNetworkImage(imageUrl: snapshot.data['image']),
+                    ),
                   ),
                   title: CustomText(text: snapshot.data['name'],align: TextAlign.start,),
                   onTap: (){

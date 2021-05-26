@@ -65,6 +65,18 @@ class _CommentsState extends State<Comments> {
     }
   }
 
+  getCommentedUserData(String id) async {
+    var sub = await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: id).get();
+    var users = sub.docs;
+    if(users.isNotEmpty){
+      Map x = {
+        'proPic': users[0]['proPic'],
+        'userName': users[0]['name']
+      };
+      return x;
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -107,43 +119,63 @@ class _CommentsState extends State<Comments> {
                   physics: BouncingScrollPhysics(),
                   itemBuilder: (context,i){
 
-                    String proPic = comments[i]['authorImage'];
-                    String name = comments[i]['authorName'];
+
+                    String id = comments[i]['authorID'];
                     String comment = comments[i]['comment'];
                     String time = comments[i]['time'];
 
-                    return ListTile(
-                      isThreeLine: true,
-                      onTap: (){
-                        Navigator.push(
-                          context,
-                          CupertinoPageRoute(builder: (context) => Profile(uid: comments[i]['authorID'],)),
-                        );
-                      },
-                      leading: CircleAvatar(
-                        backgroundImage: CachedNetworkImageProvider(proPic),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
-                      title: CustomText(text: name==userName?'Me':name,align: TextAlign.start,),
-                      // subtitle: CustomText(text: DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(time))+'\n'+comment,align: TextAlign.start,isBold: false,size: ScreenUtil().setSp(25),),
-                      subtitle: Linkify(
-                        onOpen: (link) async {
-                          if (await canLaunch(link.url)) {
-                            await launch(link.url);
-                          } else {
-                            ToastBar(text: 'Could not launch url!',color: Colors.red).show(context);
-                          }
-                        },
-                        style: TextStyle(
-                          color: Constants.kMainTextColor,
-                          fontSize: ScreenUtil().setSp(25),
-                          letterSpacing: 0.6,
-                          fontFamily: 'Antonio',
-                        ),
-                        textAlign: TextAlign.start,
-                        text: DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(time))+'\n'+comment,
+                    return FutureBuilder(
+                      future: getCommentedUserData(id),
+                      builder: (context, snapshot){
+                        if(snapshot.hasData) {
+                          String proPic = snapshot.data['proPic'];
+                          String name = snapshot.data['userName'];
 
-                      ),
+                          return ListTile(
+                            isThreeLine: true,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(builder: (context) =>
+                                    Profile(uid: comments[i]['authorID'],)),
+                              );
+                            },
+                            leading: CircleAvatar(
+                              backgroundImage: CachedNetworkImageProvider(
+                                  proPic),
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: ScreenUtil().setWidth(10)),
+                            title: CustomText(
+                              text: name == userName ? 'Me' : name,
+                              align: TextAlign.start,),
+                            // subtitle: CustomText(text: DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(time))+'\n'+comment,align: TextAlign.start,isBold: false,size: ScreenUtil().setSp(25),),
+                            subtitle: Linkify(
+                              onOpen: (link) async {
+                                if (await canLaunch(link.url)) {
+                                  await launch(link.url);
+                                } else {
+                                  ToastBar(text: 'Could not launch url!',
+                                      color: Colors.red).show(context);
+                                }
+                              },
+                              style: TextStyle(
+                                color: Constants.kMainTextColor,
+                                fontSize: ScreenUtil().setSp(25),
+                                letterSpacing: 0.6,
+                                fontFamily: 'Antonio',
+                              ),
+                              textAlign: TextAlign.start,
+                              text: DateFormat('dd/MM/yyyy HH:mm').format(
+                                  DateTime.parse(time)) + '\n' + comment,
+
+                            ),
+                          );
+                        }
+                        else{
+                          return Container();
+                        }
+                      },
                     );
                   },
                 ):Center(child: CircularProgressIndicator(),),

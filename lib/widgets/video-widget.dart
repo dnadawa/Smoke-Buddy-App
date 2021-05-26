@@ -65,6 +65,7 @@ class _VideoWidgetState extends State<VideoWidget> {
                     looping: false,
                     autoPlay: false,
                     deviceOrientationsOnEnterFullScreen: [DeviceOrientation.landscapeLeft,DeviceOrientation.landscapeRight],
+                    deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
                     errorBuilder: (context, errorMessage) {
                       return Center(
                         child: Text(

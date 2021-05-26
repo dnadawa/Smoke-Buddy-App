@@ -31,6 +31,7 @@ class _EditProfileState extends State<EditProfile> {
 
   TextEditingController name = TextEditingController();
   TextEditingController status = TextEditingController();
+  TextEditingController email = TextEditingController();
   List<DocumentSnapshot> user;
   StreamSubscription<QuerySnapshot> subscription;
   String image = '';
@@ -43,6 +44,7 @@ class _EditProfileState extends State<EditProfile> {
         name.text = user[0]['name'];
         status.text = user[0]['status'];
         image = user[0]['proPic'];
+        email.text = user[0]['email'];
       });
     });
   }
@@ -104,7 +106,17 @@ class _EditProfileState extends State<EditProfile> {
                           controller: name,
                         ),
                       ),
-                      
+
+                      ///email
+                      Padding(
+                        padding: EdgeInsets.all(ScreenUtil().setHeight(40)),
+                        child: InputField(
+                          hint: 'Email',
+                          isLabel: true,
+                          controller: email,
+                          enabled: false,
+                        ),
+                      ),
                       
                       ///status
                       Padding(
@@ -154,12 +166,31 @@ class _EditProfileState extends State<EditProfile> {
                             text: 'SAVE',
                             onPressed: () async {
                               ToastBar(text: 'Please wait',color: Colors.orange).show(context);
-                              await FirebaseFirestore.instance.collection('users').doc(widget.uid).update({
-                                'name': name.text,
-                                'status': status.text,
-                                'proPic': image
-                              });
-                              ToastBar(text: 'Account updated!',color: Colors.green).show(context);
+
+                              ///check user exists
+                              var sub = await FirebaseFirestore.instance.collection('users').where('name', isEqualTo: name.text).get();
+                              var users = sub.docs;
+                              if(users.isNotEmpty){
+                                if(users[0]['id']==widget.uid){
+                                  await FirebaseFirestore.instance.collection('users').doc(widget.uid).update({
+                                    'name': name.text,
+                                    'status': status.text,
+                                    'proPic': image
+                                  });
+                                  ToastBar(text: 'Account updated!',color: Colors.green).show(context);
+                                }
+                                else{
+                                  ToastBar(text: 'NAME ALREADY IN USE',color: Colors.red).show(context);
+                                }
+                              }
+                              else{
+                                await FirebaseFirestore.instance.collection('users').doc(widget.uid).update({
+                                  'name': name.text,
+                                  'status': status.text,
+                                  'proPic': image
+                                });
+                                ToastBar(text: 'Account updated!',color: Colors.green).show(context);
+                              }
                             },
                           ),
                         ),
@@ -187,6 +218,8 @@ class _EditProfileState extends State<EditProfile> {
                       image = await snap.ref.getDownloadURL();
                       setState(() {});
                       ToastBar(text: 'Image uploaded!',color: Colors.green).show(context);
+                      imageCache.maximumSize = 0;
+                      imageCache.clear();
                       },
                     child: CircleAvatar(
                         backgroundColor: Colors.white,

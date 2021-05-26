@@ -50,6 +50,8 @@ class _RegisterState extends State<Register> {
         ToastBar(text: 'No image selected',color: Colors.red).show(context);
       }
     });
+    imageCache.maximumSize = 0;
+    imageCache.clear();
   }
 
   @override

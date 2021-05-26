@@ -120,6 +120,8 @@ class _CreatePostState extends State<CreatePost> {
                                                                       }
                                                                     });
                                                                     Navigator.pop(context);
+                                                                    imageCache.maximumSize = 0;
+                                                                    imageCache.clear();
                                                                   },
                                                                   child: CustomText(text: 'Camera',)
                                                               ),
@@ -136,6 +138,8 @@ class _CreatePostState extends State<CreatePost> {
                                                                       }
                                                                     });
                                                                     Navigator.pop(context);
+                                                                    imageCache.maximumSize = 0;
+                                                                    imageCache.clear();
                                                                   },
                                                                   child: CustomText(text: 'Gallery',)
                                                               )
@@ -181,6 +185,8 @@ class _CreatePostState extends State<CreatePost> {
                                                                         ToastBar(text: 'No video selected',color: Colors.red).show(context);
                                                                       }
                                                                     Navigator.pop(context);
+                                                                    imageCache.maximumSize = 0;
+                                                                    imageCache.clear();
                                                                   },
                                                                   child: CustomText(text: 'Camera',)
                                                               ),
@@ -206,6 +212,8 @@ class _CreatePostState extends State<CreatePost> {
                                                                       }
 
                                                                     Navigator.pop(context);
+                                                                    imageCache.maximumSize = 0;
+                                                                    imageCache.clear();
                                                                   },
                                                                   child: CustomText(text: 'Gallery',)
                                                               )
@@ -374,10 +382,9 @@ class _CreatePostState extends State<CreatePost> {
 
                           pr.hide();
                           ToastBar(text: 'Posted',color: Colors.green).show(context);
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(builder: (context) => Forums(index: widget.category=='status'?0:widget.category=='gallery'?1:widget.category=='grow'?2:3,)),
-                          );
+                          Navigator.of(context).pushAndRemoveUntil(
+                              CupertinoPageRoute(builder: (context) =>
+                                  Forums(index: widget.category=='status'?0:widget.category=='gallery'?1:widget.category=='grow'?2:3,)), (Route<dynamic> route) => false);
                         }
                       }
                       catch(e){

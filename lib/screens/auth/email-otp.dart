@@ -61,7 +61,7 @@ class _EmailOTPState extends State<EmailOTP> {
       ToastBar(text: 'OTP send to your email!',color: Colors.green).show(context);
     } on MailerException catch (e) {
       print('Message not sent.');
-      ToastBar(text: 'Error sending email!',color: Colors.red).show(context);
+      ToastBar(text: 'Error sending email! Error: ${e.toString()}',color: Colors.red).show(context);
       for (var p in e.problems) {
         print('Problem: ${p.code}: ${p.msg}');
       }

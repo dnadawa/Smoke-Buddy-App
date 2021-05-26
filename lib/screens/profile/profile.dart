@@ -414,7 +414,6 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                       children: [
                         SizedBox(height: ScreenUtil().setHeight(60),),
                         CustomText(text: name,size: ScreenUtil().setSp(45),),
-                        CustomText(text: email),
                         MarqueeWidget(child: CustomText(text: status,isBold: false,)),
                       ],
                     ),
@@ -430,7 +429,10 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                   padding: EdgeInsets.only(top: ScreenUtil().setHeight(45)),
                   child: CircleAvatar(
                     backgroundColor: Colors.white,
-                    backgroundImage: CachedNetworkImageProvider(proPic),
+                    // backgroundImage: CachedNetworkImageProvider(proPic),
+                    child: ClipOval(
+                      child: CachedNetworkImage(imageUrl: proPic, width: ScreenUtil().setHeight(160),height: ScreenUtil().setHeight(160),fit: BoxFit.fitWidth,),
+                    ),
                     radius: ScreenUtil().setHeight(80),
                   ),
                 )
