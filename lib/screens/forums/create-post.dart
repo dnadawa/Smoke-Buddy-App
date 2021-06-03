@@ -382,9 +382,13 @@ class _CreatePostState extends State<CreatePost> {
 
                           pr.hide();
                           ToastBar(text: 'Posted',color: Colors.green).show(context);
-                          Navigator.of(context).pushAndRemoveUntil(
-                              CupertinoPageRoute(builder: (context) =>
-                                  Forums(index: widget.category=='status'?0:widget.category=='gallery'?1:widget.category=='grow'?2:3,)), (Route<dynamic> route) => false);
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(builder: (context) => Forums(index: widget.category=='status'?0:widget.category=='gallery'?1:widget.category=='grow'?2:3,)),
+                          );
+                          // Navigator.of(context).pushAndRemoveUntil(
+                          //     CupertinoPageRoute(builder: (context) =>
+                          //         Forums(index: widget.category=='status'?0:widget.category=='gallery'?1:widget.category=='grow'?2:3,)), (Route<dynamic> route) => false);
                         }
                       }
                       catch(e){

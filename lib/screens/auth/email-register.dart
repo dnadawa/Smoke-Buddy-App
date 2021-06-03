@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
@@ -62,21 +63,25 @@ class EmailRegister extends StatelessWidget {
                 height: ScreenUtil().setHeight(100),
                 child: Button(
                   text: 'NEXT',
-                  onPressed: (){
+                  onPressed: () async {
 
-                    if(password.text==confirmPassword.text){
-                      Navigator.push(
-                        context,
-                        CupertinoPageRoute(builder: (context) => EmailOTP(email: email.text,password: password.text,)),
-                      );
+                    var sub = await FirebaseFirestore.instance.collection('users').where('email', isEqualTo: email.text).get();
+                    var user = sub.docs;
+
+                    if(user.isEmpty){
+                      if(password.text==confirmPassword.text){
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(builder: (context) => EmailOTP(email: email.text,password: password.text,)),
+                        );
+                      }
+                      else{
+                        ToastBar(text: 'Password does not match!',color: Colors.red).show(context);
+                      }
                     }
                     else{
-                      ToastBar(text: 'Password does not match!',color: Colors.red).show(context);
+                      ToastBar(text: 'Email already registered!',color: Colors.red).show(context);
                     }
-
-
-
-
                   },
                 ),
               ),

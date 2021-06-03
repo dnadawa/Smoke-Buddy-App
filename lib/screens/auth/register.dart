@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smoke_buddy/screens/home.dart';
@@ -43,13 +44,30 @@ class _RegisterState extends State<Register> {
   Future getImage() async {
     final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery,imageQuality: 50);
 
-    setState(() {
       if (pickedFile != null) {
-        image = File(pickedFile.path);
+        File croppedFile = await ImageCropper.cropImage(
+            sourcePath: pickedFile.path,
+            aspectRatioPresets: [
+              CropAspectRatioPreset.square,
+            ],
+            aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+            compressFormat: ImageCompressFormat.png,
+            androidUiSettings: AndroidUiSettings(
+                toolbarTitle: 'Crop Image',
+                toolbarColor: Theme.of(context).primaryColor,
+                activeControlsWidgetColor: Theme.of(context).accentColor,
+                initAspectRatio: CropAspectRatioPreset.square,
+                lockAspectRatio: true
+            ),
+            iosUiSettings: IOSUiSettings(
+              minimumAspectRatio: 1.0,
+            )
+        );
+        image = File(croppedFile.path);
       } else {
         ToastBar(text: 'No image selected',color: Colors.red).show(context);
       }
-    });
+    setState(() {});
     imageCache.maximumSize = 0;
     imageCache.clear();
   }
@@ -231,8 +249,17 @@ class _RegisterState extends State<Register> {
                             ///check user exists
                             var sub = await FirebaseFirestore.instance.collection('users').where('name', isEqualTo: username.text).get();
                             var users = sub.docs;
+
+                            ///check email exists
+                            var sub2 = await FirebaseFirestore.instance.collection('users').where('email', isEqualTo: email.text).get();
+                            var user = sub2.docs;
+
+
                             if(users.isNotEmpty){
                               ToastBar(text: 'NAME ALREADY IN USE',color: Colors.orange).show(context);
+                            }
+                            else if(user.isNotEmpty){
+                              ToastBar(text: 'EMAIL ALREADY IN USE',color: Colors.orange).show(context);
                             }
                             else{
                               ///auth using email

@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smoke_buddy/screens/auth/password-reset-otp.dart';
 import 'package:smoke_buddy/widgets/bottom-sheet.dart';
@@ -209,7 +210,25 @@ class _EditProfileState extends State<EditProfile> {
                       FirebaseStorage storage = FirebaseStorage.instance;
                       final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery,imageQuality: 50);
                       if (pickedFile != null) {
-                          pickedImage = File(pickedFile.path);
+                        File croppedFile = await ImageCropper.cropImage(
+                            sourcePath: pickedFile.path,
+                            aspectRatioPresets: [
+                              CropAspectRatioPreset.square,
+                            ],
+                            aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+                            compressFormat: ImageCompressFormat.png,
+                            androidUiSettings: AndroidUiSettings(
+                                toolbarTitle: 'Crop Image',
+                                toolbarColor: Theme.of(context).primaryColor,
+                                activeControlsWidgetColor: Theme.of(context).accentColor,
+                                initAspectRatio: CropAspectRatioPreset.square,
+                                lockAspectRatio: true
+                            ),
+                            iosUiSettings: IOSUiSettings(
+                              minimumAspectRatio: 1.0,
+                            )
+                        );
+                        pickedImage = File(croppedFile.path);
                       } else {
                           ToastBar(text: 'No image selected',color: Colors.red).show(context);
                       }

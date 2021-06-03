@@ -25,6 +25,14 @@ class _ExtendedWallpaperState extends State<ExtendedWallpaper> {
     // TODO: implement initState
     super.initState();
     controller = PageController(initialPage: widget.index);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 
   @override

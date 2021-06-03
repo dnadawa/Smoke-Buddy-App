@@ -46,6 +46,7 @@ class _PostWidgetState extends State<PostWidget> {
   bool followed = false;
   List<DocumentSnapshot> comments;
   StreamSubscription<QuerySnapshot> subscription;
+  StreamSubscription<QuerySnapshot> subscriptionAuthor;
   String proPic = "";
   String name = "loading";
 
@@ -59,12 +60,25 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   getAuthorDetails() async {
-    var sub = await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: widget.authorId).get();
-    var user = sub.docs;
-    setState(() {
-      proPic = user[0]['proPic'];
-      name = user[0]['name'];
+    subscriptionAuthor = FirebaseFirestore.instance.collection('users').where('id', isEqualTo: widget.authorId).snapshots().listen((datasnapshot){
+      setState(() {
+        var user = datasnapshot.docs;
+        proPic = user[0]['proPic'];
+        name = user[0]['name'];
+      });
     });
+  }
+
+  getCommentedUserData(String id) async {
+    var sub = await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: id).get();
+    var users = sub.docs;
+    if(users.isNotEmpty){
+      Map x = {
+        'proPic': users[0]['proPic'],
+        'userName': users[0]['name']
+      };
+      return x;
+    }
   }
 
 
@@ -106,6 +120,7 @@ class _PostWidgetState extends State<PostWidget> {
     // TODO: implement dispose
     super.dispose();
     subscription?.cancel();
+    subscriptionAuthor?.cancel();
   }
   @override
   Widget build(BuildContext context) {
@@ -404,19 +419,34 @@ class _PostWidgetState extends State<PostWidget> {
 
           ///single comment
           if(comments!=null&&comments.isNotEmpty)
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(50)),
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundImage: CachedNetworkImageProvider(comments[0]['authorImage']),
-              ),
-              contentPadding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
-              dense: true,
-              isThreeLine: true,
-              title: CustomText(text: comments[0]['authorID']==widget.uid?'Me':comments[0]['authorName'],align: TextAlign.start,),
-              subtitle: CustomText(text: DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(comments[0]['time']))+'\n'+comments[0]['comment'],align: TextAlign.start,isBold: false,size: ScreenUtil().setSp(25),),
+            FutureBuilder(
+              future: getCommentedUserData(comments[0]['authorID']),
+              builder: (context, snapshot){
+                if(snapshot.hasData){
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(50)),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: ClipOval(
+                          child: CachedNetworkImage(imageUrl: snapshot.data['proPic'], width: ScreenUtil().setHeight(160),height: ScreenUtil().setHeight(160),fit: BoxFit.fitWidth,),
+                        ),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
+                      dense: true,
+                      isThreeLine: true,
+                      title: CustomText(text: comments[0]['authorID']==widget.uid?'Me':snapshot.data['userName'],align: TextAlign.start,),
+                      subtitle: CustomText(text: DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(comments[0]['time']))+'\n'+comments[0]['comment'],align: TextAlign.start,isBold: false,size: ScreenUtil().setSp(25),),
+                    ),
+                  );
+                }
+                else{
+                  return Container();
+                }
+
+              },
             ),
-          )
+
 
         ],
       ),
